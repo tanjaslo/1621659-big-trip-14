@@ -1,6 +1,7 @@
 import { createAddFormTemplate } from './view/add-form.js';
 import { createEditFormTemplate } from './view/edit-form.js';
 import { createFiltersTemplate } from './view/filter.js';
+import { createEventsListTemplate } from './view/list.js';
 import { createMenuTemplate } from './view/menu.js';
 import { createRouteTemplate } from './view/route.js';
 import { createSortTemplate } from './view/sort.js';
@@ -24,10 +25,14 @@ renderTemplate(menuElement, createMenuTemplate(), 'beforeend');
 renderTemplate(filtersElement, createFiltersTemplate(), 'beforeend');
 renderTemplate(eventsElement, createSortTemplate(), 'afterbegin');
 renderTemplate(eventsElement, createAddFormTemplate(), 'beforeend');
+renderTemplate(eventsElement, createEventsListTemplate(), 'beforeend');
+
+const eventList = mainElement.querySelector('.trip-events__list');
 
 for (let i = 0; i < WAYPOINT_COUNT; i++) {
-  renderTemplate(eventsElement, createWaypointsTemplate(), 'beforeend');
+  renderTemplate(eventList, createWaypointsTemplate(), 'beforeend');
 }
 
-const eventsList = document.querySelector('.trip-events__list');
-renderTemplate(eventsList, createEditFormTemplate(), 'beforeend');
+const eventItem = document.querySelector('.trip-events__item');
+
+renderTemplate(eventItem, createEditFormTemplate(), 'afterend');
