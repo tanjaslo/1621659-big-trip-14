@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { createAddFormTemplate } from './view/add-form.js';
 import { createEditFormTemplate } from './view/edit-form.js';
 import { createFiltersTemplate } from './view/filter.js';
@@ -8,9 +9,9 @@ import { createSortTemplate } from './view/sort.js';
 import { createWaypointsTemplate } from './view/waypoint.js';
 import { createPoint } from './mock/point.js';
 
-const WAYPOINT_COUNT = 15;
+const WAYPOINT_COUNT = 10;
 
-const points = new Array(WAYPOINT_COUNT).fill().map(createPoint);
+const points = new Array(WAYPOINT_COUNT).fill().map(createPoint).slice().sort((a, b) => dayjs(a.dateFrom) - dayjs(b.dateFrom));
 
 const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -23,7 +24,7 @@ const menuElement = headerElement.querySelector('.trip-controls__navigation');
 const filtersElement = headerElement.querySelector('.trip-controls__filters');
 const eventsElement = mainElement.querySelector('.trip-events');
 
-renderTemplate(tripMainElement, createRouteTemplate(), 'afterbegin');
+renderTemplate(tripMainElement, createRouteTemplate(points), 'afterbegin');
 renderTemplate(menuElement, createMenuTemplate(), 'beforeend');
 renderTemplate(filtersElement, createFiltersTemplate(), 'beforeend');
 renderTemplate(eventsElement, createSortTemplate(), 'afterbegin');

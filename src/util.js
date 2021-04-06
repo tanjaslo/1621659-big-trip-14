@@ -55,11 +55,18 @@ export const millisecondsToTime = (duration) => {
   }
 };
 
-export const humanizeTimeFormat = (date) => {
-  return dayjs(date).format('HH:mm');
+export const getFromToFormat = (dateFrom, dateTo) => {
+  dateFrom = new Date(dateFrom).getDate();
+  dateTo = new Date(dateTo).getDate();
+
+  if (dateTo - dateFrom >= 1) {
+    return 'MM/D HH:mm';
+  } else {
+    return 'HH:mm';
+  }
 };
 
-export const humanizeDateFormat = (date) => {
+export const getDateFormat = (date) => {
   return dayjs(date).format('YYYY-MM-DD');
 };
 
@@ -69,4 +76,12 @@ export const getEventDateFormat = (date) => {
 
 export const getFormDateFormat = (date) => {
   return dayjs(date).format('YY/MM/DD HH:mm');
+};
+
+export const getMonthFormat = (date) => {
+  return dayjs(date).format('MMM');
+};
+
+export const getDayFormat = (date) => {
+  return dayjs(date).format('DD');
 };

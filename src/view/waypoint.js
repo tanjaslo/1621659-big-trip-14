@@ -1,5 +1,6 @@
-import { humanizeTimeFormat,
-  humanizeDateFormat,
+import dayjs from 'dayjs';
+import { getFromToFormat,
+  getDateFormat,
   getEventDateFormat,
   getDuration,
   millisecondsToTime } from '../util.js';
@@ -24,13 +25,17 @@ const createWaypointsTemplate = (point) => {
 
   const duration = getDuration(dateFrom, dateTo);
 
+  const humanizeTimeFormat = (date) => {
+    return dayjs(date).format(getFromToFormat(dateFrom, dateTo));
+  };
+
   const favouriteClassName = isFavourite
     ? 'event__favorite-btn event__favorite-btn--active'
     : 'event__favorite-btn';
 
   return `<li class="trip-events__item">
     <div class="event">
-      <time class="event__date" datetime="${humanizeDateFormat(dateFrom)}">${getEventDateFormat(dateFrom)}</time>
+      <time class="event__date" datetime="${getDateFormat(dateFrom)}">${getEventDateFormat(dateFrom)}</time>
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="${type} icon">
       </div>

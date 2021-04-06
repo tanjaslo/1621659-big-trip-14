@@ -23,9 +23,8 @@ export const PICTURES = [
   },
 ];
 
-const MONTHS_GAP = 12;
 const MIN_DAYS_GAP = 1;
-const MAX_DAYS_GAP = 30;
+const MAX_DAYS_GAP = 7;
 const HOURS_GAP = 24;
 const MIN_MINUTES_GAP = 10;
 const MAX_MINUTES_GAP = 60;
@@ -43,7 +42,6 @@ export const getDescription = () => {
 
 export const getDateFrom = () => {
   const dateFrom = dayjs()
-    .add(getRandomInteger(0, MONTHS_GAP), 'M')
     .add(getRandomInteger(0, MAX_DAYS_GAP), 'd')
     .add(getRandomInteger(0, HOURS_GAP), 'h')
     .add(getRandomInteger(0, MAX_MINUTES_GAP), 'm')
