@@ -6,8 +6,11 @@ import { createMenuTemplate } from './view/menu.js';
 import { createRouteTemplate } from './view/route.js';
 import { createSortTemplate } from './view/sort.js';
 import { createWaypointsTemplate } from './view/waypoint.js';
+import { createPoint } from './mock/point.js';
 
-const WAYPOINT_COUNT = 3;
+const WAYPOINT_COUNT = 15;
+
+const points = new Array(WAYPOINT_COUNT).fill().map(createPoint);
 
 const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -24,15 +27,15 @@ renderTemplate(tripMainElement, createRouteTemplate(), 'afterbegin');
 renderTemplate(menuElement, createMenuTemplate(), 'beforeend');
 renderTemplate(filtersElement, createFiltersTemplate(), 'beforeend');
 renderTemplate(eventsElement, createSortTemplate(), 'afterbegin');
-renderTemplate(eventsElement, createAddFormTemplate(), 'beforeend');
+renderTemplate(eventsElement, createAddFormTemplate(points[0]), 'beforeend');
 renderTemplate(eventsElement, createEventsListTemplate(), 'beforeend');
 
 const eventList = mainElement.querySelector('.trip-events__list');
 
-for (let i = 0; i < WAYPOINT_COUNT; i++) {
-  renderTemplate(eventList, createWaypointsTemplate(), 'beforeend');
+for (let i = 1; i < WAYPOINT_COUNT; i++) {
+  renderTemplate(eventList, createWaypointsTemplate(points[i]), 'beforeend');
 }
 
 const eventItem = document.querySelector('.trip-events__item');
 
-renderTemplate(eventItem, createEditFormTemplate(), 'afterend');
+renderTemplate(eventItem, createEditFormTemplate(points[1]), 'afterend');
