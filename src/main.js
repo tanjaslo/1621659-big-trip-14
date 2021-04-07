@@ -1,17 +1,17 @@
-import dayjs from 'dayjs';
+import { WAYPOINT_COUNT } from './data.js';
 import { createAddFormTemplate } from './view/add-form.js';
 import { createEditFormTemplate } from './view/edit-form.js';
-import { createFiltersTemplate } from './view/filter.js';
+import { createFilterTemplate } from './view/filter.js';
 import { createEventsListTemplate } from './view/list.js';
 import { createMenuTemplate } from './view/menu.js';
 import { createRouteTemplate } from './view/route.js';
 import { createSortTemplate } from './view/sort.js';
-import { createWaypointsTemplate } from './view/waypoint.js';
-import { createPoint } from './mock/point.js';
+import { createWaypointsTemplate } from './view/point.js';
+import { renderPoints } from './mock/point.js';
+import { generateFilters } from './mock/filter.js';
 
-const WAYPOINT_COUNT = 10;
-
-const points = new Array(WAYPOINT_COUNT).fill().map(createPoint).slice().sort((a, b) => dayjs(a.dateFrom) - dayjs(b.dateFrom));
+const points = renderPoints(WAYPOINT_COUNT);
+const filters = generateFilters(points);
 
 const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -26,7 +26,7 @@ const eventsElement = mainElement.querySelector('.trip-events');
 
 renderTemplate(tripMainElement, createRouteTemplate(points), 'afterbegin');
 renderTemplate(menuElement, createMenuTemplate(), 'beforeend');
-renderTemplate(filtersElement, createFiltersTemplate(), 'beforeend');
+renderTemplate(filtersElement, createFilterTemplate(filters), 'beforeend');
 renderTemplate(eventsElement, createSortTemplate(), 'afterbegin');
 renderTemplate(eventsElement, createAddFormTemplate(points[0]), 'beforeend');
 renderTemplate(eventsElement, createEventsListTemplate(), 'beforeend');

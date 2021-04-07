@@ -1,22 +1,17 @@
-import { getMonthFormat, getDayFormat } from '../util.js';
+import { getTripDates,
+  getSortedRoutePointsTitle,
+  getTotalPrice } from '../util.js';
 
 const createRouteTemplate = (points) => {
 
-  const lastIndex = points.length - 1;
-  const middleIndex = points.length/2 - 1;
-  const firstPoint = points[0];
-  const middlePoint = points[middleIndex];
-  const lastPoint = points[lastIndex];
-
   return `<section class="trip-main__trip-info  trip-info">
-    <div class="trip-info__main">
-      <h1 class="trip-info__title">${firstPoint.destination.name} &mdash; ${middlePoint.destination.name} &mdash; ${lastPoint.destination.name}</h1>
-
-      <p class="trip-info__dates">${getMonthFormat(firstPoint.dateFrom)} ${getDayFormat(firstPoint.dateFrom)} &mdash;&nbsp; ${getDayFormat(lastPoint.dateTo)}</p>
-    </div>
+  <div class="trip-info__main">
+  <h1 class="trip-info__title">${getSortedRoutePointsTitle(points)}</h1>
+  <p class="trip-info__dates">${getTripDates(points)}</p>
+</div>
 
     <p class="trip-info__cost">
-      Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
+      Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalPrice(points)}</span>
     </p>
   </section>`;
 };

@@ -1,5 +1,6 @@
-import dayjs from 'dayjs';
-import { getRandomInteger, getRandomArray, shuffle } from './util.js';
+import { getRandomInteger, getRandomArray } from './util.js';
+
+export const WAYPOINT_COUNT = 20;
 
 export const SENTENCES = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Cras aliquet varius magna, non porta ligula feugiat eget.', 'Fusce tristique felis at fermentum pharetra.', 'Aliquam id orci ut lectus varius viverra.', 'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.', 'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.', 'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.', 'Sed sed nisi sed augue convallis suscipit in sed felis.', 'Aliquam erat volutpat.', 'Nunc fermentum tortor ac porta dapibus.', 'In rutrum ac purus sit amet tempus.'];
@@ -22,43 +23,6 @@ export const PICTURES = [
     src: `http://picsum.photos/248/152?r=${getRandomInteger(15, 20)}`,
   },
 ];
-
-const MIN_DAYS_GAP = 1;
-const MAX_DAYS_GAP = 7;
-const HOURS_GAP = 24;
-const MIN_MINUTES_GAP = 10;
-const MAX_MINUTES_GAP = 60;
-
-export const getDescription = () => {
-  const array = SENTENCES.slice();
-  const description = [];
-  shuffle(array);
-
-  for (let i = 0; i < getRandomInteger(1, 5); i++) {
-    description.push(array[i]);
-  }
-  return description.join(' ');
-};
-
-export const getDateFrom = () => {
-  const dateFrom = dayjs()
-    .add(getRandomInteger(0, MAX_DAYS_GAP), 'd')
-    .add(getRandomInteger(0, HOURS_GAP), 'h')
-    .add(getRandomInteger(0, MAX_MINUTES_GAP), 'm')
-    .format('YYYY-MM-DDTHH:mm');
-
-  return dateFrom;
-};
-
-export const getDateTo = (dateFrom) => {
-  const dateTo = dayjs(dateFrom)
-    .add(getRandomInteger(0, MIN_DAYS_GAP), 'd')
-    .add(getRandomInteger(0, HOURS_GAP), 'h')
-    .add(getRandomInteger(MIN_MINUTES_GAP, MAX_MINUTES_GAP), 'm')
-    .format('YYYY-MM-DDTHH:mm');
-
-  return dateTo;
-};
 
 const busOptions = [
   {

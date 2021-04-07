@@ -1,16 +1,18 @@
-import { optionsMap,
-  getDateFrom,
-  getDateTo,
-  getDescription,
+import dayjs from 'dayjs';
+import {
+  optionsMap,
   DESTINATIONS,
   PICTURES,
+  SENTENCES,
   TYPES } from '../data.js';
 import { getRandomInteger,
   getRandomArrayElement,
-  getRandomArray } from '../util.js';
+  getRandomArray,
+  getDateFrom,
+  getDateTo,
+  getDescriptionFromSentences } from '../util.js';
 
 const createPoint = () => {
-
   const dateFrom = getDateFrom();
   const type = getRandomArrayElement(TYPES);
 
@@ -19,7 +21,7 @@ const createPoint = () => {
     dateFrom: dateFrom,
     dateTo: getDateTo(dateFrom),
     destination: {
-      description: getDescription(),
+      description: getDescriptionFromSentences(SENTENCES),
       name: getRandomArrayElement(DESTINATIONS),
       pictures: getRandomArray(PICTURES),
     },
@@ -29,4 +31,10 @@ const createPoint = () => {
   };
 };
 
-export { createPoint };
+const renderPoints = (count) => {
+  const points = new Array(count).fill().map(createPoint).slice().sort((a, b) => dayjs(a.dateFrom) - dayjs(b.dateFrom));
+
+  return points;
+};
+
+export { renderPoints };
