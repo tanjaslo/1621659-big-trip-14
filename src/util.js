@@ -1,4 +1,8 @@
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+
+dayjs.extend(duration);
+dayjs.duration(100);
 
 const MAX_MONTHS_GAP = 6;
 const MIN_DAYS_GAP = -10;
@@ -21,6 +25,10 @@ export const getRandomArrayElement = (array) => {
   return array[randomIndex];
 };
 
+export const getRandomArray = (array) => {
+  return array.filter(() => Math.random() < 0.5);
+};
+
 // Тасование Фишера — Йетса https://learn.javascript.ru/task/shuffle
 export const shuffle = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -29,90 +37,83 @@ export const shuffle = (array) => {
   }
 };
 
-export const getRandomArray = (array) => {
-  const arrayList = [];
-  array.forEach((element) => {
-    if (Math.random() > 0.5) {
-      return;
-    }
-    arrayList.push(element);
-  });
-  return arrayList;
-};
-
-export const getSortedRoutePointsTitle = (points) => {
-  const sortedPoints = [points[0].destination.name];
+const removeDuplPointsNames = (points) => {
+  const unduplicatedPointsNames = [points[0].destination.name];
 
   for (let i = 0; i < points.length - 1; i++) {
     const current = points[i].destination.name;
     const next = points[i + 1].destination.name;
 
     if (next !== current) {
-      sortedPoints.push(next);
+      unduplicatedPointsNames.push(next);
     }
   }
-  if (sortedPoints.length > MIN_TITLE_LENGTH) {
-    return sortedPoints.slice(0, MIN_TITLE_LENGTH - 1).join(' &mdash; ') + ' &mdash; . . . &mdash; ' + sortedPoints.slice([sortedPoints.length - 1]).join(' &mdash; ');
+  return unduplicatedPointsNames;
+};
+
+export const getSortedRoutePointsTitle = (points) => {
+  const routeTitle = removeDuplPointsNames(points);
+  const lastPoint = routeTitle.slice([routeTitle.length - 1]);
+
+  if (routeTitle.length > MIN_TITLE_LENGTH) {
+    return `${routeTitle.slice(0, MIN_TITLE_LENGTH - 1).join(' &mdash; ')}
+     &mdash; . . . &mdash; ${lastPoint.join(' &mdash; ')}`;
   }
-  return sortedPoints.join(' &mdash; ');
+  return routeTitle.join(' &mdash; ');
+};
+
+const getAllPointsCost = (points) => {
+  const allPointsCost = points.reduce((acc, point) => {
+    return acc + point.basePrice;}, 0);
+
+  return allPointsCost;
+};
+
+const getAllOffersCost = (points) => {
+  let allOffersCost = 0;
+
+  points.forEach((point) => {
+    point.offers.forEach((offer) => {
+      allOffersCost = allOffersCost + offer.price;
+    });
+  });
+  return allOffersCost;
 };
 
 export const getTotalPrice = (points) => {
-  let totalPrice = 0;
-  const reducer = (accumulator, currentValue) => accumulator + currentValue;
-
-  points.forEach((point) => {
-    totalPrice = totalPrice + point.offers.map((offer) => offer.price).reduce(reducer, point.basePrice);
-  });
+  const totalPrice = getAllPointsCost(points) + getAllOffersCost(points);
 
   return totalPrice;
 };
 
-export const getDescriptionFromSentences = (array) => {
-  const newArray = array.slice();
-  const description = [];
-  shuffle(newArray);
-
-  for (let i = 0; i < getRandomInteger(1, 5); i++) {
-    description.push(newArray[i]);
+export const createPhotosArray = () => {
+  const array = [];
+  for (let i = 1; i < getRandomInteger(2, 10); i++) {
+    array.push({
+      src: `http://picsum.photos/248/152?r=${getRandomInteger(i, i++)}`,
+    });
   }
-  return description.join(' ');
+  return array;
+};
+
+export const getDescriptionFromSentences = (array) => {
+  const copiedArray = array.slice();
+  shuffle(copiedArray);
+
+  const descriptionSentences = copiedArray.slice(0, getRandomInteger(1, 5));
+  return descriptionSentences.join(' ');
 };
 
 export const getDuration = (dateFrom, dateTo) => {
-  const startTime = new Date(dateFrom).getTime();
-  const endTime = new Date(dateTo).getTime();
-  const duration = endTime - startTime;
-  return duration;
-};
-
-export const humanizeDurationFormat = (duration) => {
-  let minutes = Math.floor((duration / (1000 * 60)) % 60);
-  let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-  let days = Math.floor((duration / (1000 * 60 * 60 * 24)) % 30);
-
-  hours = (hours < 10) ? '0' + hours : hours;
-  minutes = (minutes < 10) ? '0' + minutes : minutes;
-  days = (days < 10) ? '0' + days : days;
-
-  if (days !== '00') {
-    return `${days}D ${hours}H ${minutes}M`;
-  } else if (days === '00' && hours !== '00') {
-    return `${hours}H ${minutes}M`;
-  } else {
-    return `${minutes}M`;
-  }
+  return new Date(dateTo) - new Date(dateFrom);
 };
 
 export const getPointDateFromToFormat = (dateFrom, dateTo) => {
-  dateFrom = new Date(dateFrom).getDate();
-  dateTo = new Date(dateTo).getDate();
+  const date1 = dayjs(dateFrom);
+  const date2 = dayjs(dateTo);
+  const difference = date2.diff(date1, 'day');
 
-  if (dateTo - dateFrom >= 1) {
-    return 'MM/D HH:mm';
-  } else {
-    return 'HH:mm';
-  }
+  return difference >= 1 ? 'MM/D HH:mm' : 'HH:mm';
 };
 
 export const getDateFrom = () => {
@@ -142,11 +143,24 @@ export const getTripDates = (points) => {
   const lastPoint = points[lastIndex];
   const startingMonth = dayjs(firstPoint.dateFrom).month();
   const endingMonth = dayjs(lastPoint.dateTo).month();
+  const start = getEventDateFormat(firstPoint.dateFrom);
+  const end = startingMonth === endingMonth ? getDayFormat(lastPoint.dateTo) : getEventDateFormat(lastPoint.dateTo);
 
-  if (startingMonth === endingMonth) {
-    return `${getEventDateFormat(firstPoint.dateFrom)} &mdash; ${getDayFormat(lastPoint.dateTo)}`;
+  return `${start} &mdash; ${end}`;
+};
+
+export const humanizeDurationFormat = (dateFrom, dateTo) => {
+  const difference = dayjs(dateTo).diff(dayjs(dateFrom));
+  const daysDiff = dayjs.duration(difference).days();
+  const hoursDiff = dayjs.duration(difference).hours();
+  const minutesDiff = dayjs.duration(difference).minutes();
+
+  if (daysDiff > 0) {
+    return `${daysDiff}D ${hoursDiff}H ${minutesDiff}M`;
+  } else if (daysDiff === 0 && hoursDiff !== 0) {
+    return `${hoursDiff}H ${minutesDiff}M`;
   }
-  return `${getEventDateFormat(firstPoint.dateFrom)} &mdash; ${getEventDateFormat(lastPoint.dateTo)}`;
+  return `${minutesDiff}M`;
 };
 
 export const getDateFormat = (date) => {

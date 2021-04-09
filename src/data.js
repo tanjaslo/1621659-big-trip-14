@@ -9,21 +9,6 @@ export const DESTINATIONS = ['Grosuplje', 'Ljubljana','Maribor', 'Novo Mesto', '
 
 export const TYPES = ['taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
-export const PICTURES = [
-  {
-    src: `http://picsum.photos/248/152?r=${getRandomInteger(0, 5)}`,
-  },
-  {
-    src: `http://picsum.photos/248/152?r=${getRandomInteger(5, 10)}`,
-  },
-  {
-    src: `http://picsum.photos/248/152?r=${getRandomInteger(10, 15)}`,
-  },
-  {
-    src: `http://picsum.photos/248/152?r=${getRandomInteger(15, 20)}`,
-  },
-];
-
 const busOptions = [
   {
     title: 'Book tickets',

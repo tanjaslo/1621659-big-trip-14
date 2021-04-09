@@ -2,28 +2,22 @@ import dayjs from 'dayjs';
 import { getDateFormat,
   getPointDateFromToFormat,
   getEventDateFormat,
-  getDuration,
   humanizeDurationFormat } from '../util.js';
 
 const createOffersList = (offers) => {
-  if (offers.length !== 0) {
-    const OffersList = offers.map((offer) =>
-      `<li class="event__offer">
+  const offersList = offers.map((offer) =>
+    `<li class="event__offer">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
-      </li>`).join('');
+    </li>`).join('');
 
-    return OffersList;
-  }
-  return '';
+  return offersList;
 };
 
 const createWaypointsTemplate = (point) => {
 
   const {basePrice, destination, dateFrom, dateTo, isFavourite, offers, type} = point;
-
-  const duration = getDuration(dateFrom, dateTo);
 
   const humanizePointDateFormat = (date) => {
     return dayjs(date).format(getPointDateFromToFormat(dateFrom, dateTo));
@@ -46,7 +40,7 @@ const createWaypointsTemplate = (point) => {
           &mdash;
           <time class="event__end-time" datetime="${dateTo}">${humanizePointDateFormat(dateTo)}</time>
         </p>
-          <p class="event__duration">${humanizeDurationFormat(duration)}</p>
+          <p class="event__duration">${humanizeDurationFormat(dateFrom, dateTo)}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

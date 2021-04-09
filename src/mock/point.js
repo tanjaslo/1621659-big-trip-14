@@ -2,14 +2,13 @@ import dayjs from 'dayjs';
 import {
   optionsMap,
   DESTINATIONS,
-  PICTURES,
   SENTENCES,
   TYPES } from '../data.js';
 import { getRandomInteger,
   getRandomArrayElement,
-  getRandomArray,
   getDateFrom,
   getDateTo,
+  createPhotosArray,
   getDescriptionFromSentences } from '../util.js';
 
 const createPoint = () => {
@@ -23,7 +22,7 @@ const createPoint = () => {
     destination: {
       description: getDescriptionFromSentences(SENTENCES),
       name: getRandomArrayElement(DESTINATIONS),
-      pictures: getRandomArray(PICTURES),
+      pictures: createPhotosArray(),
     },
     isFavourite: Boolean(getRandomInteger(0, 1)),
     offers: optionsMap.get(type),
@@ -32,7 +31,7 @@ const createPoint = () => {
 };
 
 const renderPoints = (count) => {
-  const points = new Array(count).fill().map(createPoint).slice().sort((a, b) => dayjs(a.dateFrom) - dayjs(b.dateFrom));
+  const points = new Array(count).fill().map(createPoint).sort((a, b) => dayjs(a.dateFrom) - dayjs(b.dateFrom));
 
   return points;
 };
