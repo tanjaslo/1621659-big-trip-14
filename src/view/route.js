@@ -1,12 +1,12 @@
 import { getTripDates,
-  getSortedRoutePointsTitle,
+  getRoutePointsTitle,
   getTotalPrice } from '../util.js';
 
 const createRouteTemplate = (points) => {
 
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
-  <h1 class="trip-info__title">${getSortedRoutePointsTitle(points)}</h1>
+  <h1 class="trip-info__title">${getRoutePointsTitle(points)}</h1>
   <p class="trip-info__dates">${getTripDates(points)}</p>
 </div>
 

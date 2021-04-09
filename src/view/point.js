@@ -1,6 +1,6 @@
-import dayjs from 'dayjs';
 import { getDateFormat,
-  getPointDateFromToFormat,
+  humanizeDateFromFormat,
+  humanizeDateToFormat,
   getEventDateFormat,
   humanizeDurationFormat } from '../util.js';
 
@@ -19,10 +19,6 @@ const createWaypointsTemplate = (point) => {
 
   const {basePrice, destination, dateFrom, dateTo, isFavourite, offers, type} = point;
 
-  const humanizePointDateFormat = (date) => {
-    return dayjs(date).format(getPointDateFromToFormat(dateFrom, dateTo));
-  };
-
   const favouriteClassName = isFavourite
     ? 'event__favorite-btn event__favorite-btn--active'
     : 'event__favorite-btn';
@@ -36,9 +32,9 @@ const createWaypointsTemplate = (point) => {
       <h3 class="event__title">${type} ${destination.name}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="${dateFrom}">${humanizePointDateFormat(dateFrom)}</time>
+          <time class="event__start-time" datetime="${dateFrom}">${humanizeDateFromFormat(dateFrom, dateTo)}</time>
           &mdash;
-          <time class="event__end-time" datetime="${dateTo}">${humanizePointDateFormat(dateTo)}</time>
+          <time class="event__end-time" datetime="${dateTo}">${humanizeDateToFormat(dateFrom, dateTo)}</time>
         </p>
           <p class="event__duration">${humanizeDurationFormat(dateFrom, dateTo)}</p>
       </div>

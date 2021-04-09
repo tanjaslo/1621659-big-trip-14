@@ -51,7 +51,7 @@ const removeDuplPointsNames = (points) => {
   return unduplicatedPointsNames;
 };
 
-export const getSortedRoutePointsTitle = (points) => {
+export const getRoutePointsTitle = (points) => {
   const routeTitle = removeDuplPointsNames(points);
   const lastPoint = routeTitle.slice([routeTitle.length - 1]);
 
@@ -63,20 +63,15 @@ export const getSortedRoutePointsTitle = (points) => {
 };
 
 const getAllPointsCost = (points) => {
-  const allPointsCost = points.reduce((acc, point) => {
-    return acc + point.basePrice;}, 0);
+  const allPointsCost = points.reduce((acc, point) => acc + point.basePrice, 0);
 
   return allPointsCost;
 };
 
 const getAllOffersCost = (points) => {
-  let allOffersCost = 0;
-
-  points.forEach((point) => {
-    point.offers.forEach((offer) => {
-      allOffersCost = allOffersCost + offer.price;
-    });
-  });
+  const allOffersCost = points.reduce((pointsAcc, {offers}) => {
+    return pointsAcc += offers.reduce((offersAcc, offer) => offersAcc + offer.price, 0);
+  }, 0);
   return allOffersCost;
 };
 
@@ -90,7 +85,7 @@ export const createPhotosArray = () => {
   const array = [];
   for (let i = 1; i < getRandomInteger(2, 10); i++) {
     array.push({
-      src: `http://picsum.photos/248/152?r=${getRandomInteger(i, i++)}`,
+      src: `http://picsum.photos/248/152?r=${(i, i++)}`,
     });
   }
   return array;
@@ -102,18 +97,6 @@ export const getDescriptionFromSentences = (array) => {
 
   const descriptionSentences = copiedArray.slice(0, getRandomInteger(1, 5));
   return descriptionSentences.join(' ');
-};
-
-export const getDuration = (dateFrom, dateTo) => {
-  return new Date(dateTo) - new Date(dateFrom);
-};
-
-export const getPointDateFromToFormat = (dateFrom, dateTo) => {
-  const date1 = dayjs(dateFrom);
-  const date2 = dayjs(dateTo);
-  const difference = date2.diff(date1, 'day');
-
-  return difference >= 1 ? 'MM/D HH:mm' : 'HH:mm';
 };
 
 export const getDateFrom = () => {
@@ -137,6 +120,25 @@ export const getDateTo = (dateFrom) => {
   return dateTo;
 };
 
+export const getDuration = (dateFrom, dateTo) => {
+  return new Date(dateTo) - new Date(dateFrom);
+};
+
+const getPointDateFromToFormat = (dateFrom, dateTo) => {
+  const date1 = dayjs(dateFrom);
+  const date2 = dayjs(dateTo);
+
+  return date2.isAfter(date1, 'day') ? 'MM/D HH:mm' : 'HH:mm';
+};
+
+export const humanizeDateFromFormat = (dateFrom, dateTo) => {
+  return dayjs(dateFrom).format(getPointDateFromToFormat(dateFrom, dateTo));
+};
+
+export const humanizeDateToFormat = (dateFrom, dateTo) => {
+  return dayjs(dateTo).format(getPointDateFromToFormat(dateFrom, dateTo));
+};
+
 export const getTripDates = (points) => {
   const firstPoint = points[0];
   const lastIndex = points.length - 1;
@@ -154,13 +156,16 @@ export const humanizeDurationFormat = (dateFrom, dateTo) => {
   const daysDiff = dayjs.duration(difference).days();
   const hoursDiff = dayjs.duration(difference).hours();
   const minutesDiff = dayjs.duration(difference).minutes();
+  const days = String(daysDiff).padStart(2, '0');
+  const hours = String(hoursDiff).padStart(2, '0');
+  const minutes = String(minutesDiff).padStart(2, '0');
 
   if (daysDiff > 0) {
-    return `${daysDiff}D ${hoursDiff}H ${minutesDiff}M`;
-  } else if (daysDiff === 0 && hoursDiff !== 0) {
-    return `${hoursDiff}H ${minutesDiff}M`;
+    return `${days}D ${hours}H ${minutes}M`;
+  } else if (hoursDiff > 0) {
+    return `${hours}H ${minutes}M`;
   }
-  return `${minutesDiff}M`;
+  return `${minutes}M`;
 };
 
 export const getDateFormat = (date) => {
