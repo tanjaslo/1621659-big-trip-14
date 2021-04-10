@@ -4,13 +4,6 @@ import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 dayjs.duration(100);
 
-const MAX_MONTHS_GAP = 6;
-const MIN_DAYS_GAP = -10;
-const MAX_DAYS_GAP = 7;
-const MIN_DAYSTO_GAP = 1;
-const HOURS_GAP = 24;
-const MIN_MINUTES_GAP = 10;
-const MAX_MINUTES_GAP = 60;
 const MIN_TITLE_LENGTH = 5;
 
 export const getRandomInteger = (a = 0, b = 1) => {
@@ -99,25 +92,15 @@ export const getDescriptionFromSentences = (array) => {
   return descriptionSentences.join(' ');
 };
 
-export const getDateFrom = () => {
-  const dateFrom = dayjs()
-    .add(getRandomInteger(0, MAX_MONTHS_GAP), 'M')
-    .add(getRandomInteger(MIN_DAYS_GAP, MAX_DAYS_GAP), 'd')
-    .add(getRandomInteger(0, HOURS_GAP), 'h')
-    .add(getRandomInteger(0, MAX_MINUTES_GAP), 'm')
-    .format('YYYY-MM-DDTHH:mm');
-
-  return dateFrom;
+export const getRandomDate = (start, end) => {
+  const randomDate = dayjs(dayjs(start) + Math.random() * (dayjs(end) - dayjs(start)));
+  return dayjs(randomDate).format('YYYY-MM-DDTHH:mm');
 };
 
 export const getDateTo = (dateFrom) => {
-  const dateTo = dayjs(dateFrom)
-    .add(getRandomInteger(0, MIN_DAYSTO_GAP), 'd')
-    .add(getRandomInteger(0, HOURS_GAP), 'h')
-    .add(getRandomInteger(MIN_MINUTES_GAP, MAX_MINUTES_GAP), 'm')
-    .format('YYYY-MM-DDTHH:mm');
-
-  return dateTo;
+  const minEventDuration = dayjs(dateFrom).add(10, 'm');
+  const maxEventDuration = dayjs(dateFrom).add(36, 'h');
+  return dayjs(getRandomInteger(minEventDuration, maxEventDuration)).format('YYYY-MM-DDTHH:mm');
 };
 
 export const getDuration = (dateFrom, dateTo) => {

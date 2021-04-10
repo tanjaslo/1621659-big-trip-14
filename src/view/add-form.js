@@ -15,13 +15,10 @@ const createOffersList = (offers) => {
 };
 
 const createPicturesList = (destination) => {
-  if (destination.pictures.length !== 0) {
-    const picturesList = destination.pictures.map((picture) =>
-      `<img class="event__photo" src="${picture.src}" alt="Event photo">`).join('');
+  const picturesList = destination.pictures.map((picture) =>
+    `<img class="event__photo" src="${picture.src}" alt="Event photo">`).join('');
 
-    return picturesList;
-  }
-  return '';
+  return picturesList;
 };
 
 const createAddFormTemplate = (point) => {

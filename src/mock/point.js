@@ -6,18 +6,18 @@ import {
   TYPES } from '../data.js';
 import { getRandomInteger,
   getRandomArrayElement,
-  getDateFrom,
+  getRandomDate,
   getDateTo,
   createPhotosArray,
   getDescriptionFromSentences } from '../util.js';
 
 const createPoint = () => {
-  const dateFrom = getDateFrom();
+  const dateFrom = getRandomDate(dayjs(), dayjs().add(6, 'M'));
   const type = getRandomArrayElement(TYPES);
 
   return {
     basePrice: getRandomInteger(10, 1000),
-    dateFrom: dateFrom,
+    dateFrom,
     dateTo: getDateTo(dateFrom),
     destination: {
       description: getDescriptionFromSentences(SENTENCES),
@@ -26,7 +26,7 @@ const createPoint = () => {
     },
     isFavourite: Boolean(getRandomInteger(0, 1)),
     offers: optionsMap.get(type),
-    type: type,
+    type,
   };
 };
 
