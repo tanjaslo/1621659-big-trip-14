@@ -1,5 +1,3 @@
-import { getRandomInteger, getRandomArray } from './util.js';
-
 export const WAYPOINT_COUNT = 20;
 
 export const SENTENCES = [
@@ -11,32 +9,53 @@ export const TYPES = ['taxi', 'bus', 'train', 'ship', 'transport', 'drive', 'fli
 
 const busOptions = [
   {
-    title: 'Book tickets',
-    price: getRandomInteger(50, 100),
+    id: 1,
+    title: 'Add luggage',
+    price: 10,
   },
   {
+    id: 2,
     title: 'Choose seats',
     price: 5,
+  },
+  {
+    id: 3,
+    title: 'Book tickets',
+    price: 20,
   },
 ];
 
 const checkinOptions = [
   {
+    id: 4,
     title: 'Add breakfast',
+    price: 20,
+  },
+  {
+    id: 5,
+    title: 'Add dinner',
+    price: 30,
+  },
+  {
+    id: 6,
+    title: 'Early check-in',
     price: 50,
   },
   {
-    title: 'Add dinner',
+    id: 7,
+    title: 'Late check-out',
     price: 50,
   },
 ];
 
 const driveOptions = [
   {
+    id: 8,
     title: 'Rent a car',
     price: 200,
   },
   {
+    id: 9,
     title: 'Rent a van',
     price: 500,
   },
@@ -44,29 +63,35 @@ const driveOptions = [
 
 const flightOptions = [
   {
+    id: 10,
     title: 'Add luggage',
-    price: getRandomInteger(20, 50),
+    price: 30,
   },
   {
+    id: 11,
     title: 'Add meal',
-    price: getRandomInteger(5, 25),
+    price: 20,
   },
   {
+    id: 12,
     title: 'Choose seats',
     price: 10,
   },
   {
+    id: 13,
     title: 'Switch to comfort class',
-    price: getRandomInteger(50, 100),
+    price: 100,
   },
 ];
 
 const restaurantOptions = [
   {
+    id: 14,
     title: 'Book table 8-10am',
     price: 10,
   },
   {
+    id: 15,
     title: 'Book table 5-6pm',
     price: 50,
   },
@@ -74,14 +99,17 @@ const restaurantOptions = [
 
 const shipOptions = [
   {
+    id: 16,
     title: 'Add beverages',
     price: 20,
   },
   {
+    id: 17,
     title: 'Add snacks',
     price: 20,
   },
   {
+    id: 18,
     title: 'Choose cabin',
     price: 100,
   },
@@ -89,10 +117,12 @@ const shipOptions = [
 
 const sightseeingOptions = [
   {
+    id: 19,
     title: 'Book tickets',
     price: 50,
   },
   {
+    id: 20,
     title: 'Lunch in city',
     price: 30,
   },
@@ -100,14 +130,17 @@ const sightseeingOptions = [
 
 const taxiOptions = [
   {
+    id: 21,
     title: 'Order Uber',
     price: 20,
   },
   {
+    id: 22,
     title: 'Choose the radio station',
     price: 10,
   },
   {
+    id: 23,
     title: 'Upgrade to a business class',
     price: 100,
   },
@@ -115,10 +148,12 @@ const taxiOptions = [
 
 const trainOptions = [
   {
+    id: 24,
     title: 'Add meal',
     price: 20,
   },
   {
+    id: 25,
     title: 'Choose seats',
     price: 100,
   },
@@ -126,14 +161,17 @@ const trainOptions = [
 
 const transportOptions = [
   {
+    id: 26,
     title: 'Buy day pass',
     price: 10,
   },
   {
+    id: 27,
     title: 'Buy week pass',
     price: 25,
   },
   {
+    id: 28,
     title: 'Buy month pass',
     price: 50,
   },
@@ -141,13 +179,13 @@ const transportOptions = [
 
 export const optionsMap = new Map();
 optionsMap
-  .set('bus', getRandomArray(busOptions))
-  .set('check-in', getRandomArray(checkinOptions))
-  .set('drive', getRandomArray(driveOptions))
-  .set('flight', getRandomArray(flightOptions))
-  .set('sightseeing', getRandomArray(sightseeingOptions))
-  .set('ship', getRandomArray(shipOptions))
-  .set('restaurant', getRandomArray(restaurantOptions))
-  .set('taxi', getRandomArray(taxiOptions))
-  .set('train', getRandomArray(trainOptions))
-  .set('transport', getRandomArray(transportOptions));
+  .set('bus', busOptions)
+  .set('check-in', checkinOptions)
+  .set('drive', driveOptions)
+  .set('flight', flightOptions)
+  .set('sightseeing', sightseeingOptions)
+  .set('ship', shipOptions)
+  .set('restaurant', restaurantOptions)
+  .set('taxi', taxiOptions)
+  .set('train', trainOptions)
+  .set('transport', transportOptions);

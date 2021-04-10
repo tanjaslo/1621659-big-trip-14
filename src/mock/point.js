@@ -5,6 +5,7 @@ import {
   SENTENCES,
   TYPES } from '../data.js';
 import { getRandomInteger,
+  getRandomArray,
   getRandomArrayElement,
   getRandomDate,
   getDateTo,
@@ -25,7 +26,7 @@ const createPoint = () => {
       pictures: createPhotosArray(),
     },
     isFavourite: Boolean(getRandomInteger(0, 1)),
-    offers: optionsMap.get(type),
+    offers: getRandomArray(optionsMap.get(type)),
     type,
   };
 };

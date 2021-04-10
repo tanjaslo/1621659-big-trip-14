@@ -174,3 +174,7 @@ export const isFutureEvent = (point) => {
 export const isExpiredEvent = (point) => {
   return dayjs(point.dateTo).isBefore(dayjs(), 'd');
 };
+
+export const firstLetterCaps = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};

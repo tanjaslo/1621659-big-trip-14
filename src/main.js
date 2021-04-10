@@ -6,7 +6,7 @@ import { createEventsListTemplate } from './view/list.js';
 import { createMenuTemplate } from './view/menu.js';
 import { createRouteTemplate } from './view/route.js';
 import { createSortTemplate } from './view/sort.js';
-import { createWaypointsTemplate } from './view/point.js';
+import { createPointsTemplate } from './view/point.js';
 import { renderPoints } from './mock/point.js';
 import { generateFilters } from './mock/filter.js';
 
@@ -34,7 +34,7 @@ renderTemplate(eventsElement, createEventsListTemplate(), 'beforeend');
 const eventList = mainElement.querySelector('.trip-events__list');
 
 for (let i = 1; i < WAYPOINT_COUNT; i++) {
-  renderTemplate(eventList, createWaypointsTemplate(points[i]), 'beforeend');
+  renderTemplate(eventList, createPointsTemplate(points[i]), 'beforeend');
 }
 
 const eventItem = document.querySelector('.trip-events__item');

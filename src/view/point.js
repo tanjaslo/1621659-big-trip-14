@@ -4,18 +4,19 @@ import { getDateFormat,
   getEventDateFormat,
   humanizeDurationFormat } from '../util.js';
 
-const createOffersList = (offers) => {
-  const offersList = offers.map((offer) =>
+const createSelectedOffersList = (offers) => {
+
+  const selectedOffersList = offers.map((offer) =>
     `<li class="event__offer">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
     </li>`).join('');
 
-  return offersList;
+  return selectedOffersList;
 };
 
-const createWaypointsTemplate = (point) => {
+const createPointsTemplate = (point) => {
 
   const {basePrice, destination, dateFrom, dateTo, isFavourite, offers, type} = point;
 
@@ -43,7 +44,7 @@ const createWaypointsTemplate = (point) => {
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
-      ${createOffersList(offers)}
+      ${createSelectedOffersList(offers)}
       </ul>
       <button class="${favouriteClassName}" type="button">
         <span class="visually-hidden">Add to favorite</span>
@@ -58,4 +59,4 @@ const createWaypointsTemplate = (point) => {
   </li>`;
 };
 
-export { createWaypointsTemplate };
+export { createPointsTemplate };
