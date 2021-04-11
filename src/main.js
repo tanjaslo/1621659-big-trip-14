@@ -1,4 +1,4 @@
-import { WAYPOINT_COUNT } from './data.js';
+import { POINT_COUNT } from './data.js';
 import { createAddFormTemplate } from './view/add-form.js';
 import { createEditFormTemplate } from './view/edit-form.js';
 import { createFilterTemplate } from './view/filter.js';
@@ -10,7 +10,7 @@ import { createPointsTemplate } from './view/point.js';
 import { renderPoints } from './mock/point.js';
 import { generateFilters } from './mock/filter.js';
 
-const points = renderPoints(WAYPOINT_COUNT);
+const points = renderPoints(POINT_COUNT);
 const filters = generateFilters(points);
 
 const renderTemplate = (container, template, place) => {
@@ -33,7 +33,7 @@ renderTemplate(eventsElement, createEventsListTemplate(), 'beforeend');
 
 const eventList = mainElement.querySelector('.trip-events__list');
 
-for (let i = 1; i < WAYPOINT_COUNT; i++) {
+for (let i = 1; i < POINT_COUNT; i++) {
   renderTemplate(eventList, createPointsTemplate(points[i]), 'beforeend');
 }
 
