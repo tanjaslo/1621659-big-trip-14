@@ -63,7 +63,10 @@ const getAllPointsCost = (points) => {
 
 const getAllOffersCost = (points) => {
   const allOffersCost = points.reduce((pointsAcc, {offers}) => {
-    return pointsAcc += offers.reduce((offersAcc, offer) => offersAcc + offer.price, 0);
+    pointsAcc += offers.reduce((offersAcc, offer) => {
+      return offersAcc + offer.price;
+    }, 0);
+    return pointsAcc;
   }, 0);
   return allOffersCost;
 };
@@ -78,7 +81,7 @@ export const createPhotosArray = () => {
   const array = [];
   for (let i = 1; i < getRandomInteger(2, 10); i++) {
     array.push({
-      src: `http://picsum.photos/248/152?r=${(i, i++)}`,
+      src: `http://picsum.photos/248/152?r=${(i)}`,
     });
   }
   return array;
