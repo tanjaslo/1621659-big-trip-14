@@ -28,8 +28,8 @@ const createFilterTemplate = (filterItems) => {
 
 export default class Filter {
   constructor(filterItems) {
-    //this._element = null;
     this._filterItems = filterItems;
+    this._element = null;
   }
 
   getTemplate() {

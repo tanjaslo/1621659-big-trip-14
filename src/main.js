@@ -1,7 +1,7 @@
 import { POINT_COUNT } from './data.js';
 import { renderElement, RenderPosition } from './util.js';
 import AddFormView from './view/add-form.js';
-import EditFormView from './view/edit-form.js';
+// import EditFormView from './view/edit-form.js';
 import FilterView from './view/filter.js';
 import EventsListView from './view/list.js';
 import MenuView from './view/menu.js';
@@ -34,6 +34,6 @@ points.forEach((point) => {
   renderElement(eventList, new PointView(point).getElement(), RenderPosition.BEFOREEND);
 });
 
-const eventItem = document.querySelector('.trip-events__item');
+// const eventItem = document.querySelector('.trip-events__item');
 
-renderElement(eventItem, new EditFormView(points[0]).getElement(), RenderPosition.BEFOREEND);
+// renderElement(eventItem, new EditFormView(points[0]).getElement(), RenderPosition.BEFOREEND);
