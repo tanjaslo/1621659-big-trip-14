@@ -1,4 +1,4 @@
-import { getFormDateFormat, firstLetterCaps } from '../util.js';
+import { getFormDateFormat, firstLetterCaps, createElement } from '../util.js';
 import { TYPES, optionsMap } from '../data.js';
 
 const createEventTypesListTemplate = () => {
@@ -90,7 +90,8 @@ const createAddFormTemplate = (point) => {
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Cancel</button>
   </header>
-  <section class="event__details">
+  <section class="event__details"
+  >
     <section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -113,4 +114,25 @@ const createAddFormTemplate = (point) => {
 </form>`;
 };
 
-export { createAddFormTemplate };
+export default class AddForm {
+  constructor(points) {
+    this._element = null;
+    this._points = points;
+  }
+
+  getTemplate() {
+    return createAddFormTemplate(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

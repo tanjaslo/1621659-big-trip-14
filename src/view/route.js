@@ -1,6 +1,7 @@
 import { getTripDates,
   getRoutePointsTitle,
-  getTotalPrice } from '../util.js';
+  getTotalPrice,
+  createElement } from '../util.js';
 
 const createRouteTemplate = (points) => {
 
@@ -16,4 +17,25 @@ const createRouteTemplate = (points) => {
   </section>`;
 };
 
-export { createRouteTemplate };
+export default class TripInfo {
+  constructor(points) {
+    this._element = null;
+    this._points = points;
+  }
+
+  getTemplate() {
+    return createRouteTemplate(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

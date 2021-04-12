@@ -1,3 +1,5 @@
+import { createElement } from '../util.js';
+
 const createFilterItemTemplate = (filter, isChecked) => {
   const { name, count } = filter;
 
@@ -24,4 +26,25 @@ const createFilterTemplate = (filterItems) => {
     </form>`;
 };
 
-export { createFilterTemplate };
+export default class Filter {
+  constructor(filterItems) {
+    //this._element = null;
+    this._filterItems = filterItems;
+  }
+
+  getTemplate() {
+    return createFilterTemplate(this._filterItems);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
