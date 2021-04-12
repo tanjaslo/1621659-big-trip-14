@@ -37,7 +37,8 @@ const createEditFormTemplate = (point) => {
   const offersContainerClassName =
   offers.length !== 0 ? '' : ' visually-hidden';
 
-  return `<form class="event event--edit" action="#" method="post">
+  return `<li class="trip-events__item">
+  <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -102,17 +103,18 @@ const createEditFormTemplate = (point) => {
         <p class="event__destination-description">${destination.description}</p>
       </section>
     </section>
-  </form>`;
+  </form>
+  </li>`;
 };
 
 export default class EditForm {
-  constructor(points) {
+  constructor(point) {
     this._element = null;
-    this._points = points;
+    this._point = point;
   }
 
   getTemplate() {
-    return createEditFormTemplate(this._points);
+    return createEditFormTemplate(this._point);
   }
 
   getElement() {
