@@ -2,7 +2,8 @@ import { getDateFormat,
   humanizeDateFromFormat,
   humanizeDateToFormat,
   getEventDateFormat,
-  humanizeDurationFormat } from '../util.js';
+  humanizeDurationFormat,
+  createElement } from '../util.js';
 
 const createSelectedOffersList = (offers) => {
 
@@ -59,4 +60,25 @@ const createPointsTemplate = (point) => {
   </li>`;
 };
 
-export { createPointsTemplate };
+export default class Point {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createPointsTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

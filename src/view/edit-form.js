@@ -1,4 +1,4 @@
-import { getFormDateFormat, firstLetterCaps } from '../util.js';
+import { getFormDateFormat, firstLetterCaps, createElement } from '../util.js';
 import { TYPES, optionsMap } from '../data.js';
 
 const createEventTypesListTemplate = () => {
@@ -37,7 +37,8 @@ const createEditFormTemplate = (point) => {
   const offersContainerClassName =
   offers.length !== 0 ? '' : ' visually-hidden';
 
-  return `<form class="event event--edit" action="#" method="post">
+  return `<li class="trip-events__item">
+  <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -102,7 +103,30 @@ const createEditFormTemplate = (point) => {
         <p class="event__destination-description">${destination.description}</p>
       </section>
     </section>
-  </form>`;
+  </form>
+  </li>`;
 };
 
-export { createEditFormTemplate };
+export default class EditForm {
+  constructor(point) {
+    this._element = null;
+    this._point = point;
+  }
+
+  getTemplate() {
+    return createEditFormTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
