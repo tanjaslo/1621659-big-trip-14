@@ -8,6 +8,7 @@ import MenuView from './view/menu.js';
 import TripInfoView from './view/route.js';
 import TripSortView from './view/sort.js';
 import PointView from './view/point.js';
+import NoEventView from './view/no-event.js';
 import { renderPoints } from './mock/point.js';
 import { generateFilters } from './mock/filter.js';
 
@@ -21,16 +22,11 @@ const menuElement = headerElement.querySelector('.trip-controls__navigation');
 const filtersElement = headerElement.querySelector('.trip-controls__filters');
 const eventsElement = mainElement.querySelector('.trip-events');
 
-render(tripMainElement, new TripInfoView(points).getElement(), RenderPosition.AFTERBEGIN);
-render(menuElement, new MenuView().getElement(), RenderPosition.AFTERBEGIN);
-render(filtersElement, new FilterView(filters).getElement(), RenderPosition.BEFOREEND);
-render(eventsElement, new TripSortView().getElement(), RenderPosition.AFTERBEGIN);
-render(eventsElement, new AddFormView(points[0]).getElement(), RenderPosition.BEFOREEND);
 render(eventsElement, new EventsListView().getElement(), RenderPosition.BEFOREEND);
 
 const eventList = mainElement.querySelector('.trip-events__list');
 
-const renderPoint = (pointsListElement, point) => {
+const renderPoint = (pointContainer, point) => {
   const pointComponent = new PointView(point).getElement();
   const pointEditComponent = new EditFormView(point).getElement();
   const eventButton = pointComponent.querySelector('.event__rollup-btn');
@@ -38,11 +34,11 @@ const renderPoint = (pointsListElement, point) => {
   const closeFormButton = pointEditComponent.querySelector('.event__rollup-btn');
 
   const replacePointToForm = () => {
-    pointsListElement.replaceChild(pointEditComponent, pointComponent);
+    pointContainer.replaceChild(pointEditComponent, pointComponent);
   };
 
   const replaceFormToPoint = () => {
-    pointsListElement.replaceChild(pointComponent, pointEditComponent);
+    pointContainer.replaceChild(pointComponent, pointEditComponent);
   };
 
   eventButton.addEventListener('click', () => {
@@ -68,9 +64,21 @@ const renderPoint = (pointsListElement, point) => {
       document.removeEventListener('keydown', onEscKeyDown);
     }
   };
-  render(pointsListElement, pointComponent, RenderPosition.BEFOREEND);
+  render(pointContainer, pointComponent, RenderPosition.BEFOREEND);
 };
 
-points.forEach((point) => {
-  renderPoint(eventList, point);
-});
+const renderEventsListElement = (pointsContainer, points) => {
+  if (points.length === 0) {
+    render(pointsContainer, new NoEventView().getElement(), RenderPosition.BEFOREEND);
+  }
+  render(eventsElement, new AddFormView(points[0]).getElement(), RenderPosition.AFTERBEGIN);
+  render(tripMainElement, new TripInfoView(points).getElement(), RenderPosition.AFTERBEGIN); render(eventsElement, new TripSortView().getElement(), RenderPosition.AFTERBEGIN);
+
+  points.forEach((point) => {
+    renderPoint(pointsContainer, point);
+  });
+};
+
+render(menuElement, new MenuView().getElement(), RenderPosition.AFTERBEGIN);
+render(filtersElement, new FilterView(filters).getElement(), RenderPosition.BEFOREEND);
+renderEventsListElement(eventList, points);
