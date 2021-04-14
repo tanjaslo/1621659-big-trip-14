@@ -1,3 +1,4 @@
+import { getRandomInteger, shuffle } from '../utils/common.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
@@ -5,57 +6,6 @@ dayjs.extend(duration);
 dayjs.duration(100);
 
 const MIN_TITLE_LENGTH = 5;
-
-export const RenderPosition = {
-  AFTERBEGIN: 'afterbegin',
-  BEFOREEND: 'beforeend',
-};
-
-export const render = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-  }
-};
-
-export const createElement = (template) => {
-  const newElement = document.createElement('div');
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
-
-export const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-export const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-export const getRandomArrayElement = (array) => {
-  const randomIndex = getRandomInteger(0, array.length - 1);
-  return array[randomIndex];
-};
-
-export const getRandomArray = (array) => {
-  return array.filter(() => Math.random() < 0.5);
-};
-
-// Тасование Фишера — Йетса https://learn.javascript.ru/task/shuffle
-export const shuffle = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-};
 
 const removeDuplPointsNames = (points) => {
   const unduplicatedPointsNames = [points[0].destination.name];
@@ -122,6 +72,13 @@ export const getDescriptionFromSentences = (array) => {
   return descriptionSentences.join(' ');
 };
 
+const getPointDateFromToFormat = (dateFrom, dateTo) => {
+  const date1 = dayjs(dateFrom);
+  const date2 = dayjs(dateTo);
+
+  return date2.isAfter(date1, 'day') ? 'MM/D HH:mm' : 'HH:mm';
+};
+
 export const getRandomDate = (start, end) => {
   const randomDate = dayjs(dayjs(start) + Math.random() * (dayjs(end) - dayjs(start)));
   return dayjs(randomDate).format('YYYY-MM-DDTHH:mm');
@@ -135,13 +92,6 @@ export const getDateTo = (dateFrom) => {
 
 export const getDuration = (dateFrom, dateTo) => {
   return new Date(dateTo) - new Date(dateFrom);
-};
-
-const getPointDateFromToFormat = (dateFrom, dateTo) => {
-  const date1 = dayjs(dateFrom);
-  const date2 = dayjs(dateTo);
-
-  return date2.isAfter(date1, 'day') ? 'MM/D HH:mm' : 'HH:mm';
 };
 
 export const humanizeDateFromFormat = (dateFrom, dateTo) => {
@@ -203,8 +153,4 @@ export const isFutureEvent = (point) => {
 
 export const isExpiredEvent = (point) => {
   return dayjs(point.dateTo).isBefore(dayjs(), 'd');
-};
-
-export const firstLetterCaps = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
 };

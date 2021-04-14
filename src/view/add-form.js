@@ -1,4 +1,5 @@
-import { getFormDateFormat, firstLetterCaps } from '../util.js';
+import { getFormDateFormat } from '../utils/point.js';
+import { firstLetterCaps } from '../utils/common.js';
 import { TYPES, optionsMap } from '../data.js';
 import AbstractView from './abstract.js';
 

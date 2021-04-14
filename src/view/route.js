@@ -1,6 +1,6 @@
 import { getTripDates,
   getRoutePointsTitle,
-  getTotalPrice } from '../util.js';
+  getTotalPrice } from '../utils/point.js';
 import AbstractView from './abstract.js';
 
 const createRouteTemplate = (points) => {

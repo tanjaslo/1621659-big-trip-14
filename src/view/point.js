@@ -1,8 +1,8 @@
 import { getDateFormat,
+  getEventDateFormat,
   humanizeDateFromFormat,
   humanizeDateToFormat,
-  getEventDateFormat,
-  humanizeDurationFormat } from '../util.js';
+  humanizeDurationFormat } from '../utils/point.js';
 import AbstractView from './abstract.js';
 
 const createSelectedOffersList = (offers) => {
