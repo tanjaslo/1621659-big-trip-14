@@ -27,32 +27,28 @@ render(eventsElement, new EventsListView().getElement(), RenderPosition.BEFOREEN
 const eventList = mainElement.querySelector('.trip-events__list');
 
 const renderPoint = (pointContainer, point) => {
-  const pointComponent = new PointView(point).getElement();
-  const pointEditComponent = new EditFormView(point).getElement();
-  const eventButton = pointComponent.querySelector('.event__rollup-btn');
-  const editForm = pointEditComponent.querySelector('form');
-  const closeFormButton = pointEditComponent.querySelector('.event__rollup-btn');
+  const pointComponent = new PointView(point);
+  const pointEditComponent = new EditFormView(point);
 
   const replacePointToForm = () => {
-    pointContainer.replaceChild(pointEditComponent, pointComponent);
+    pointContainer.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
   };
 
   const replaceFormToPoint = () => {
-    pointContainer.replaceChild(pointComponent, pointEditComponent);
+    pointContainer.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
   };
 
-  eventButton.addEventListener('click', () => {
+  pointComponent.setPointClickHandler(() => {
     replacePointToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  editForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  pointEditComponent.setEditFormSubmitHandler(() => {
     replaceFormToPoint();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  closeFormButton.addEventListener('click', () => {
+  pointEditComponent.setEditFormCloseHandler(() => {
     replaceFormToPoint();
     document.removeEventListener('keydown', onEscKeyDown);
   });
@@ -64,7 +60,7 @@ const renderPoint = (pointContainer, point) => {
       document.removeEventListener('keydown', onEscKeyDown);
     }
   };
-  render(pointContainer, pointComponent, RenderPosition.BEFOREEND);
+  render(pointContainer, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
 const renderEventsListElement = (pointsContainer, points) => {
