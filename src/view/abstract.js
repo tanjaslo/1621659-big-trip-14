@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import {createElement} from '../util.js';
 
 export default class Abstract {
   constructor() {
