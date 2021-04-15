@@ -1,4 +1,4 @@
-import {isFutureEvent, isExpiredEvent} from '../util';
+import {isFutureEvent, isExpiredEvent} from '../utils/point.js';
 
 const pointsToFilterMap = {
   everything: (points) => {

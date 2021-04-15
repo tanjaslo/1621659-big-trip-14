@@ -1,5 +1,7 @@
-import { getFormDateFormat, firstLetterCaps, createElement } from '../util.js';
+import { getFormDateFormat } from '../utils/point.js';
+import { firstLetterCaps } from '../utils/common.js';
 import { TYPES, optionsMap } from '../data.js';
+import AbstractView from './abstract.js';
 
 const createEventTypesListTemplate = () => {
   const eventTypesList = TYPES.map((type) =>
@@ -113,25 +115,13 @@ const createAddFormTemplate = (point) => {
 </form>`;
 };
 
-export default class AddForm {
+export default class AddForm extends AbstractView {
   constructor(points) {
-    this._element = null;
+    super();
     this._points = points;
   }
 
   getTemplate() {
     return createAddFormTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

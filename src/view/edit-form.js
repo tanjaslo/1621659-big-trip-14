@@ -1,5 +1,7 @@
-import { getFormDateFormat, firstLetterCaps, createElement } from '../util.js';
+import { firstLetterCaps } from '../utils/common.js';
+import { getFormDateFormat } from '../utils/point.js';
 import { TYPES, optionsMap } from '../data.js';
+import AbstractView from './abstract.js';
 
 const createEventTypesListTemplate = () => {
   const eventTypesList = TYPES.map((type) =>
@@ -107,26 +109,41 @@ const createEditFormTemplate = (point) => {
   </li>`;
 };
 
-export default class EditForm {
+export default class EditForm extends AbstractView {
   constructor(point) {
-    this._element = null;
+    super();
     this._point = point;
+
+    this._editFormSubmitHandler = this._editFormSubmitHandler.bind(this);
+    this._editFormCloseHandler = this._editFormCloseHandler.bind(this);
   }
 
   getTemplate() {
     return createEditFormTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _editFormSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callbacks.formSubmit();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditFormSubmitHandler(callback) {
+    this._callbacks.formSubmit = callback;
+    this.getElement()
+      .querySelector('form')
+      .addEventListener('submit', this._editFormSubmitHandler);
+  }
+
+  _editFormCloseHandler(evt) {
+    evt.preventDefault();
+    this._callbacks.formClose();
+  }
+
+  setEditFormCloseHandler(callback) {
+    this._callbacks.formClose = callback;
+    this.getElement()
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this._editFormCloseHandler);
   }
 }
 

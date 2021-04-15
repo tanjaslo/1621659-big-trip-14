@@ -1,7 +1,7 @@
 import { getTripDates,
   getRoutePointsTitle,
-  getTotalPrice,
-  createElement } from '../util.js';
+  getTotalPrice } from '../utils/point.js';
+import AbstractView from './abstract.js';
 
 const createRouteTemplate = (points) => {
 
@@ -17,25 +17,13 @@ const createRouteTemplate = (points) => {
   </section>`;
 };
 
-export default class TripInfo {
+export default class TripInfo extends AbstractView {
   constructor(points) {
-    this._element = null;
+    super();
     this._points = points;
   }
 
   getTemplate() {
     return createRouteTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

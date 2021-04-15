@@ -1,4 +1,4 @@
-import { createElement } from '../util.js';
+import AbstractView from './abstract.js';
 
 const createFilterItemTemplate = (filter, isChecked) => {
   const { name, count } = filter;
@@ -26,25 +26,13 @@ const createFilterTemplate = (filterItems) => {
     </form>`;
 };
 
-export default class Filter {
+export default class Filter extends AbstractView {
   constructor(filterItems) {
+    super();
     this._filterItems = filterItems;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilterTemplate(this._filterItems);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

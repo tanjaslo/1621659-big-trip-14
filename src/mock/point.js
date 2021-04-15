@@ -6,11 +6,12 @@ import {
   TYPES } from '../data.js';
 import { getRandomInteger,
   getRandomArray,
-  getRandomArrayElement,
+  getRandomArrayElement } from '../utils/common.js';
+import {
   getRandomDate,
   getDateTo,
   createPhotosArray,
-  getDescriptionFromSentences } from '../util.js';
+  getDescriptionFromSentences } from '../utils/point.js';
 
 const createPoint = () => {
   const dateFrom = getRandomDate(dayjs(), dayjs().add(6, 'M'));
