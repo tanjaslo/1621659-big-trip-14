@@ -124,11 +124,11 @@ export default class EditForm extends AbstractView {
 
   _editFormSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callbacks.formSubmit();
   }
 
-  setEditFormSubmitHandler(callback) {
-    this._callback.formSubmit = callback;
+  setEditFormSubmitHandler(callbacks) {
+    this._callbacks.formSubmit = callbacks;
     this.getElement()
       .querySelector('form')
       .addEventListener('submit', this._editFormSubmitHandler);
@@ -136,11 +136,11 @@ export default class EditForm extends AbstractView {
 
   _editFormCloseHandler(evt) {
     evt.preventDefault();
-    this._callback.formClose();
+    this._callbacks.formClose();
   }
 
-  setEditFormCloseHandler(callback) {
-    this._callback.formClose = callback;
+  setEditFormCloseHandler(callbacks) {
+    this._callbacks.formClose = callbacks;
     this.getElement()
       .querySelector('.event__rollup-btn')
       .addEventListener('click', this._editFormCloseHandler);
