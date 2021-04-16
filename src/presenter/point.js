@@ -1,10 +1,10 @@
-import { render, RenderPosition, replace } from '../utils/render.js';
+import { render, RenderPosition, replace, remove } from '../utils/render.js';
 import EditFormView from '../view/edit-form.js';
 import PointView from '../view/point.js';
 
 export default class Point {
-  constructor(pointListContainer) {
-    this._pointListContainer = pointListContainer;
+  constructor(pointContainer) {
+    this._pointContainer = pointContainer;
 
     this._pointComponent = null;
     this._pointEditComponent = null;
@@ -18,6 +18,9 @@ export default class Point {
   init(point) {
     this._point = point;
 
+    const prevPointComponent = this._pointComponent;
+    const prevPointEditComponent = this._pointEditComponent;
+
     this._pointComponent = new PointView(point);
     this._pointEditComponent = new EditFormView(point);
 
@@ -25,7 +28,27 @@ export default class Point {
     this._pointEditComponent.setEditFormSubmitHandler(this._editFormSubmitHandler);
     this._pointEditComponent.setEditFormCloseHandler(this._editFormCloseHandler);
 
-    render(this._pointListContainer, this._pointComponent, RenderPosition.BEFOREEND);
+    if (prevPointComponent === null || prevPointEditComponent === null) {
+      render(this._pointContainer, this._pointComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+    // Проверка на наличие в DOM необходима,
+    // чтобы не пытаться заменить то, что не было отрисовано
+    if (this._pointContainer.getElement().contains(prevPointComponent.getElement())) {
+      replace(this._pointComponent, prevPointComponent);
+    }
+
+    if (this._pointContainer.getElement().contains(prevPointEditComponent.getElement())) {
+      replace(this._pointEditComponent, prevPointEditComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevPointEditComponent);
+  }
+
+  destroy() {
+    remove(this._pointComponent);
+    remove(this._pointEditComponent);
   }
 
   _replacePointToForm() {
