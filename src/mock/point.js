@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import {
   optionsMap,
   DESTINATIONS,
@@ -18,6 +19,7 @@ const createPoint = () => {
   const type = getRandomArrayElement(TYPES);
 
   return {
+    id: nanoid(),
     basePrice: getRandomInteger(10, 1000),
     dateFrom,
     dateTo: getDateTo(dateFrom),

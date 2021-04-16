@@ -8,6 +8,7 @@ import PointPresenter from '../presenter/point.js';
 export default class Events {
   constructor(pointsContainer) {
     this._pointsContainer = pointsContainer;
+    this._pointPresenter = {};
 
     this._pointsComponent = new EventsListView();
     this._sortComponent = new TripSortView();
@@ -29,6 +30,15 @@ export default class Events {
   _renderPoint(point) {
     const pointPresenter = new PointPresenter(this._pointsComponent);
     pointPresenter.init(point);
+    this._pointPresenter[point.id] = pointPresenter;
+  }
+
+  _clearPoints() {
+    Object
+      .values(this._taskPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._pointPresenter = {};
+    remove(this._sortComponent);
   }
 
   _renderPoints() {
