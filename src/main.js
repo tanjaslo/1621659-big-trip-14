@@ -24,6 +24,7 @@ render(menuElement, new MenuView(), RenderPosition.AFTERBEGIN);
 render(filtersElement, new FilterView(filters), RenderPosition.BEFOREEND);
 
 const eventsContainer = new EventsListView();
+
 render(eventsElement, eventsContainer, RenderPosition.BEFOREEND);
 render(eventsContainer, new AddFormView(points[0]), RenderPosition.AFTERBEGIN);
 
