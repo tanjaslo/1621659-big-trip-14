@@ -15,7 +15,8 @@ export default class Events {
     this._sortComponent = new TripSortView();
     this._noEventComponent = new NoEventView();
 
-    this._pointChangeHandler = this._pointChangeHandler.bind(this);
+    this._changePointHandler = this._changePointHandler.bind(this);
+    this._сhangeModeHandler = this._сhangeModeHandler.bind(this);
   }
 
   init(points) {
@@ -26,7 +27,13 @@ export default class Events {
     this._renderEventsList();
   }
 
-  _pointChangeHandler(updatedPoint) {
+  _сhangeModeHandler() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
+  _changePointHandler(updatedPoint) {
     this._points = updateItem(this._points, updatedPoint);
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
@@ -36,7 +43,7 @@ export default class Events {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointsComponent, this._pointChangeHandler);
+    const pointPresenter = new PointPresenter(this._pointsComponent, this._changePointHandler, this._сhangeModeHandler);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
