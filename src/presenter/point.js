@@ -3,13 +3,15 @@ import EditFormView from '../view/edit-form.js';
 import PointView from '../view/point.js';
 
 export default class Point {
-  constructor(pointContainer) {
+  constructor(pointContainer, changeData) {
     this._pointContainer = pointContainer;
+    this._changeData = changeData;
 
     this._pointComponent = null;
     this._pointEditComponent = null;
 
     this._pointEditClickHandler = this._pointEditClickHandler.bind(this);
+    this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
     this._editFormSubmitHandler = this._editFormSubmitHandler.bind(this);
     this._editFormCloseHandler = this._editFormCloseHandler.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
@@ -25,6 +27,7 @@ export default class Point {
     this._pointEditComponent = new EditFormView(point);
 
     this._pointComponent.setPointEditClickHandler(this._pointEditClickHandler);
+    this._pointComponent.setFavouriteClickHandler(this._favouriteClickHandler);
     this._pointEditComponent.setEditFormSubmitHandler(this._editFormSubmitHandler);
     this._pointEditComponent.setEditFormCloseHandler(this._editFormCloseHandler);
 
@@ -72,7 +75,20 @@ export default class Point {
     this._replacePointToForm();
   }
 
-  _editFormSubmitHandler() {
+  _favouriteClickHandler() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._point,
+        {
+          isFavourite: !this._point.isFavourite,
+        },
+      ),
+    );
+  }
+
+  _editFormSubmitHandler(point) {
+    this._changeData(point);
     this._replaceFormToPoint();
   }
 

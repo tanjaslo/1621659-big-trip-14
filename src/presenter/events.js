@@ -1,9 +1,10 @@
-import { render, RenderPosition, remove } from '../utils/render.js';
-import { POINT_COUNT } from '../data.js';
 import EventsListView from '../view/list.js';
 import NoEventView from '../view/no-event.js';
 import TripSortView from '../view/sort.js';
 import PointPresenter from '../presenter/point.js';
+import { render, RenderPosition, remove } from '../utils/render.js';
+import { updateItem } from '../utils/common.js';
+import { POINT_COUNT } from '../data.js';
 
 export default class Events {
   constructor(pointsContainer) {
@@ -13,6 +14,8 @@ export default class Events {
     this._pointsComponent = new EventsListView();
     this._sortComponent = new TripSortView();
     this._noEventComponent = new NoEventView();
+
+    this._pointChangeHandler = this._pointChangeHandler.bind(this);
   }
 
   init(points) {
@@ -23,12 +26,17 @@ export default class Events {
     this._renderEventsList();
   }
 
+  _pointChangeHandler(updatedPoint) {
+    this._points = updateItem(this._points, updatedPoint);
+    this._pointPresenter[updatedPoint.id].init(updatedPoint);
+  }
+
   _renderSort() {
     render(this._pointsComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointsComponent);
+    const pointPresenter = new PointPresenter(this._pointsComponent, this._pointChangeHandler);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
