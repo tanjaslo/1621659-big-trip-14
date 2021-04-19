@@ -1,4 +1,4 @@
-import { POINT_COUNT } from './data.js';
+import { POINT_COUNT } from '../src/data.js';
 import { render, RenderPosition } from './utils/render.js';
 import AddFormView from './view/add-form.js';
 import FilterView from './view/filter.js';

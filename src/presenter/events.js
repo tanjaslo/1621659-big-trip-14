@@ -3,13 +3,12 @@ import NoEventView from '../view/no-event.js';
 import TripSortView from '../view/sort.js';
 import PointPresenter from '../presenter/point.js';
 import { render, RenderPosition, remove } from '../utils/render.js';
-import { updateItem } from '../utils/common.js';
-import { POINT_COUNT } from '../data.js';
+import { updateItemById } from '../utils/common.js';
 
 export default class Events {
   constructor(pointsContainer) {
     this._pointsContainer = pointsContainer;
-    this._pointPresenter = {};
+    this._pointPresenters = {};
 
     this._pointsComponent = new EventsListView();
     this._sortComponent = new TripSortView();
@@ -29,13 +28,13 @@ export default class Events {
 
   _сhangeModeHandler() {
     Object
-      .values(this._pointPresenter)
+      .values(this._pointPresenters)
       .forEach((presenter) => presenter.resetView());
   }
 
   _changePointHandler(updatedPoint) {
-    this._points = updateItem(this._points, updatedPoint);
-    this._pointPresenter[updatedPoint.id].init(updatedPoint);
+    this._points = updateItemById(this._points, updatedPoint);
+    this._pointPresenters[updatedPoint.id].init(updatedPoint);
   }
 
   _renderSort() {
@@ -45,14 +44,14 @@ export default class Events {
   _renderPoint(point) {
     const pointPresenter = new PointPresenter(this._pointsComponent, this._changePointHandler, this._сhangeModeHandler);
     pointPresenter.init(point);
-    this._pointPresenter[point.id] = pointPresenter;
+    this._pointPresenters[point.id] = pointPresenter;
   }
 
   _clearPoints() {
     Object
       .values(this._taskPresenter)
       .forEach((presenter) => presenter.destroy());
-    this._pointPresenter = {};
+    this._pointPresenters = {};
     remove(this._sortComponent);
   }
 
@@ -72,6 +71,6 @@ export default class Events {
     }
 
     this._renderSort();
-    this._renderPoints(POINT_COUNT);
+    this._renderPoints();
   }
 }

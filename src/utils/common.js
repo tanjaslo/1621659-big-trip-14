@@ -26,7 +26,7 @@ export const firstLetterCaps = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const updateItem = (items, update) => {
+export const updateItemById = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
 
   if (index === -1) {
