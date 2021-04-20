@@ -189,3 +189,9 @@ optionsMap
   .set('taxi', taxiOptions)
   .set('train', trainOptions)
   .set('transport', transportOptions);
+
+export const SortType = {
+  DAY: 'day',
+  PRICE: 'price',
+  TIME: 'time',
+};

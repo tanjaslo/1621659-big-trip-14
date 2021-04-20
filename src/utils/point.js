@@ -1,4 +1,4 @@
-import { getRandomInteger, shuffle } from '../utils/common.js';
+import { getRandomInteger, shuffle, getWeightForNull } from '../utils/common.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
@@ -153,4 +153,20 @@ export const isFutureEvent = (point) => {
 
 export const isExpiredEvent = (point) => {
   return dayjs(point.dateTo).isBefore(dayjs(), 'd');
+};
+
+export const sortByPrice = (pointA, pointB) => {
+  const weight = getWeightForNull(pointA.basePrice, pointB.basePrice);
+
+  if (weight !== null) {
+    return weight;
+  }
+  return pointB.basePrice - pointA.basePrice;
+};
+
+export const sortByTime = (pointA, pointB) => {
+  const timeA = getDuration(pointA.dateFrom, pointA.dateTo);
+  const timeB = getDuration(pointB.dateFrom, pointB.dateTo);
+
+  return timeB - timeA;
 };

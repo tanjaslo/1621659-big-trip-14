@@ -39,3 +39,16 @@ export const updateItemById = (items, update) => {
     ...items.slice(index + 1),
   ];
 };
+
+export const getWeightForNull = (a, b) => {
+  if (a === null && b === null) {
+    return 0;
+  }
+  if (a === null) {
+    return 1;
+  }
+  if (b === null) {
+    return -1;
+  }
+  return null;
+};
