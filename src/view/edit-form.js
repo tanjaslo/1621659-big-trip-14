@@ -124,7 +124,7 @@ export default class EditForm extends AbstractView {
 
   _editFormSubmitHandler(evt) {
     evt.preventDefault();
-    this._callbacks.formSubmit();
+    this._callbacks.formSubmit(this._point);
   }
 
   setEditFormSubmitHandler(callback) {
