@@ -4,18 +4,22 @@ import TripSortView from '../view/sort.js';
 import PointPresenter from '../presenter/point.js';
 import { render, RenderPosition, remove } from '../utils/render.js';
 import { updateItemById } from '../utils/common.js';
+import { sortByDay, sortByPrice, sortByTime } from '../utils/point.js';
+import { SortType } from '../data.js';
 
 export default class Events {
   constructor(pointsContainer) {
     this._pointsContainer = pointsContainer;
     this._pointPresenters = {};
+    this._currentSortType = SortType.DAY;
 
     this._pointsComponent = new EventsListView();
-    this._sortComponent = new TripSortView();
+    this._sortComponent = new TripSortView(this._currentSortType);
     this._noEventComponent = new NoEventView();
 
     this._changePointHandler = this._changePointHandler.bind(this);
     this._сhangeModeHandler = this._сhangeModeHandler.bind(this);
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
   init(points) {
@@ -37,8 +41,34 @@ export default class Events {
     this._pointPresenters[updatedPoint.id].init(updatedPoint);
   }
 
+  _sortPoints(sortType) {
+    switch (sortType) {
+      case SortType.PRICE:
+        this._points.sort(sortByPrice);
+        break;
+      case SortType.TIME:
+        this._points.sort(sortByTime);
+        break;
+      case SortType.DAY:
+      default:
+        this._points.sort(sortByDay);
+    }
+    this._currentSortType = sortType;
+  }
+
+  _sortTypeChangeHandler(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._sortPoints(sortType);
+    this._clearPoints();
+    this._renderEventsList();
+  }
+
   _renderSort() {
+    this._sortComponent = new TripSortView(this._currentSortType);
     render(this._pointsComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
+    this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
   }
 
   _renderPoint(point) {
@@ -49,16 +79,14 @@ export default class Events {
 
   _clearPoints() {
     Object
-      .values(this._taskPresenter)
+      .values(this._pointPresenters)
       .forEach((presenter) => presenter.destroy());
     this._pointPresenters = {};
     remove(this._sortComponent);
   }
 
   _renderPoints() {
-    this._points
-      .slice()
-      .forEach((point) => this._renderPoint(point));
+    this._points.forEach((point) => this._renderPoint(point));
   }
 
   _renderNoPoints() {

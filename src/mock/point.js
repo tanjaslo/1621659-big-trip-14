@@ -12,7 +12,8 @@ import {
   getRandomDate,
   getDateTo,
   createPhotosArray,
-  getDescriptionFromSentences } from '../utils/point.js';
+  getDescriptionFromSentences,
+  sortByDay } from '../utils/point.js';
 
 const createPoint = () => {
   const dateFrom = getRandomDate(dayjs(), dayjs().add(6, 'M'));
@@ -35,7 +36,7 @@ const createPoint = () => {
 };
 
 const renderPoints = (count) => {
-  const points = new Array(count).fill().map(createPoint).sort((a, b) => dayjs(a.dateFrom) - dayjs(b.dateFrom));
+  const points = new Array(count).fill().map(createPoint).sort(sortByDay);
 
   return points;
 };

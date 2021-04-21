@@ -39,3 +39,4 @@ export const updateItemById = (items, update) => {
     ...items.slice(index + 1),
   ];
 };
+
