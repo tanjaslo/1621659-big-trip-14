@@ -4,7 +4,7 @@ import TripSortView from '../view/sort.js';
 import PointPresenter from '../presenter/point.js';
 import { render, RenderPosition, remove } from '../utils/render.js';
 import { updateItemById } from '../utils/common.js';
-import { sortByPrice, sortByTime } from '../utils/point.js';
+import { sortByDay, sortByPrice, sortByTime } from '../utils/point.js';
 import { SortType } from '../data.js';
 
 export default class Events {
@@ -24,7 +24,6 @@ export default class Events {
 
   init(points) {
     this._points = points.slice();
-    this._sourcedPoints = points.slice();
 
     render(this._pointsContainer, this._pointsComponent, RenderPosition.BEFOREEND);
 
@@ -39,7 +38,6 @@ export default class Events {
 
   _changePointHandler(updatedPoint) {
     this._points = updateItemById(this._points, updatedPoint);
-    this._sourcedPoints = updateItemById(this._sourcedPoints, updatedPoint);
     this._pointPresenters[updatedPoint.id].init(updatedPoint);
   }
 
@@ -52,7 +50,7 @@ export default class Events {
         this._points.sort(sortByTime);
         break;
       default:
-        this._points = this._sourcedPoints.slice();
+        this._points.sort(sortByDay);
     }
     this._currentSortType = sortType;
   }
@@ -87,9 +85,7 @@ export default class Events {
   }
 
   _renderPoints() {
-    this._points
-      .slice()
-      .forEach((point) => this._renderPoint(point));
+    this._points.forEach((point) => this._renderPoint(point));
   }
 
   _renderNoPoints() {
