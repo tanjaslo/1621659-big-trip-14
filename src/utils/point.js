@@ -1,4 +1,4 @@
-import { getRandomInteger, shuffle, getWeightForNull } from '../utils/common.js';
+import { getRandomInteger, shuffle } from '../utils/common.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
@@ -156,11 +156,6 @@ export const isExpiredEvent = (point) => {
 };
 
 export const sortByPrice = (pointA, pointB) => {
-  const weight = getWeightForNull(pointA.basePrice, pointB.basePrice);
-
-  if (weight !== null) {
-    return weight;
-  }
   return pointB.basePrice - pointA.basePrice;
 };
 
