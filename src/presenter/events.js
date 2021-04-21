@@ -49,6 +49,7 @@ export default class Events {
       case SortType.TIME:
         this._points.sort(sortByTime);
         break;
+      case SortType.DAY:
       default:
         this._points.sort(sortByDay);
     }
