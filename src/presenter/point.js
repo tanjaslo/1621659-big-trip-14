@@ -17,10 +17,10 @@ export default class Point {
     this._pointEditComponent = null;
     this._mode = Mode.DEFAULT;
 
-    this._pointEditClickHandler = this._pointEditClickHandler.bind(this);
-    this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
-    this._editFormSubmitHandler = this._editFormSubmitHandler.bind(this);
-    this._editFormCloseHandler = this._editFormCloseHandler.bind(this);
+    this._handlePointEditClick = this._handlePointEditClick.bind(this);
+    this._handleFavouriteClick = this._handleFavouriteClick.bind(this);
+    this._handleEditFormSubmit = this._handleEditFormSubmit.bind(this);
+    this._handleEditFormClose = this._handleEditFormClose.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
@@ -33,10 +33,10 @@ export default class Point {
     this._pointComponent = new PointView(point);
     this._pointEditComponent = new EditFormView(point);
 
-    this._pointComponent.setPointEditClickHandler(this._pointEditClickHandler);
-    this._pointComponent.setFavouriteClickHandler(this._favouriteClickHandler);
-    this._pointEditComponent.setEditFormSubmitHandler(this._editFormSubmitHandler);
-    this._pointEditComponent.setEditFormCloseHandler(this._editFormCloseHandler);
+    this._pointComponent.setPointEditClickHandler(this._handlePointEditClick);
+    this._pointComponent.setFavouriteClickHandler(this._handleFavouriteClick);
+    this._pointEditComponent.setEditFormSubmitHandler(this._handleEditFormSubmit);
+    this._pointEditComponent.setEditFormCloseHandler(this._handleEditFormClose);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this._pointContainer, this._pointComponent, RenderPosition.BEFOREEND);
@@ -86,11 +86,11 @@ export default class Point {
     }
   }
 
-  _pointEditClickHandler() {
+  _handlePointEditClick() {
     this._replacePointToForm();
   }
 
-  _favouriteClickHandler() {
+  _handleFavouriteClick() {
     this._changeData(
       Object.assign(
         {},
@@ -102,12 +102,12 @@ export default class Point {
     );
   }
 
-  _editFormSubmitHandler(point) {
+  _handleEditFormSubmit(point) {
     this._changeData(point);
     this._replaceFormToPoint();
   }
 
-  _editFormCloseHandler() {
+  _handleEditFormClose() {
     this._replaceFormToPoint();
   }
 }
