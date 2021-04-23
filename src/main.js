@@ -21,7 +21,6 @@ const eventsElement = mainElement.querySelector('.trip-events');
 render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
 render(menuElement, new MenuView(), RenderPosition.AFTERBEGIN);
 render(filtersElement, new FilterView(filters), RenderPosition.BEFOREEND);
-render(eventsElement, new AddFormView(points[0]), RenderPosition.AFTERBEGIN);
 
 const eventsPresenter = new EventsPresenter(eventsElement);
 eventsPresenter.init(points);

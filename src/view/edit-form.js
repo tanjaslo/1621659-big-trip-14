@@ -1,7 +1,7 @@
 import { firstLetterCaps } from '../utils/common.js';
 import { getFormDateFormat } from '../utils/point.js';
 import { TYPES, optionsMap } from '../data.js';
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
 
 const createEventTypesListTemplate = () => {
   const eventTypesList = TYPES.map((type) =>
@@ -33,11 +33,21 @@ const createOffersList = ({type, offers}) => {
   return offersList;
 };
 
+const createPicturesList = (destination) => {
+  const picturesList = destination.pictures.map((picture) =>
+    `<img class="event__photo" src="${picture.src}" alt="Event photo">`).join('');
+
+  return picturesList;
+};
+
 const createEditFormTemplate = (point) => {
   const {basePrice, destination, dateFrom, dateTo, offers, type} = point;
 
   const offersContainerClassName =
   offers.length !== 0 ? '' : ' visually-hidden';
+
+  const photosContainerClassName =
+  destination.pictures.length !== 0 ? '' : ' visually-hidden';
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -103,13 +113,18 @@ const createEditFormTemplate = (point) => {
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">${destination.name}</h3>
         <p class="event__destination-description">${destination.description}</p>
-      </section>
+        <div class="event__photos-container ${photosContainerClassName}">
+        <div class="event__photos-tape">
+        ${createPicturesList(destination)}
+        </div>
+      </div>
     </section>
-  </form>
+  </section>
+</form>
   </li>`;
 };
 
-export default class EditForm extends AbstractView {
+export default class EditForm extends SmartView {
   constructor(point) {
     super();
     this._point = point;
@@ -120,6 +135,11 @@ export default class EditForm extends AbstractView {
 
   getTemplate() {
     return createEditFormTemplate(this._point);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
   _editFormSubmitHandler(evt) {
@@ -146,4 +166,3 @@ export default class EditForm extends AbstractView {
       .addEventListener('click', this._editFormCloseHandler);
   }
 }
-
