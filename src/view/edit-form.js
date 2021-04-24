@@ -1,16 +1,23 @@
-import { firstLetterCaps } from '../utils/common.js';
+import { firstLetterCaps, isArrayEmpty } from '../utils/common.js';
 import { getFormDateFormat } from '../utils/point.js';
-import { TYPES, optionsMap } from '../data.js';
+import { DESTINATIONS, optionsMap } from '../data.js';
 import SmartView from './smart.js';
 
-const createEventTypesListTemplate = () => {
-  const eventTypesList = TYPES.map((type) =>
+const createEventTypesListTemplate = (currentType) => {
+  const arr = Array.from(optionsMap.keys());
+  const eventTypesList = arr.map((type) =>
     `<div class="event__type-item">
-      <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+      <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${type === currentType ? 'checked' : ''}>
       <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${firstLetterCaps(type)}</label>
     </div>`).join('');
 
   return eventTypesList;
+};
+
+const createDestinationsListTemplate = () => {
+  return DESTINATIONS.map((destination) => {
+    return `<option value="${destination}"></option>`;
+  }).join('');
 };
 
 const createOffersList = ({type, offers}) => {
@@ -40,14 +47,8 @@ const createPicturesList = (destination) => {
   return picturesList;
 };
 
-const createEditFormTemplate = (point) => {
-  const {basePrice, destination, dateFrom, dateTo, offers, type} = point;
-
-  const offersContainerClassName =
-  offers.length !== 0 ? '' : ' visually-hidden';
-
-  const photosContainerClassName =
-  destination.pictures.length !== 0 ? '' : ' visually-hidden';
+const createEditFormTemplate = (data) => {
+  const {basePrice, destination, dateFrom, dateTo, type, isAvailableOffers, isDescription, isPhotosList} = data;
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -62,7 +63,7 @@ const createEditFormTemplate = (point) => {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${createEventTypesListTemplate()}
+            ${createEventTypesListTemplate(type)}
           </fieldset>
         </div>
       </div>
@@ -73,9 +74,7 @@ const createEditFormTemplate = (point) => {
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
         <datalist id="destination-list-1">
-          <option value="Amsterdam"></option>
-          <option value="Geneva"></option>
-          <option value="Chamonix"></option>
+        ${createDestinationsListTemplate()}
         </datalist>
       </div>
 
@@ -102,20 +101,19 @@ const createEditFormTemplate = (point) => {
       </button>
     </header>
     <section class="event__details">
-      <section class="event__section  event__section--offers ${offersContainerClassName}">
+      <section class="event__section  event__section--offers ${isAvailableOffers ? '' : 'visually-hidden'}">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
         <div class="event__available-offers">
-        ${createOffersList(point)}
+        ${isAvailableOffers ? createOffersList(data) : ''}
         </div>
       </section>
 
       <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">${destination.name}</h3>
-        <p class="event__destination-description">${destination.description}</p>
-        <div class="event__photos-container ${photosContainerClassName}">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description" ${isDescription ? '' : 'visually-hidden'}>${destination.description}</p>
+        <div class="event__photos-container ${isPhotosList ? '' : 'visually-hidden'}">
         <div class="event__photos-tape">
-        ${createPicturesList(destination)}
+        ${isPhotosList ? createPicturesList(destination) : ''}
         </div>
       </div>
     </section>
@@ -127,14 +125,14 @@ const createEditFormTemplate = (point) => {
 export default class EditForm extends SmartView {
   constructor(point) {
     super();
-    this._point = point;
+    this._data = EditForm.parsePointToState(point);
 
     this._editFormSubmitHandler = this._editFormSubmitHandler.bind(this);
     this._editFormCloseHandler = this._editFormCloseHandler.bind(this);
   }
 
   getTemplate() {
-    return createEditFormTemplate(this._point);
+    return createEditFormTemplate(this._data);
   }
 
   restoreHandlers() {
@@ -144,7 +142,7 @@ export default class EditForm extends SmartView {
 
   _editFormSubmitHandler(evt) {
     evt.preventDefault();
-    this._callbacks.formSubmit(this._point);
+    this._callbacks.formSubmit(EditForm.parseStateToPoint(this._data));
   }
 
   setEditFormSubmitHandler(callback) {
@@ -164,5 +162,27 @@ export default class EditForm extends SmartView {
     this.getElement()
       .querySelector('.event__rollup-btn')
       .addEventListener('click', this._editFormCloseHandler);
+  }
+
+  static parsePointToState(point) {
+    return Object.assign(
+      {},
+      point,
+      {
+        isAvailableOffers: optionsMap.get(point.type),
+        isDescription: isArrayEmpty(point.destination.description),
+        isPhotosList: isArrayEmpty(point.destination.pictures),
+      },
+    );
+  }
+
+  static parseStateToPoint(data) {
+    data = Object.assign({}, data);
+
+    delete data.isAvailableOffers;
+    delete data.isDescription;
+    delete data.isPhotosList;
+
+    return data;
   }
 }

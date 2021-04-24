@@ -40,3 +40,7 @@ export const updateItemById = (items, update) => {
   ];
 };
 
+export const isArrayEmpty = (array) => {
+  return array.length === 0 ? false : true;
+  // или return !array.length;ы
+};
