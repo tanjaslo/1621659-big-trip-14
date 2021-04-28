@@ -1,14 +1,9 @@
 import {
   firstLetterCaps,
   isArrayEmpty } from '../utils/common.js';
-import {
-  getFormDateFormat,
-  getDescriptionFromSentences,
-  createPhotosArray } from '../utils/point.js';
-import {
-  DESTINATIONS,
-  SENTENCES,
-  optionsMap } from '../data.js';
+import { getFormDateFormat } from '../utils/point.js';
+import { optionsMap } from '../data.js';
+import { destinations } from '../mock/destination.js';
 import SmartView from './smart.js';
 
 const createEventTypesListTemplate = (currentType) => {
@@ -24,8 +19,8 @@ const createEventTypesListTemplate = (currentType) => {
 };
 
 const createDestinationsList = () => {
-  return DESTINATIONS.map((city) => {
-    return `<option value="${city}"></option>`;
+  return destinations.map((destination) => {
+    return `<option value="${destination.name}"></option>`;
   }).join('');
 };
 
@@ -51,13 +46,13 @@ const createOffersList = ({type, offers}) => {
 
 const createPicturesList = (destination) => {
   const picturesList = destination.pictures.map((picture) =>
-    `<img class="event__photo" src="${picture.src}" alt="Event photo">`).join('');
+    `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('');
 
   return picturesList;
 };
 
 const createEditFormTemplate = (state) => {
-  const {basePrice, destination, dateFrom, dateTo, type, offersAreAvailable, isDescription, isPicturesList} = state;
+  const {basePrice, destination, dateFrom, dateTo, type, hasOptions, hasDescription, hasPicturesList} = state;
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -111,7 +106,7 @@ const createEditFormTemplate = (state) => {
       </header>
       <section class="event__details">
         <section class="event__section  event__section--offers
-        ${offersAreAvailable ? '' : 'visually-hidden'}">
+        ${hasOptions ? '' : 'visually-hidden'}">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
           ${createOffersList(state)}
@@ -119,11 +114,11 @@ const createEditFormTemplate = (state) => {
         </section>
 
         <section class="event__section  event__section--destination"
-        ${isDescription ? '' : 'visually-hidden'}>
+        ${hasDescription ? '' : 'visually-hidden'}>
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${destination.description}</p>
           <div class="event__photos-container"
-          ${isPicturesList ? '' : 'visually-hidden'}>
+          ${hasPicturesList ? '' : 'visually-hidden'}>
           <div class="event__photos-tape">
           ${createPicturesList(destination)}
           </div>
@@ -159,7 +154,7 @@ export default class EditForm extends SmartView {
     this.getElement()
       .querySelector('.event__input--destination')
       .addEventListener('change', this._destinationToggleHandler);
-    if (this._state.offersAreAvailable) {
+    if (this._state.hasOptions) {
       this.getElement()
         .querySelector('.event__available-offers')
         .addEventListener('click', this._offersSelectorClickHandler);
@@ -173,17 +168,17 @@ export default class EditForm extends SmartView {
   }
 
   _typeToggleHandler(evt) {
-    evt.preventDefault;
-    if (!evt.target.name === 'event-type') {
+    evt.preventDefault();
+    if (!evt.target.classList.contains('event__type-label')) {
       return;
     }
     const currentType = evt.target.dataset.type;
-    const options = optionsMap.get(this._state.type);
+    const options = optionsMap.get(currentType);
     const emptyOffers = [];
 
     this.updateState({
       type: currentType,
-      offersAreAvailable: isArrayEmpty(options),
+      hasOptions: isArrayEmpty(options),
       offers: emptyOffers,
     });
   }
@@ -191,7 +186,7 @@ export default class EditForm extends SmartView {
   _destinationToggleHandler(evt) {
     evt.preventDefault();
     const destinationName = evt.target.value;
-    const destinationFromList = DESTINATIONS.find((destination) => destinationName === destination);
+    const destinationFromList = destinations.find((destination) => destinationName === destination.name);
 
     if (!destinationFromList) {
       evt.target.setCustomValidity('Please select a destination from the list');
@@ -201,11 +196,9 @@ export default class EditForm extends SmartView {
     evt.target.setCustomValidity('');
 
     this.updateState({
-      destination: {
-        name: destinationName,
-        description: getDescriptionFromSentences(SENTENCES),
-        pictures: createPhotosArray(),
-      },
+      destination: destinationFromList,
+      hasDescription: isArrayEmpty(destinationFromList.description),
+      hasPicturesList: isArrayEmpty(destinationFromList.pictures),
     });
   }
 
@@ -264,9 +257,9 @@ export default class EditForm extends SmartView {
       {},
       point,
       {
-        offersAreAvailable: isArrayEmpty(optionsMap.get(point.type)),
-        isDescription: isArrayEmpty(point.destination.description),
-        isPicturesList: isArrayEmpty(point.destination.pictures),
+        hasOptions: isArrayEmpty(optionsMap.get(point.type)),
+        hasDescription: isArrayEmpty(point.destination.description),
+        hasPicturesList: isArrayEmpty(point.destination.pictures),
       },
     );
   }
@@ -274,9 +267,9 @@ export default class EditForm extends SmartView {
   static parseStateToPoint(state) {
     state = Object.assign({}, state);
 
-    delete state.isDescription;
-    delete state.isPicturesList;
-    delete state.offersAreAvailable;
+    delete state.hasDescription;
+    delete state.hasPicturesList;
+    delete state.hasOptions;
 
     return state;
   }
