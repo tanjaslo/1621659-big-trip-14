@@ -166,11 +166,6 @@ export default class EditForm extends SmartView {
     }
   }
 
-  _clearOffersList() {
-    this._state.offers = [];
-    return this._state.offers;
-  }
-
   restoreHandlers() {
     this._setInnerHandlers();
     this.setEditFormSubmitHandler(this._callbacks.formSubmit);
@@ -178,15 +173,18 @@ export default class EditForm extends SmartView {
   }
 
   _typeToggleHandler(evt) {
-    evt.preventDefault();
-
+    evt.preventDefault;
+    if (!evt.target.name === 'event-type') {
+      return;
+    }
     const currentType = evt.target.dataset.type;
     const options = optionsMap.get(this._state.type);
+    const emptyOffers = [];
 
     this.updateState({
       type: currentType,
       offersAreAvailable: isArrayEmpty(options),
-      offers: this._clearOffersList(),
+      offers: emptyOffers,
     });
   }
 
