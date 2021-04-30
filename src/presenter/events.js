@@ -17,9 +17,9 @@ export default class Events {
     this._sortComponent = new TripSortView(this._currentSortType);
     this._noEventComponent = new NoEventView();
 
-    this._changePointHandler = this._changePointHandler.bind(this);
-    this._сhangeModeHandler = this._сhangeModeHandler.bind(this);
-    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
+    this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(points) {
@@ -30,13 +30,13 @@ export default class Events {
     this._renderEventsList();
   }
 
-  _сhangeModeHandler() {
+  _handleModeChange() {
     Object
       .values(this._pointPresenters)
       .forEach((presenter) => presenter.resetView());
   }
 
-  _changePointHandler(updatedPoint) {
+  _handlePointChange(updatedPoint) {
     this._points = updateItemById(this._points, updatedPoint);
     this._pointPresenters[updatedPoint.id].init(updatedPoint);
   }
@@ -56,7 +56,7 @@ export default class Events {
     this._currentSortType = sortType;
   }
 
-  _sortTypeChangeHandler(sortType) {
+  _handleSortTypeChange(sortType) {
     if (this._currentSortType === sortType) {
       return;
     }
@@ -68,12 +68,12 @@ export default class Events {
   _renderSort() {
     this._sortComponent = new TripSortView(this._currentSortType);
     render(this._pointsComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
-    this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
-  _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointsComponent, this._changePointHandler, this._сhangeModeHandler);
-    pointPresenter.init(point);
+  _renderPoint(point, destinations) {
+    const pointPresenter = new PointPresenter(this._pointsComponent, this._handlePointChange, this._handleModeChange, this._destinations);
+    pointPresenter.init(point, destinations);
     this._pointPresenters[point.id] = pointPresenter;
   }
 

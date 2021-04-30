@@ -2,8 +2,6 @@ import dayjs from 'dayjs';
 import {nanoid} from 'nanoid';
 import {
   optionsMap,
-  DESTINATIONS,
-  SENTENCES,
   TYPES } from '../data.js';
 import { getRandomInteger,
   getRandomArray,
@@ -11,9 +9,8 @@ import { getRandomInteger,
 import {
   getRandomDate,
   getDateTo,
-  createPhotosArray,
-  getDescriptionFromSentences,
   sortByDay } from '../utils/point.js';
+import { createDestination } from './destination.js';
 
 const createPoint = () => {
   const dateFrom = getRandomDate(dayjs(), dayjs().add(6, 'M'));
@@ -24,11 +21,7 @@ const createPoint = () => {
     basePrice: getRandomInteger(10, 1000),
     dateFrom,
     dateTo: getDateTo(dateFrom),
-    destination: {
-      description: getDescriptionFromSentences(SENTENCES),
-      name: getRandomArrayElement(DESTINATIONS),
-      pictures: createPhotosArray(),
-    },
+    destination: createDestination(),
     isFavourite: Boolean(getRandomInteger(0, 1)),
     offers: getRandomArray(optionsMap.get(type)),
     type,

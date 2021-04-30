@@ -1,6 +1,7 @@
-import { getRandomInteger, shuffle } from '../utils/common.js';
+import { getRandomArrayElement, getRandomInteger, shuffle } from '../utils/common.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import { SENTENCES } from '../data.js';
 
 dayjs.extend(duration);
 dayjs.duration(100);
@@ -57,9 +58,11 @@ export const getTotalPrice = (points) => {
 export const createPhotosArray = () => {
   const array = [];
   for (let i = 1; i < getRandomInteger(2, 10); i++) {
-    array.push({
+    const picture = {
       src: `http://picsum.photos/248/152?r=${(i)}`,
-    });
+      description: getRandomArrayElement(SENTENCES),
+    };
+    array.push(picture);
   }
   return array;
 };

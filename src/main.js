@@ -1,6 +1,5 @@
 import { POINT_COUNT } from '../src/data.js';
 import { render, RenderPosition } from './utils/render.js';
-import AddFormView from './view/add-form.js';
 import FilterView from './view/filter.js';
 import MenuView from './view/menu.js';
 import TripInfoView from './view/route.js';
@@ -21,7 +20,6 @@ const eventsElement = mainElement.querySelector('.trip-events');
 render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
 render(menuElement, new MenuView(), RenderPosition.AFTERBEGIN);
 render(filtersElement, new FilterView(filters), RenderPosition.BEFOREEND);
-render(eventsElement, new AddFormView(points[0]), RenderPosition.AFTERBEGIN);
 
 const eventsPresenter = new EventsPresenter(eventsElement);
 eventsPresenter.init(points);
