@@ -143,7 +143,7 @@ export const getEventDateFormat = (date) => {
 };
 
 export const getFormDateFormat = (date) => {
-  return dayjs(date).format('YY/MM/DD HH:mm');
+  return dayjs(date).format('DD/MM/YY HH:mm');
 };
 
 export const getDayFormat = (date) => {

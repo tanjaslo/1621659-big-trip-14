@@ -5,6 +5,11 @@ import { getFormDateFormat } from '../utils/point.js';
 import { optionsMap } from '../data.js';
 import SmartView from './smart.js';
 
+// import dayjs from 'dayjs';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+const DATEPICKER_FORMAT = 'd/m/y H:i';
+
 const createEventTypesListTemplate = (currentType) => {
   const eventTypes = Array.from(optionsMap.keys());
 
@@ -133,14 +138,53 @@ export default class EditForm extends SmartView {
     super();
     this._state = EditForm.parsePointToState(point);
     this._destinations = destinations;
+    this._datepicker = null;
 
     this._editFormSubmitHandler = this._editFormSubmitHandler.bind(this);
     this._editFormCloseHandler = this._editFormCloseHandler.bind(this);
     this._typeToggleHandler = this._typeToggleHandler.bind(this);
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
     this._offersSelectorClickHandler = this._offersSelectorClickHandler.bind(this);
-
+    this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
+    this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
+    this._setDateFromPicker();
+    this._setDateToPicker();
     this._setInnerHandlers();
+  }
+
+  _setDateFromPicker() {
+    if (this._dateFromPicker) {
+      this._dateFromPicker.destroy();
+      this._dateFromPicker = null;
+    }
+
+    this._dateFromPicker = flatpickr(
+      this.getElement().querySelector('#event-start-time-1'),
+      {
+        dateFormat: DATEPICKER_FORMAT,
+        enableTime: true,
+        default: this._state.dateFrom,
+        onChange: this._dateFromChangeHandler,
+      },
+    );
+  }
+
+  _setDateToPicker() {
+    if (this._dateToPicker) {
+      this._dateToPicker.destroy();
+      this._dateToPicker = null;
+    }
+
+    this._dateToPicker = flatpickr(
+      this.getElement().querySelector('#event-end-time-1'),
+      {
+        dateFormat: DATEPICKER_FORMAT,
+        enableTime: true,
+        default: this._state.dateTo,
+        minDate: this._state.dateFrom,
+        onChange: this._dateToChangeHandler,
+      },
+    );
   }
 
   getTemplate() {
@@ -163,8 +207,22 @@ export default class EditForm extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setDateFromPicker();
+    this._setDateToPicker();
     this.setEditFormSubmitHandler(this._callbacks.formSubmit);
     this.setEditFormCloseHandler(this._callbacks.formClose);
+  }
+
+  _dateFromChangeHandler([userDate]) {
+    this.updateState({
+      dateFrom: userDate,
+    });
+  }
+
+  _dateToChangeHandler([userDate]) {
+    this.updateState({
+      dateTo: userDate,
+    });
   }
 
   _typeToggleHandler(evt) {
