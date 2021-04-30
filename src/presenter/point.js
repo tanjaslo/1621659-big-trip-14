@@ -1,4 +1,5 @@
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
+import { destinations } from '../mock/destination.js';
 import EditFormView from '../view/edit-form.js';
 import PointView from '../view/point.js';
 
@@ -31,7 +32,7 @@ export default class Point {
     const prevPointEditComponent = this._pointEditComponent;
 
     this._pointComponent = new PointView(point);
-    this._pointEditComponent = new EditFormView(point);
+    this._pointEditComponent = new EditFormView(point, destinations);
 
     this._pointComponent.setPointEditClickHandler(this._handlePointEditClick);
     this._pointComponent.setFavouriteClickHandler(this._handleFavouriteClick);

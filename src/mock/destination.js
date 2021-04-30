@@ -22,4 +22,4 @@ const createDestinations = () => new Array(DESTINATION_COUNT).fill(null).map(cre
 
 const destinations = createDestinations();
 
-export { destinations };
+export { createDestination, destinations };

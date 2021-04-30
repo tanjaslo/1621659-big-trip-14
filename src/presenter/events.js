@@ -71,9 +71,9 @@ export default class Events {
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
-  _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._pointsComponent, this._handlePointChange, this._handleModeChange);
-    pointPresenter.init(point);
+  _renderPoint(point, destinations) {
+    const pointPresenter = new PointPresenter(this._pointsComponent, this._handlePointChange, this._handleModeChange, this._destinations);
+    pointPresenter.init(point, destinations);
     this._pointPresenters[point.id] = pointPresenter;
   }
 

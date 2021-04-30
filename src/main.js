@@ -7,6 +7,7 @@ import TripInfoView from './view/route.js';
 import EventsPresenter from './presenter/events.js';
 import { renderPoints } from './mock/point.js';
 import { generateFilters } from './mock/filter.js';
+// import './mock/destination.js';
 
 const points = renderPoints(POINT_COUNT);
 const filters = generateFilters(points);

@@ -3,7 +3,6 @@ import {
   isArrayEmpty } from '../utils/common.js';
 import { getFormDateFormat } from '../utils/point.js';
 import { optionsMap } from '../data.js';
-import { destinations } from '../mock/destination.js';
 import SmartView from './smart.js';
 
 const createEventTypesListTemplate = (currentType) => {
@@ -18,7 +17,7 @@ const createEventTypesListTemplate = (currentType) => {
   return eventTypesList;
 };
 
-const createDestinationsList = () => {
+const createDestinationsList = (destinations) => {
   return destinations.map((destination) => {
     return `<option value="${destination.name}"></option>`;
   }).join('');
@@ -51,7 +50,7 @@ const createPicturesList = (destination) => {
   return picturesList;
 };
 
-const createEditFormTemplate = (state) => {
+const createEditFormTemplate = (state, destinations) => {
   const {basePrice, destination, dateFrom, dateTo, type, hasOptions, hasDescription, hasPicturesList} = state;
 
   return `<li class="trip-events__item">
@@ -78,8 +77,8 @@ const createEditFormTemplate = (state) => {
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
           <datalist id="destination-list-1">
-          ${createDestinationsList()}
-          </datalist>
+          ${createDestinationsList(destinations)}
+        </datalist>
         </div>
 
         <div class="event__field-group  event__field-group--time">
@@ -130,9 +129,10 @@ const createEditFormTemplate = (state) => {
 };
 
 export default class EditForm extends SmartView {
-  constructor(point) {
+  constructor(point, destinations) {
     super();
     this._state = EditForm.parsePointToState(point);
+    this._destinations = destinations;
 
     this._editFormSubmitHandler = this._editFormSubmitHandler.bind(this);
     this._editFormCloseHandler = this._editFormCloseHandler.bind(this);
@@ -144,7 +144,7 @@ export default class EditForm extends SmartView {
   }
 
   getTemplate() {
-    return createEditFormTemplate(this._state);
+    return createEditFormTemplate(this._state, this._destinations);
   }
 
   _setInnerHandlers() {
@@ -186,7 +186,7 @@ export default class EditForm extends SmartView {
   _destinationToggleHandler(evt) {
     evt.preventDefault();
     const destinationName = evt.target.value;
-    const destinationFromList = destinations.find((destination) => destinationName === destination.name);
+    const destinationFromList = this._destinations.find((destination) => destinationName === destination.name);
 
     if (!destinationFromList) {
       evt.target.setCustomValidity('Please select a destination from the list');
@@ -210,7 +210,7 @@ export default class EditForm extends SmartView {
     }
     const clickedOption = target.dataset.title;
     const availableOptions = optionsMap.get(this._state.type);
-    const pointOffers = this._state.offers.slice();
+    const pointOffers = this._state.offers;
 
     const selectedOption = availableOptions.find((item) => item.title === clickedOption);
     const optionToAdd = pointOffers.find((item) => item.title === clickedOption);
