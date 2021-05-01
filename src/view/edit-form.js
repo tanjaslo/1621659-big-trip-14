@@ -5,7 +5,6 @@ import { getFormDateFormat } from '../utils/point.js';
 import { optionsMap } from '../data.js';
 import SmartView from './smart.js';
 
-// import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 const DATEPICKER_FORMAT = 'd/m/y H:i';
@@ -145,6 +144,7 @@ export default class EditForm extends SmartView {
     this._typeToggleHandler = this._typeToggleHandler.bind(this);
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
     this._offersSelectorClickHandler = this._offersSelectorClickHandler.bind(this);
+    this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
     this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
     this._setDateFromPicker();
@@ -198,6 +198,9 @@ export default class EditForm extends SmartView {
     this.getElement()
       .querySelector('.event__input--destination')
       .addEventListener('change', this._destinationToggleHandler);
+    this.getElement()
+      .querySelector('.event__input--price')
+      .addEventListener('change', this._priceChangeHandler);
     if (this._state.hasOptions) {
       this.getElement()
         .querySelector('.event__available-offers')
@@ -278,6 +281,23 @@ export default class EditForm extends SmartView {
     this.updateState({
       offers: selectedOptions,
     });
+  }
+
+  _priceChangeHandler(evt) {
+    evt.preventDefault();
+    const price = evt.target.value;
+
+    if (isNaN(price) || price < 0) {
+      evt.target.setCustomValidity('Price must be a positive number');
+      evt.target.reportValidity();
+      return;
+    }
+    evt.target.setCustomValidity('');
+
+    this.updateState(
+      {
+        basePrice: parseInt(price, 10),
+      }, true);
   }
 
   _editFormSubmitHandler(evt) {
