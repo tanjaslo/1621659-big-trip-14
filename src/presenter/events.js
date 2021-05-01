@@ -8,8 +8,9 @@ import { sortByDay, sortByPrice, sortByTime } from '../utils/point.js';
 import { SortType } from '../data.js';
 
 export default class Events {
-  constructor(pointsContainer) {
+  constructor(pointsContainer, pointsModel) {
     this._pointsContainer = pointsContainer;
+    this._pointsModel = pointsModel;
     this._pointPresenters = {};
     this._currentSortType = SortType.DAY;
 
@@ -28,6 +29,10 @@ export default class Events {
     render(this._pointsContainer, this._pointsComponent, RenderPosition.BEFOREEND);
 
     this._renderEventsList();
+  }
+
+  _getPoints() {
+    return this._pointsModel.getPoints();
   }
 
   _handleModeChange() {

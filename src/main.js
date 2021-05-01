@@ -1,5 +1,7 @@
 import { POINT_COUNT } from '../src/data.js';
 import { render, RenderPosition } from './utils/render.js';
+import PointsModel from './model/points.js';
+import OffersModel from './model/offers.js';
 import FilterView from './view/filter.js';
 import MenuView from './view/menu.js';
 import TripInfoView from './view/route.js';
@@ -9,6 +11,12 @@ import { generateFilters } from './mock/filter.js';
 
 const points = renderPoints(POINT_COUNT);
 const filters = generateFilters(points);
+
+const pointsModel = new PointsModel();
+PointsModel.setPoints(points);
+
+const offersModel = new OffersModel();
+//OffersModel.setOffers(offers);
 
 const headerElement = document.querySelector('.page-header');
 const mainElement = document.querySelector('.page-body__page-main');
@@ -21,5 +29,5 @@ render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
 render(menuElement, new MenuView(), RenderPosition.AFTERBEGIN);
 render(filtersElement, new FilterView(filters), RenderPosition.BEFOREEND);
 
-const eventsPresenter = new EventsPresenter(eventsElement);
+const eventsPresenter = new EventsPresenter(eventsElement, pointsModel, offersModel);
 eventsPresenter.init(points);
