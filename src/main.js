@@ -35,3 +35,7 @@ const filterPresenter = new FilterPresenter(filtersElement, filterModel, pointsM
 filterPresenter.init();
 boardPresenter.init();
 
+headerElement.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  boardPresenter.createPoint();
+});

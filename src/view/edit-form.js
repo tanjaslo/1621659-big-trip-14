@@ -47,15 +47,35 @@ const createOffersList = ({type, offers}) => {
   return offersList;
 };
 
-const createPicturesList = (destination) => {
+const createDestinationContainer = (destination) => {
+  return `<section class="event__section  event__section--destination">
+    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${destination.description}</p>
+    </section>`;
+};
+
+const createPicturesContainer = (destination) => {
   const picturesList = destination.pictures.map((picture) =>
     `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('');
 
-  return picturesList;
+  return `<div class="event__photos-container">
+  <div class="event__photos-tape">
+  ${picturesList}
+  </div>
+</div>`;
+};
+
+const createOffersContainer = (state) => {
+  return `<h3 class="event__section-title  event__section-title--offers">Offers</h3>
+  <div class="event__available-offers">${createOffersList(state)}</div>`;
 };
 
 const createEditFormTemplate = (state, destinations) => {
-  const {basePrice, destination, dateFrom, dateTo, type, hasOptions, hasDescription, hasPicturesList} = state;
+  const {basePrice, destination, dateFrom, dateTo, type} = state;
+
+  const hasDescription = isArrayEmpty(destination.description);
+  const hasPicturesList = isArrayEmpty(destination.pictures);
+  const hasOptions = isArrayEmpty(optionsMap.get(type));
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -79,10 +99,10 @@ const createEditFormTemplate = (state, destinations) => {
           <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1" required>
           <datalist id="destination-list-1">
           ${createDestinationsList(destinations)}
-        </datalist>
+          </datalist>
         </div>
 
         <div class="event__field-group  event__field-group--time">
@@ -98,7 +118,7 @@ const createEditFormTemplate = (state, destinations) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}" required>
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -108,26 +128,14 @@ const createEditFormTemplate = (state, destinations) => {
         </button>
       </header>
       <section class="event__details">
-        <section class="event__section  event__section--offers
-        ${hasOptions ? '' : 'visually-hidden'}">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-          <div class="event__available-offers">
-          ${createOffersList(state)}
-          </div>
-        </section>
-
-        <section class="event__section  event__section--destination"
-        ${hasDescription ? '' : 'visually-hidden'}>
-          <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${destination.description}</p>
-          <div class="event__photos-container"
-          ${hasPicturesList ? '' : 'visually-hidden'}>
-          <div class="event__photos-tape">
-          ${createPicturesList(destination)}
-          </div>
-        </div>
+      <section class="event__section  event__section--offers">
+        ${hasOptions ? createOffersContainer(state) : ''}
       </section>
-    </section>
+      <section class="event__section  event__section--destination">
+        ${hasDescription ? createDestinationContainer(destination) : ''}
+        ${hasPicturesList ? createPicturesContainer(destination) : ''}
+      </section>
+      </section>
   </form>
 </li>`;
 };
@@ -205,11 +213,9 @@ export default class EditForm extends SmartView {
     this.getElement()
       .querySelector('.event__input--price')
       .addEventListener('change', this._priceChangeHandler);
-    if (this._state.hasOptions) {
-      this.getElement()
-        .querySelector('.event__available-offers')
-        .addEventListener('click', this._offersSelectorClickHandler);
-    }
+    this.getElement()
+      .querySelector('.event__available-offers')
+      .addEventListener('click', this._offersSelectorClickHandler);
   }
 
   restoreHandlers() {
@@ -239,12 +245,12 @@ export default class EditForm extends SmartView {
       return;
     }
     const currentType = evt.target.dataset.type;
-    const options = optionsMap.get(currentType);
+    const currentOptions = optionsMap.get(currentType);
     const emptyOffers = [];
 
     this.updateState({
       type: currentType,
-      hasOptions: isArrayEmpty(options),
+      options: currentOptions,
       offers: emptyOffers,
     });
   }
@@ -263,8 +269,6 @@ export default class EditForm extends SmartView {
 
     this.updateState({
       destination: destinationFromList,
-      hasDescription: isArrayEmpty(destinationFromList.description),
-      hasPicturesList: isArrayEmpty(destinationFromList.pictures),
     });
   }
 
@@ -339,8 +343,6 @@ export default class EditForm extends SmartView {
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._editFormDeleteClickHandler);
   }
 
-  // Перегружаем метод родителя removeElement,
-  // чтобы при удалении удалялся более ненужный календарь
   removeElement() {
     super.removeElement();
 
@@ -357,24 +359,11 @@ export default class EditForm extends SmartView {
   }
 
   static parsePointToState(point) {
-    return Object.assign(
-      {},
-      point,
-      {
-        hasOptions: isArrayEmpty(optionsMap.get(point.type)),
-        hasDescription: isArrayEmpty(point.destination.description),
-        hasPicturesList: isArrayEmpty(point.destination.pictures),
-      },
-    );
+    return Object.assign({}, point);
   }
 
   static parseStateToPoint(state) {
-    state = Object.assign({}, state);
-
-    delete state.hasDescription;
-    delete state.hasPicturesList;
-    delete state.hasOptions;
-
-    return state;
+    return Object.assign({}, state);
   }
 }
+

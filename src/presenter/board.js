@@ -2,10 +2,11 @@ import EventsListView from '../view/events-list.js';
 import NoEventView from '../view/no-event.js';
 import TripSortView from '../view/sort.js';
 import PointPresenter from './point.js';
+import PointNewPresenter from './point-new.js';
 import { render, RenderPosition, remove } from '../utils/render.js';
 import { pointsFilter } from '../utils/filter.js';
 import { sortByDay, sortByPrice, sortByTime } from '../utils/point.js';
-import { SortType, UpdateType, UserAction } from '../const.js';
+import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 
 export default class Board {
   constructor(boardContainer, pointsModel, filterModel, offersModel) {
@@ -30,6 +31,8 @@ export default class Board {
     this._filterModel.addObserver(this._handleModelEvent);
     this._offersModel.addObserver(this._handleModelEvent);
     // this._destinationsModel.addObserver(this._handleModelEvent);
+
+    this._pointNewPresenter = new PointNewPresenter(this._boardComponent, this._handleViewAction);
   }
 
   init() {
@@ -38,20 +41,11 @@ export default class Board {
     this._renderBoard();
   }
 
-  /*   _sortPoints(sortType) {
-    switch (sortType) {
-      case SortType.PRICE:
-        this._points.sort(sortByPrice);
-        break;
-      case SortType.TIME:
-        this._points.sort(sortByTime);
-        break;
-      case SortType.DAY:
-      default:
-        this._points.sort(sortByDay);
-    }
-    this._currentSortType = sortType;
-  } */
+  createPoint() {
+    this._currentSortType = SortType.DAY;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._pointNewPresenter.init();
+  }
 
   _getPoints() {
     const filterType = this._filterModel.getFilter();
@@ -68,6 +62,7 @@ export default class Board {
   }
 
   _handleModeChange() {
+    this._pointNewPresenter.destroy();
     Object
       .values(this._pointPresenters)
       .forEach((presenter) => presenter.resetView());
@@ -152,6 +147,8 @@ export default class Board {
   }
 
   _clearBoard({resetSortType = false} = {}) {
+    this._pointNewPresenter.destroy();
+
     Object
       .values(this._pointPresenters)
       .forEach((presenter) => presenter.destroy());
