@@ -1,7 +1,7 @@
 import AbstractView from './abstract.js';
 
-const createFilterItemTemplate = (filter, isChecked) => {
-  const { name, count } = filter;
+const createFilterItemTemplate = (filter, currentFilterType) => {
+  const {type, name, count} = filter;
 
   return (
     `<input
@@ -10,15 +10,16 @@ const createFilterItemTemplate = (filter, isChecked) => {
       class="trip-filters__filter-input  visually-hidden"
       name="trip-filter"
       value="${name}"
-      ${isChecked ? 'checked' : ''}
+      ${type === currentFilterType ? 'checked' : ''}
+      ${count === 0 ? 'disabled' : ''}
     />
     <label for="filter__${name}" class="trip-filters__filter-label">${name} (${count})</label>`
   );
 };
 
-const createFilterTemplate = (filterItems) => {
-  const filterItemsTemplate = filterItems
-    .map((filter) => createFilterItemTemplate(filter)).join(' &nbsp;&nbsp; ');
+const createFilterTemplate = (filters, currentFilterType) => {
+  const filterItemsTemplate = filters
+    .map((filter) => createFilterItemTemplate(filter, currentFilterType)).join(' &nbsp;&nbsp; ');
 
   return `<form class="trip-filters" action="#" method="get">
     ${filterItemsTemplate}
@@ -27,12 +28,25 @@ const createFilterTemplate = (filterItems) => {
 };
 
 export default class Filter extends AbstractView {
-  constructor(filterItems) {
+  constructor(filters, currentFilterType) {
     super();
-    this._filterItems = filterItems;
+    this._filters = filters;
+    this._currentFilter = currentFilterType;
+
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return createFilterTemplate(this._filterItems);
+    return createFilterTemplate(this._filters, this._currentFilter);
+  }
+
+  _filterTypeChangeHandler(evt) {
+    evt.preventDefault();
+    this._callbacks.filterTypeChange(evt.target.value);
+  }
+
+  setFilterTypeChangeHandler(callback) {
+    this._callbacks.filterTypeChange = callback;
+    this.getElement().addEventListener('change', this._filterTypeChangeHandler);
   }
 }

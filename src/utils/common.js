@@ -26,20 +26,6 @@ export const firstLetterCaps = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const updateItemById = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
 export const isArrayEmpty = (array) => {
   return array.length === 0 ? false : true;
   // или return !array.length;

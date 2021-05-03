@@ -13,7 +13,7 @@ import {
 import { createDestination } from './destination.js';
 
 const createPoint = () => {
-  const dateFrom = getRandomDate(dayjs(), dayjs().add(6, 'M'));
+  const dateFrom = getRandomDate(dayjs().add(-20, 'd'), dayjs().add(6, 'M'));
   const type = getRandomArrayElement(TYPES);
 
   return {

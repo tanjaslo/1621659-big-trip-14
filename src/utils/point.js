@@ -172,3 +172,8 @@ export const sortByTime = (pointA, pointB) => {
 
   return timeB - timeA;
 };
+
+export const areDatesEqual = (firstPoint, secondPoint) => {
+  return new Date(firstPoint.date) - new Date(secondPoint.date);
+};
+

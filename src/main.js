@@ -2,18 +2,19 @@ import { POINT_COUNT } from '../src/data.js';
 import { render, RenderPosition } from './utils/render.js';
 import PointsModel from './model/points.js';
 import OffersModel from './model/offers.js';
-import FilterView from './view/filter.js';
+import FilterModel from './model/filter.js';
 import MenuView from './view/menu.js';
 import TripInfoView from './view/route.js';
 import EventsPresenter from './presenter/events.js';
+import FilterPresenter from './presenter/filter.js';
 import { renderPoints } from './mock/point.js';
-import { generateFilters } from './mock/filter.js';
 
 const points = renderPoints(POINT_COUNT);
-const filters = generateFilters(points);
 
 const pointsModel = new PointsModel();
-PointsModel.setPoints(points);
+pointsModel.setPoints(points);
+
+const filterModel = new FilterModel();
 
 const offersModel = new OffersModel();
 //OffersModel.setOffers(offers);
@@ -27,7 +28,9 @@ const eventsElement = mainElement.querySelector('.trip-events');
 
 render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
 render(menuElement, new MenuView(), RenderPosition.AFTERBEGIN);
-render(filtersElement, new FilterView(filters), RenderPosition.BEFOREEND);
 
-const eventsPresenter = new EventsPresenter(eventsElement, pointsModel, offersModel);
-eventsPresenter.init(points);
+const eventsPresenter = new EventsPresenter(eventsElement, pointsModel, filterModel, offersModel);
+const filterPresenter = new FilterPresenter(filtersElement, filterModel, pointsModel);
+
+filterPresenter.init();
+eventsPresenter.init();

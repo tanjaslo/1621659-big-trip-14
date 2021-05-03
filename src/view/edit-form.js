@@ -141,6 +141,7 @@ export default class EditForm extends SmartView {
 
     this._editFormSubmitHandler = this._editFormSubmitHandler.bind(this);
     this._editFormCloseHandler = this._editFormCloseHandler.bind(this);
+    this._editFormDeleteClickHandler = this._editFormDeleteClickHandler.bind(this);
     this._typeToggleHandler = this._typeToggleHandler.bind(this);
     this._destinationToggleHandler = this._destinationToggleHandler.bind(this);
     this._offersSelectorClickHandler = this._offersSelectorClickHandler.bind(this);
@@ -214,6 +215,7 @@ export default class EditForm extends SmartView {
     this._setDateToPicker();
     this.setEditFormSubmitHandler(this._callbacks.formSubmit);
     this.setEditFormCloseHandler(this._callbacks.formClose);
+    this.setEditFormDeleteClickHandler(this._callbacks.deleteClick);
   }
 
   _dateFromChangeHandler([userDate]) {
@@ -322,6 +324,27 @@ export default class EditForm extends SmartView {
     this.getElement()
       .querySelector('.event__rollup-btn')
       .addEventListener('click', this._editFormCloseHandler);
+  }
+
+  _editFormDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callbacks.deleteClick(EditForm.parseStateToPoint(this._state));
+  }
+
+  setEditFormDeleteClickHandler(callback) {
+    this._callbacks.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._editFormDeleteClickHandler);
+  }
+
+  // Перегружаем метод родителя removeElement,
+  // чтобы при удалении удалялся более ненужный календарь
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
   }
 
   reset(point) {
