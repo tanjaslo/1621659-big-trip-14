@@ -1,15 +1,15 @@
-import BoardView from '../view/board.js';
+import EventsListView from '../view/events-list.js';
 import NoEventView from '../view/no-event.js';
 import TripSortView from '../view/sort.js';
-import PointPresenter from '../presenter/point.js';
+import PointPresenter from './point.js';
 import { render, RenderPosition, remove } from '../utils/render.js';
 import { pointsFilter } from '../utils/filter.js';
 import { sortByDay, sortByPrice, sortByTime } from '../utils/point.js';
 import { SortType, UpdateType, UserAction } from '../const.js';
 
-export default class Events {
-  constructor(pointsContainer, pointsModel, filterModel, offersModel) {
-    this._pointsContainer = pointsContainer;
+export default class Board {
+  constructor(boardContainer, pointsModel, filterModel, offersModel) {
+    this._boardContainer = boardContainer;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._offersModel = offersModel;
@@ -18,7 +18,7 @@ export default class Events {
     this._currentSortType = SortType.DAY;
 
     this._sortComponent = null;
-    this._boardComponent = new BoardView();
+    this._boardComponent = new EventsListView();
     this._noEventComponent = new NoEventView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -33,7 +33,7 @@ export default class Events {
   }
 
   init() {
-    render(this._pointsContainer, this._boardComponent, RenderPosition.BEFOREEND);
+    render(this._boardContainer, this._boardComponent, RenderPosition.BEFOREEND);
 
     this._renderBoard();
   }

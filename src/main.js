@@ -5,7 +5,7 @@ import OffersModel from './model/offers.js';
 import FilterModel from './model/filter.js';
 import MenuView from './view/menu.js';
 import TripInfoView from './view/route.js';
-import EventsPresenter from './presenter/events.js';
+import BoardPresenter from './presenter/board.js';
 import FilterPresenter from './presenter/filter.js';
 import { renderPoints } from './mock/point.js';
 
@@ -29,8 +29,9 @@ const eventsElement = mainElement.querySelector('.trip-events');
 render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
 render(menuElement, new MenuView(), RenderPosition.AFTERBEGIN);
 
-const eventsPresenter = new EventsPresenter(eventsElement, pointsModel, filterModel, offersModel);
+const boardPresenter = new BoardPresenter(eventsElement, pointsModel, filterModel, offersModel);
 const filterPresenter = new FilterPresenter(filtersElement, filterModel, pointsModel);
 
 filterPresenter.init();
-eventsPresenter.init();
+boardPresenter.init();
+
