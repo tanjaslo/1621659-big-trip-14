@@ -164,7 +164,9 @@ export default class EditForm extends SmartView {
       {
         dateFormat: DATEPICKER_FORMAT,
         enableTime: true,
+        time_24hr: true,
         default: this._state.dateFrom,
+        maxDate: new Date(this._state.dateTo),
         onChange: this._dateFromChangeHandler,
       },
     );
@@ -181,6 +183,7 @@ export default class EditForm extends SmartView {
       {
         dateFormat: DATEPICKER_FORMAT,
         enableTime: true,
+        time_24hr: true,
         default: this._state.dateTo,
         minDate: this._state.dateFrom,
         onChange: this._dateToChangeHandler,
