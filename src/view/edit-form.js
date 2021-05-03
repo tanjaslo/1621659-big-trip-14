@@ -4,7 +4,7 @@ import {
 import { getFormDateFormat } from '../utils/point.js';
 import { optionsMap } from '../data.js';
 import SmartView from './smart.js';
-
+import he from 'he';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 const DATEPICKER_FORMAT = 'd/m/y H:i';
@@ -99,7 +99,7 @@ const createEditFormTemplate = (state, destinations) => {
           <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1" required>
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destination.name)}" list="destination-list-1" required>
           <datalist id="destination-list-1">
           ${createDestinationsList(destinations)}
           </datalist>
@@ -118,7 +118,7 @@ const createEditFormTemplate = (state, destinations) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}" required>
+          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" type="number" min="0" step="1" value="${he.encode(String(basePrice))}" required>
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
