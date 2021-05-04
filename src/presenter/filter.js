@@ -48,23 +48,6 @@ export default class Filter {
 
   _getFilters() {
     const points = this._pointsModel.getPoints();
-
-    return [
-      {
-        type: FilterType.EVERYTHING,
-        name: 'everything',
-        count: pointsFilter[FilterType.EVERYTHING](points).length,
-      },
-      {
-        type: FilterType.PAST,
-        name: 'past',
-        count: pointsFilter[FilterType.PAST](points).length,
-      },
-      {
-        type: FilterType.FUTURE,
-        name: 'future',
-        count: pointsFilter[FilterType.FUTURE](points).length,
-      },
-    ];
+    return Object.values(FilterType).map((type) => ({type, name: type, count: pointsFilter[type](points).length}));
   }
 }

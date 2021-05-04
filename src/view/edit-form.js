@@ -118,7 +118,7 @@ const createEditFormTemplate = (state, destinations) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" type="number" min="0" step="1" value="${he.encode(String(basePrice))}" required>
+          <input class="event__input  event__input--price" id="event-price-1" name="event-price" type="number" min="0" step="1" value="${he.encode(String(basePrice))}" required>
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

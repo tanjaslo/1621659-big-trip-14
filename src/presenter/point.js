@@ -113,7 +113,7 @@ export default class Point {
   _handleEditFormSubmit(update) {
     const isMinorUpdate =
     !areDatesEqual(this._point.dateFrom, update.dateFrom) ||
-    !areDatesEqual(this._point.dateTo, update.dateTo);
+    this._point.basePrice !== update.basePrice;
 
     this._changeData(
       UserAction.UPDATE_POINT,

@@ -9,11 +9,12 @@ import { sortByDay, sortByPrice, sortByTime } from '../utils/point.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 
 export default class Board {
-  constructor(boardContainer, pointsModel, filterModel, offersModel) {
+  constructor(boardContainer, pointsModel, filterModel, offersModel, destinationsModel) {
     this._boardContainer = boardContainer;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
 
     this._pointPresenters = {};
     this._currentSortType = SortType.DAY;
@@ -30,7 +31,7 @@ export default class Board {
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
     this._offersModel.addObserver(this._handleModelEvent);
-    // this._destinationsModel.addObserver(this._handleModelEvent);
+    this._destinationsModel.addObserver(this._handleModelEvent);
 
     this._pointNewPresenter = new PointNewPresenter(this._boardComponent, this._handleViewAction);
   }
@@ -85,7 +86,7 @@ export default class Board {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        this._pointPresenter[data.id].init(data);
+        this._pointPresenters[data.id].init(data);
         break;
       case UpdateType.MINOR:
         this._clearBoard();
@@ -108,9 +109,6 @@ export default class Board {
   }
 
   _renderSort() {
-    if (this._sortComponent !== null) {
-      this._sortComponent = null;
-    }
     this._sortComponent = new TripSortView(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
 

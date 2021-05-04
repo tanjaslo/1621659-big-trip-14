@@ -173,7 +173,8 @@ export const sortByTime = (pointA, pointB) => {
   return timeB - timeA;
 };
 
-export const areDatesEqual = (firstPoint, secondPoint) => {
-  return new Date(firstPoint.date) - new Date(secondPoint.date);
+export const areDatesEqual = (dateA, dateB) => {
+  return (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'D');
 };
+
 
