@@ -33,7 +33,7 @@ export default class Board {
     this._offersModel.addObserver(this._handleModelEvent);
     this._destinationsModel.addObserver(this._handleModelEvent);
 
-    this._pointNewPresenter = new PointNewPresenter(this._boardComponent, this._handleViewAction);
+    this._pointNewPresenter = new PointNewPresenter(this._boardComponent, this._handleViewAction, this._destinationsModel);
   }
 
   init() {
@@ -127,7 +127,7 @@ export default class Board {
 
   _renderPoints() {
     this._getPoints().forEach((point) => {
-      this._renderPoint(point);
+      this._renderPoint(point, this._destinationsModel.getDestinations());
     });
   }
 

@@ -9,13 +9,17 @@ import TripInfoView from './view/route.js';
 import BoardPresenter from './presenter/board.js';
 import FilterPresenter from './presenter/filter.js';
 import { renderPoints } from './mock/point.js';
+import { destinations } from './mock/destination.js';
+import { UpdateType } from './const.js';
 
-const points = renderPoints(POINT_COUNT);
+const points = renderPoints(POINT_COUNT, destinations);
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
 
 const destinationsModel = new DestinationsModel();
+destinationsModel.setDestinations(UpdateType.PATCH, destinations);
+
 const filterModel = new FilterModel();
 const offersModel = new OffersModel();
 
@@ -29,7 +33,7 @@ const eventsElement = mainElement.querySelector('.trip-events');
 render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
 render(menuElement, new MenuView(), RenderPosition.AFTERBEGIN);
 
-const boardPresenter = new BoardPresenter(eventsElement, pointsModel, filterModel, destinationsModel, offersModel);
+const boardPresenter = new BoardPresenter(eventsElement, pointsModel, filterModel, offersModel, destinationsModel);
 const filterPresenter = new FilterPresenter(filtersElement, filterModel, pointsModel);
 
 filterPresenter.init();

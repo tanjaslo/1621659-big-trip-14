@@ -2,7 +2,6 @@ import EditFormView from '../view/edit-form.js';
 import { nanoid } from 'nanoid';
 import { remove, render, RenderPosition } from '../utils/render.js';
 import { UserAction, UpdateType } from '../const.js';
-import { destinations } from '../mock/destination.js';
 
 const BLANK_POINT = {
   type: 'bus',
@@ -19,9 +18,10 @@ const BLANK_POINT = {
 };
 
 export default class PointNew {
-  constructor(pointContainer, changeData) {
+  constructor(pointContainer, changeData, destinationsModel) {
     this._pointContainer = pointContainer;
     this._changeData = changeData;
+    this._destinationsModel = destinationsModel.getDestinations();
 
     this._pointNewComponent = null;
 
@@ -36,7 +36,7 @@ export default class PointNew {
       return;
     }
 
-    this._pointNewComponent = new EditFormView(BLANK_POINT, destinations);
+    this._pointNewComponent = new EditFormView(BLANK_POINT, this._destinationsModel);
     this._pointNewComponent.setEditFormSubmitHandler(this._editFormSubmitHandler);
     this._pointNewComponent.setEditFormCloseHandler(this._editFormCloseHandler);
     this._pointNewComponent.setEditFormDeleteClickHandler(this._editFormDeleteClickHandler);

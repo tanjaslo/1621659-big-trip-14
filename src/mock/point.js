@@ -10,9 +10,8 @@ import {
   getRandomDate,
   getDateTo,
   sortByDay } from '../utils/point.js';
-import { createDestination } from './destination.js';
 
-const createPoint = () => {
+const createPoint = (destination) => {
   const dateFrom = getRandomDate(dayjs().add(-20, 'd'), dayjs().add(6, 'M'));
   const type = getRandomArrayElement(TYPES);
 
@@ -21,15 +20,20 @@ const createPoint = () => {
     basePrice: getRandomInteger(10, 1000),
     dateFrom,
     dateTo: getDateTo(dateFrom),
-    destination: createDestination(),
+    destination,
     isFavourite: Boolean(getRandomInteger(0, 1)),
     offers: getRandomArray(optionsMap.get(type)),
     type,
   };
 };
 
-const renderPoints = (count) => {
-  const points = new Array(count).fill().map(createPoint).sort(sortByDay);
+const renderPoints = (count, destinations) => {
+  const points = new Array(count).fill().
+    map(
+      () => {
+        return createPoint(destinations[getRandomInteger(0, destinations.length - 1)]);
+      })
+    .sort(sortByDay);
 
   return points;
 };

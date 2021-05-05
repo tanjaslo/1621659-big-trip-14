@@ -1,6 +1,5 @@
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
 import { areDatesEqual } from '../utils/point.js';
-import { destinations } from '../mock/destination.js';
 import { UserAction, UpdateType } from '../const.js';
 import EditFormView from '../view/edit-form.js';
 import PointView from '../view/point.js';
@@ -28,8 +27,9 @@ export default class Point {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init(point) {
+  init(point, destinations) {
     this._point = point;
+    this._point = destinations;
 
     const prevPointComponent = this._pointComponent;
     const prevPointEditComponent = this._pointEditComponent;
