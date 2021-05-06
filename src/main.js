@@ -6,6 +6,7 @@ import OffersModel from './model/offers.js';
 import FilterModel from './model/filter.js';
 import MenuView from './view/menu.js';
 import TripInfoView from './view/route.js';
+import StatisticsView from './view/statistics.js';
 import BoardPresenter from './presenter/board.js';
 import FilterPresenter from './presenter/filter.js';
 import { renderPoints } from './mock/point.js';
@@ -52,7 +53,10 @@ const handleMenuClick = (menuItem) => {
 menuComponent.setMenuClickHandler(handleMenuClick);
 
 filterPresenter.init();
-boardPresenter.init();
+// Для удобства отладки скроем доску
+// boardPresenter.init();
+// и отобразим сразу статистику
+render(eventsElement, new StatisticsView(pointsModel.getPoints()), RenderPosition.BEFOREEND);
 
 headerElement.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
