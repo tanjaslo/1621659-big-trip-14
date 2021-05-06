@@ -10,7 +10,7 @@ import BoardPresenter from './presenter/board.js';
 import FilterPresenter from './presenter/filter.js';
 import { renderPoints } from './mock/point.js';
 import { destinations } from './mock/destination.js';
-import { UpdateType } from './const.js';
+import { UpdateType, MenuItem } from './const.js';
 
 const points = renderPoints(POINT_COUNT, destinations);
 
@@ -30,11 +30,23 @@ const menuElement = headerElement.querySelector('.trip-controls__navigation');
 const filtersElement = headerElement.querySelector('.trip-controls__filters');
 const eventsElement = mainElement.querySelector('.trip-events');
 
+const menuComponent = new MenuView();
 render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
-render(menuElement, new MenuView(), RenderPosition.AFTERBEGIN);
+render(menuElement, menuComponent, RenderPosition.AFTERBEGIN);
 
 const boardPresenter = new BoardPresenter(eventsElement, pointsModel, filterModel, offersModel, destinationsModel);
 const filterPresenter = new FilterPresenter(filtersElement, filterModel, pointsModel);
+
+const handleMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.STATS:
+      break;
+    case MenuItem.TABLE:
+      break;
+  }
+};
+
+menuComponent.setMenuClickHandler(handleMenuClick);
 
 filterPresenter.init();
 boardPresenter.init();
