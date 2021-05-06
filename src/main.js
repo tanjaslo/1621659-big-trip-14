@@ -40,8 +40,11 @@ const filterPresenter = new FilterPresenter(filtersElement, filterModel, pointsM
 const handleMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.STATS:
+      boardPresenter.destroy();
       break;
     case MenuItem.TABLE:
+    default:
+      boardPresenter.init();
       break;
   }
 };

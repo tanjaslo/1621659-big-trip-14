@@ -28,16 +28,29 @@ export default class Board {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._pointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-    this._offersModel.addObserver(this._handleModelEvent);
-    this._destinationsModel.addObserver(this._handleModelEvent);
-
     this._pointNewPresenter = new PointNewPresenter(this._boardComponent, this._handleViewAction, this._destinationsModel);
   }
 
   init() {
     render(this._boardContainer, this._boardComponent, RenderPosition.BEFOREEND);
+
+    this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+    this._offersModel.addObserver(this._handleModelEvent);
+    this._destinationsModel.addObserver(this._handleModelEvent);
+
+    this._renderBoard();
+  }
+
+  destroy() {
+    this._clearBoard({resetSortType: true});
+
+    remove(this._boardComponent);
+
+    this._pointsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+    this._offersModel.removeObserver(this._handleModelEvent);
+    this._destinationsModel.removeObserver(this._handleModelEvent);
 
     this._renderBoard();
   }
