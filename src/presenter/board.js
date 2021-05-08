@@ -1,4 +1,5 @@
 import EventsListView from '../view/events-list.js';
+import BoardView from '../view/board.js';
 import NoEventView from '../view/no-event.js';
 import TripSortView from '../view/sort.js';
 import PointPresenter from './point.js';
@@ -20,7 +21,8 @@ export default class Board {
     this._currentSortType = SortType.DAY;
 
     this._sortComponent = null;
-    this._boardComponent = new EventsListView();
+    this._boardComponent = new BoardView();
+    this._pointsComponent = new EventsListView();
     this._noEventComponent = new NoEventView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -28,11 +30,12 @@ export default class Board {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._pointNewPresenter = new PointNewPresenter(this._boardComponent, this._handleViewAction, this._destinationsModel);
+    this._pointNewPresenter = new PointNewPresenter(this._pointsComponent, this._handleViewAction, this._destinationsModel);
   }
 
   init() {
     render(this._boardContainer, this._boardComponent, RenderPosition.BEFOREEND);
+    render(this._boardComponent, this._pointsComponent, RenderPosition.BEFOREEND);
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -45,14 +48,13 @@ export default class Board {
   destroy() {
     this._clearBoard({resetSortType: true});
 
+    remove(this._pointsComponent);
     remove(this._boardComponent);
 
     this._pointsModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
     this._offersModel.removeObserver(this._handleModelEvent);
     this._destinationsModel.removeObserver(this._handleModelEvent);
-
-    this._renderBoard();
   }
 
   createPoint() {
@@ -71,8 +73,9 @@ export default class Board {
         return filteredPoints.sort(sortByPrice);
       case SortType.TIME:
         return filteredPoints.sort(sortByTime);
+      case SortType.DAY:
+        return filteredPoints.sort(sortByDay);
     }
-    return filteredPoints.sort(sortByDay);
   }
 
   _handleModeChange() {
@@ -123,14 +126,15 @@ export default class Board {
 
   _renderSort() {
     this._sortComponent = new TripSortView(this._currentSortType);
+    render(this._pointsComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
 
-    render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
+    render(this._pointsComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderPoint(point, destinations) {
     const pointPresenter = new PointPresenter(
-      this._boardComponent,
+      this._pointsComponent,
       this._handleViewAction,
       this._handleModeChange,
       this._destinations);
@@ -145,7 +149,7 @@ export default class Board {
   }
 
   _renderNoPoints() {
-    render(this._boardComponent, this._noEventComponent, RenderPosition.AFTERBEGIN);
+    render(this._pointsComponent, this._noEventComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderBoard() {

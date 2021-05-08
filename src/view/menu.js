@@ -3,9 +3,9 @@ import { MenuItem } from '../const.js';
 
 const createMenuTemplate = () => {
   return `<nav class="trip-controls__trip-tabs  trip-tabs">
-  <a class="trip-tabs__btn  trip-tabs__btn--active" href="#" data-menu-item="${MenuItem.TABLE}" value="${MenuItem.TABLE}">Table</a>
-  <a class="trip-tabs__btn" href="#" data-menu-item="${MenuItem.STATS}" value="${MenuItem.STATS}">Stats</a>
-</nav>`;
+            <a class="trip-tabs__btn  trip-tabs__btn--active" data-key="${MenuItem.TABLE}" href="#">Table</a>
+            <a class="trip-tabs__btn" data-key="${MenuItem.STATS}" href="#">Stats</a>
+          </nav>`;
 };
 
 export default class Menu extends AbstractView {
@@ -21,21 +21,26 @@ export default class Menu extends AbstractView {
 
   _menuClickHandler(evt) {
     evt.preventDefault();
-    this._callbacks.menuClick(evt.target.value);
+    if (evt.target.classList.contains('trip-tabs__btn--active')) {
+      return;
+    }
+    this._callbacks.menuClick(evt.target.dataset.key);
   }
 
   setMenuClickHandler(callback) {
     this._callbacks.menuClick = callback;
-    this.getElement().addEventListener('change', this._menuClickHandler);
+    this.getElement().addEventListener('click', this._menuClickHandler);
   }
 
   setMenuItem(menuItem) {
-    const item = this.getElement().querySelector(`[data-menu-item=${menuItem}]`);
-    const activeItem = this.getElement().querySelector('.trip-tabs__btn--active');
+    const menuItems = this.getElement().querySelectorAll('.trip-tabs__btn');
 
-    if (item !== null && activeItem !== null) {
-      item.classList.add('trip-tabs__btn--active');
-      activeItem.classList.remove('trip-tabs__btn--active');
-    }
+    menuItems.forEach((item) => {
+      if (item.dataset.key === menuItem) {
+        item.classList.add('trip-tabs__btn--active');
+      } else {
+        item.classList.remove('trip-tabs__btn--active');
+      }
+    });
   }
 }
