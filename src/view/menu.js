@@ -21,7 +21,8 @@ export default class Menu extends AbstractView {
 
   _menuClickHandler(evt) {
     evt.preventDefault();
-    if (evt.target.classList.contains('trip-tabs__btn--active')) {
+    if (evt.target.classList.contains('trip-tabs__btn--active') ||
+    (!evt.target.classList.contains('trip-tabs__btn'))) {
       return;
     }
     this._callbacks.menuClick(evt.target.dataset.key);
