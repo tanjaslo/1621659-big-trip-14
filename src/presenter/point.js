@@ -1,14 +1,14 @@
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
 import { areDatesEqual } from '../utils/point.js';
-import { UserAction, UpdateType } from '../const.js';
+import { UserAction, UpdateType, Mode } from '../const.js';
 import EditFormView from '../view/edit-form.js';
 import PointView from '../view/point.js';
 
-const Mode = {
+/* const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
 };
-
+ */
 export default class Point {
   constructor(pointContainer, changeData, changeMode) {
     this._pointContainer = pointContainer;

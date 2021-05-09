@@ -25,6 +25,7 @@ destinationsModel.setDestinations(UpdateType.PATCH, destinations);
 const filterModel = new FilterModel();
 const offersModel = new OffersModel();
 
+const addEventButton = document.querySelector('.trip-main__event-add-btn');
 const headerElement = document.querySelector('.page-header');
 const mainElement = document.querySelector('.page-body__page-main');
 const tripMainElement = headerElement.querySelector('.trip-main');
@@ -44,14 +45,16 @@ const handleMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.STATS:
       boardPresenter.destroy();
+      addEventButton.disabled = true;
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
       render(mainElement, statisticsComponent, RenderPosition.BEFOREEND);
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       break;
     case MenuItem.TABLE:
-    default:
+    //default:
       remove(statisticsComponent);
       boardPresenter.init();
+      addEventButton.disabled = false;
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       break;
   }
@@ -62,8 +65,7 @@ menuComponent.setMenuClickHandler(handleMenuClick);
 filterPresenter.init();
 boardPresenter.init();
 
-headerElement.querySelector('.trip-main__event-add-btn')
-  .addEventListener('click', (evt) => {
-    evt.preventDefault();
-    boardPresenter.createPoint();
-  });
+addEventButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  boardPresenter.createPoint();
+});
