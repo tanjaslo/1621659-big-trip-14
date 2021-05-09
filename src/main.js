@@ -1,19 +1,16 @@
 import { POINT_COUNT } from '../src/data.js';
-import { render, RenderPosition, remove } from './utils/render.js';
+import { render, RenderPosition } from './utils/render.js';
 import PointsModel from './model/points.js';
 import DestinationsModel from './model/destinations.js';
 import OffersModel from './model/offers.js';
 import FilterModel from './model/filter.js';
 import MenuView from './view/menu.js';
 import TripInfoView from './view/route.js';
-import StatisticsView from './view/statistics.js';
 import BoardPresenter from './presenter/board.js';
 import FilterPresenter from './presenter/filter.js';
 import { renderPoints } from './mock/point.js';
 import { destinations } from './mock/destination.js';
 import { UpdateType, MenuItem, FilterType } from './const.js';
-
-let statisticsComponent = null;
 
 const points = renderPoints(POINT_COUNT, destinations);
 const pointsModel = new PointsModel();
@@ -32,6 +29,7 @@ const tripMainElement = headerElement.querySelector('.trip-main');
 const menuElement = tripMainElement.querySelector('.trip-controls__navigation');
 const filtersElement = tripMainElement.querySelector('.trip-controls__filters');
 const boardElement = mainElement.querySelector('.page-body__container');
+
 const menuComponent = new MenuView();
 render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
 render(menuElement, menuComponent, RenderPosition.AFTERBEGIN);
@@ -46,13 +44,9 @@ const handleMenuClick = (menuItem) => {
     case MenuItem.STATS:
       boardPresenter.destroy();
       addEventButton.disabled = true;
-      statisticsComponent = new StatisticsView(pointsModel.getPoints());
-      render(mainElement, statisticsComponent, RenderPosition.BEFOREEND);
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       break;
     case MenuItem.TABLE:
-    //default:
-      remove(statisticsComponent);
       boardPresenter.init();
       addEventButton.disabled = false;
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);

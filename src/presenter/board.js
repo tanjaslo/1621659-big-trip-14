@@ -2,6 +2,7 @@ import EventsListView from '../view/events-list.js';
 import BoardView from '../view/board.js';
 import NoEventView from '../view/no-event.js';
 import TripSortView from '../view/sort.js';
+import StatisticsView from '../view/statistics.js';
 import PointPresenter from './point.js';
 import PointNewPresenter from './point-new.js';
 import { render, RenderPosition, remove } from '../utils/render.js';
@@ -12,6 +13,7 @@ import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 export default class Board {
   constructor(boardContainer, pointsModel, filterModel, offersModel, destinationsModel) {
     this._boardContainer = boardContainer;
+    this._statsContainer = document.querySelector('.page-body__page-main');
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._offersModel = offersModel;
@@ -21,6 +23,7 @@ export default class Board {
     this._currentSortType = SortType.DAY;
 
     this._sortComponent = null;
+    this._statisticsComponent = null;
     this._boardComponent = new BoardView();
     this._pointsComponent = new EventsListView();
     this._noEventComponent = new NoEventView();
@@ -41,7 +44,6 @@ export default class Board {
     this._filterModel.addObserver(this._handleModelEvent);
     this._offersModel.addObserver(this._handleModelEvent);
     this._destinationsModel.addObserver(this._handleModelEvent);
-
     this._renderBoard();
   }
 
@@ -136,6 +138,15 @@ export default class Board {
     render(this._pointsComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
+  _renderStatistics() {
+    if (this._statisticsComponent !== null) {
+      this._statisticsComponent = null;
+    }
+
+    this._statisticsComponent = new StatisticsView(this._pointsModel.getPoints());
+    render(this._statsContainer, this._statisticsComponent, RenderPosition.BEFOREEND);
+  }
+
   _renderPoint(point, destinations) {
     const pointPresenter = new PointPresenter(
       this._pointsComponent,
@@ -163,6 +174,7 @@ export default class Board {
     }
     this._renderSort();
     this._renderPoints(this._pointsModel);
+    remove(this._statisticsComponent);
   }
 
   _clearBoard({resetSortType = false} = {}) {
@@ -175,6 +187,7 @@ export default class Board {
 
     remove(this._sortComponent);
     remove(this._noEventComponent);
+    this._renderStatistics();
 
     if (resetSortType) {
       this._currentSortType = SortType.DAY;

@@ -9,43 +9,22 @@ export const getUniqueTypes = (points) => {
 };
 
 export const getCostsByType = (points, uniqueTypes) => {
-  const costs = [];
-
-  uniqueTypes.forEach((uniqueType) => {
-    let cost = 0;
-
-    points.forEach((point) => {
-      point.type.toUpperCase() === uniqueType ? cost += +point.basePrice : 0;
-    });
-    costs.push(cost);
+  return uniqueTypes.map((uniqueType) => {
+    return points.filter((point) => point.type.toUpperCase() === uniqueType)
+      .reduce((total, point) => total += +point.basePrice, 0);
   });
-  return costs;
-};
-
-export const getAmountOfPointsByType = (points, uniqueTypes) => {
-  const amounts = [];
-
-  uniqueTypes.forEach((uniqueType) => {
-    let amount = 0;
-
-    points.forEach((point) => {
-      point.type.toUpperCase() === uniqueType ? amount += 1 : 0;
-    });
-    amounts.push(amount);
-  });
-  return amounts;
 };
 
 export const getTimeSpentByType = (points, uniqueTypes) => {
-  const durations = [];
-
-  uniqueTypes.forEach((type) => {
-    const allPointsTypes = points.filter((point) => point.type.toUpperCase() === type);
-
-    const duration = allPointsTypes.reduce((duration, point) => {
-      return duration + getDuration(point.dateFrom, point.dateTo);
-    }, 0);
-    durations.push(duration);
+  return uniqueTypes.map((uniqueType) => {
+    return points.filter((point) => point.type.toUpperCase() === uniqueType)
+      .reduce((total, point) => total + getDuration(point.dateFrom, point.dateTo), 0);
   });
-  return durations;
 };
+
+export const getAmountOfPointsByType = (points, uniqueTypes) => {
+  return uniqueTypes.map((uniqueType) => {
+    return points.filter((point) => point.type.toUpperCase() === uniqueType).length;
+  });
+};
+
