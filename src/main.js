@@ -11,6 +11,20 @@ import FilterPresenter from './presenter/filter.js';
 import { renderPoints } from './mock/point.js';
 import { destinations } from './mock/destination.js';
 import { UpdateType, MenuItem, FilterType } from './const.js';
+import Api from './api.js';
+
+const AUTHORIZATION = 'Basic 0L/RgNC40LLQtdGCLNC00LXRiNC40YTRgNC+0LLRidC40Loh';
+const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
+
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getPoints().then((points) => {
+  console.log(points);
+  // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
+  // а ещё на сервере используется snake_case, а у нас camelCase.
+  // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
+  // Есть вариант получше - паттерн "Адаптер"
+});
 
 const points = renderPoints(POINT_COUNT, destinations);
 const pointsModel = new PointsModel();
