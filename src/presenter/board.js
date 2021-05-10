@@ -132,10 +132,8 @@ export default class Board {
     }
 
     this._sortComponent = new TripSortView(this._currentSortType);
-    render(this._pointsComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
+    render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
-
-    render(this._pointsComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderStatistics() {
