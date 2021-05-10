@@ -1,7 +1,7 @@
 import EditFormView from '../view/edit-form.js';
 import { nanoid } from 'nanoid';
 import { remove, render, RenderPosition } from '../utils/render.js';
-import { UserAction, UpdateType } from '../const.js';
+import { UserAction, UpdateType, Mode } from '../const.js';
 
 const BLANK_POINT = {
   type: 'bus',
@@ -22,6 +22,8 @@ export default class PointNew {
     this._pointContainer = pointContainer;
     this._changeData = changeData;
     this._destinationsModel = destinationsModel.getDestinations();
+    this._mode = Mode.ADDING;
+    this._addEventButton = document.querySelector('.trip-main__event-add-btn');
 
     this._pointNewComponent = null;
 
@@ -36,13 +38,13 @@ export default class PointNew {
       return;
     }
 
-    this._pointNewComponent = new EditFormView(BLANK_POINT, this._destinationsModel);
+    this._pointNewComponent = new EditFormView(BLANK_POINT, this._destinationsModel, this._mode);
     this._pointNewComponent.setEditFormSubmitHandler(this._editFormSubmitHandler);
     this._pointNewComponent.setEditFormCloseHandler(this._editFormCloseHandler);
     this._pointNewComponent.setEditFormDeleteClickHandler(this._editFormDeleteClickHandler);
 
     render(this._pointContainer, this._pointNewComponent, RenderPosition.AFTERBEGIN);
-
+    this._addEventButton.disabled = true;
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
 
@@ -54,6 +56,7 @@ export default class PointNew {
     remove(this._pointNewComponent);
     this._pointNewComponent = null;
 
+    this._addEventButton.disabled = false;
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 

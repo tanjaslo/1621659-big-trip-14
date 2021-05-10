@@ -10,10 +10,9 @@ import BoardPresenter from './presenter/board.js';
 import FilterPresenter from './presenter/filter.js';
 import { renderPoints } from './mock/point.js';
 import { destinations } from './mock/destination.js';
-import { UpdateType } from './const.js';
+import { UpdateType, MenuItem, FilterType } from './const.js';
 
 const points = renderPoints(POINT_COUNT, destinations);
-
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
 
@@ -23,23 +22,44 @@ destinationsModel.setDestinations(UpdateType.PATCH, destinations);
 const filterModel = new FilterModel();
 const offersModel = new OffersModel();
 
+const addEventButton = document.querySelector('.trip-main__event-add-btn');
 const headerElement = document.querySelector('.page-header');
 const mainElement = document.querySelector('.page-body__page-main');
 const tripMainElement = headerElement.querySelector('.trip-main');
-const menuElement = headerElement.querySelector('.trip-controls__navigation');
-const filtersElement = headerElement.querySelector('.trip-controls__filters');
-const eventsElement = mainElement.querySelector('.trip-events');
+const menuElement = tripMainElement.querySelector('.trip-controls__navigation');
+const filtersElement = tripMainElement.querySelector('.trip-controls__filters');
+const boardElement = mainElement.querySelector('.page-body__container');
 
+const menuComponent = new MenuView();
 render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
-render(menuElement, new MenuView(), RenderPosition.AFTERBEGIN);
+render(menuElement, menuComponent, RenderPosition.AFTERBEGIN);
 
-const boardPresenter = new BoardPresenter(eventsElement, pointsModel, filterModel, offersModel, destinationsModel);
+const boardPresenter = new BoardPresenter(boardElement, pointsModel, filterModel, offersModel, destinationsModel);
 const filterPresenter = new FilterPresenter(filtersElement, filterModel, pointsModel);
+
+const handleMenuClick = (menuItem) => {
+  menuComponent.setMenuItem(menuItem);
+
+  switch (menuItem) {
+    case MenuItem.STATS:
+      boardPresenter.destroy();
+      addEventButton.disabled = true;
+      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+      break;
+    case MenuItem.TABLE:
+      boardPresenter.init();
+      addEventButton.disabled = false;
+      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+      break;
+  }
+};
+
+menuComponent.setMenuClickHandler(handleMenuClick);
 
 filterPresenter.init();
 boardPresenter.init();
 
-headerElement.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+addEventButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   boardPresenter.createPoint();
 });

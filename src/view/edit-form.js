@@ -3,11 +3,11 @@ import {
   isArrayEmpty } from '../utils/common.js';
 import { getFormDateFormat } from '../utils/point.js';
 import { optionsMap } from '../data.js';
+import { DATEPICKER_FORMAT, Mode } from '../const.js';
 import SmartView from './smart.js';
 import he from 'he';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-const DATEPICKER_FORMAT = 'd/m/y H:i';
 
 const createEventTypesListTemplate = (currentType) => {
   const eventTypes = Array.from(optionsMap.keys());
@@ -70,12 +70,19 @@ const createOffersContainer = (state) => {
   <div class="event__available-offers">${createOffersList(state)}</div>`;
 };
 
-const createEditFormTemplate = (state, destinations) => {
+const createRollupBtnTemplate = () => {
+  return `<button class="event__rollup-btn" type="button">
+  <span class="visually-hidden">Open event</span>
+  </button>`;
+};
+
+const createEditFormTemplate = (state, destinations, mode) => {
   const {basePrice, destination, dateFrom, dateTo, type} = state;
 
   const hasDescription = isArrayEmpty(destination.description);
   const hasPicturesList = isArrayEmpty(destination.pictures);
   const hasOptions = isArrayEmpty(optionsMap.get(type));
+  const isEditingMode = mode !== Mode.ADDING;
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -118,14 +125,12 @@ const createEditFormTemplate = (state, destinations) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" name="event-price" type="number" min="0" step="1" value="${he.encode(String(basePrice))}" required>
+          <input class="event__input  event__input--price" id="event-price-1" name="event-price" type="text" value="${basePrice}" required>
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-        <button class="event__reset-btn" type="reset">Delete</button>
-        <button class="event__rollup-btn" type="button">
-          <span class="visually-hidden">Open event</span>
-        </button>
+        <button class="event__reset-btn" type="reset">${mode === Mode.ADDING ? 'Cancel' : 'Delete'}</button>
+        ${isEditingMode ? createRollupBtnTemplate() : ''}
       </header>
       <section class="event__details">
       <section class="event__section  event__section--offers">
@@ -141,10 +146,11 @@ const createEditFormTemplate = (state, destinations) => {
 };
 
 export default class EditForm extends SmartView {
-  constructor(point, destinations) {
+  constructor(point, destinations, mode) {
     super();
     this._state = EditForm.parsePointToState(point);
     this._destinations = destinations;
+    this._mode = mode;
     this._datepicker = null;
 
     this._editFormSubmitHandler = this._editFormSubmitHandler.bind(this);
@@ -200,7 +206,7 @@ export default class EditForm extends SmartView {
   }
 
   getTemplate() {
-    return createEditFormTemplate(this._state, this._destinations);
+    return createEditFormTemplate(this._state, this._destinations, this._mode);
   }
 
   _setInnerHandlers() {
@@ -294,7 +300,7 @@ export default class EditForm extends SmartView {
 
   _priceChangeHandler(evt) {
     evt.preventDefault();
-    const price = evt.target.value;
+    const price = Number(evt.target.value);
 
     if (isNaN(price) || price < 0) {
       evt.target.setCustomValidity('Price must be a positive number');
@@ -327,6 +333,10 @@ export default class EditForm extends SmartView {
   }
 
   setEditFormCloseHandler(callback) {
+    if (this._mode === Mode.ADDING) {
+      return;
+    }
+
     this._callbacks.formClose = callback;
     this.getElement()
       .querySelector('.event__rollup-btn')
@@ -340,7 +350,9 @@ export default class EditForm extends SmartView {
 
   setEditFormDeleteClickHandler(callback) {
     this._callbacks.deleteClick = callback;
-    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._editFormDeleteClickHandler);
+    this.getElement()
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this._editFormDeleteClickHandler);
   }
 
   removeElement() {

@@ -38,7 +38,7 @@ const createPointsTemplate = (point) => {
           &mdash;
           <time class="event__end-time" datetime="${dateTo}">${humanizeDateToFormat(dateFrom, dateTo)}</time>
         </p>
-          <p class="event__duration">${humanizeDurationFormat(dateFrom, dateTo)}</p>
+          <p class="event__duration">${humanizeDurationFormat(new Date(dateTo) - new Date(dateFrom))}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

@@ -1,3 +1,11 @@
+export const DATEPICKER_FORMAT = 'd/m/y H:i';
+
+export const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+  ADDING: 'ADDING',
+};
+
 export const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
@@ -20,4 +28,9 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+};
+
+export const MenuItem = {
+  TABLE: 'TABLE',
+  STATS: 'STATS',
 };

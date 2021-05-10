@@ -1,6 +1,8 @@
 import EventsListView from '../view/events-list.js';
+import BoardView from '../view/board.js';
 import NoEventView from '../view/no-event.js';
 import TripSortView from '../view/sort.js';
+import StatisticsView from '../view/statistics.js';
 import PointPresenter from './point.js';
 import PointNewPresenter from './point-new.js';
 import { render, RenderPosition, remove } from '../utils/render.js';
@@ -11,6 +13,7 @@ import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 export default class Board {
   constructor(boardContainer, pointsModel, filterModel, offersModel, destinationsModel) {
     this._boardContainer = boardContainer;
+    this._statsContainer = document.querySelector('.page-body__page-main');
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._offersModel = offersModel;
@@ -20,7 +23,9 @@ export default class Board {
     this._currentSortType = SortType.DAY;
 
     this._sortComponent = null;
-    this._boardComponent = new EventsListView();
+    this._statisticsComponent = null;
+    this._boardComponent = new BoardView();
+    this._pointsComponent = new EventsListView();
     this._noEventComponent = new NoEventView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -28,18 +33,30 @@ export default class Board {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._pointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-    this._offersModel.addObserver(this._handleModelEvent);
-    this._destinationsModel.addObserver(this._handleModelEvent);
-
-    this._pointNewPresenter = new PointNewPresenter(this._boardComponent, this._handleViewAction, this._destinationsModel);
+    this._pointNewPresenter = new PointNewPresenter(this._pointsComponent, this._handleViewAction, this._destinationsModel);
   }
 
   init() {
     render(this._boardContainer, this._boardComponent, RenderPosition.BEFOREEND);
+    render(this._boardComponent, this._pointsComponent, RenderPosition.BEFOREEND);
 
+    this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+    this._offersModel.addObserver(this._handleModelEvent);
+    this._destinationsModel.addObserver(this._handleModelEvent);
     this._renderBoard();
+  }
+
+  destroy() {
+    this._clearBoard({resetSortType: true});
+
+    remove(this._pointsComponent);
+    remove(this._boardComponent);
+
+    this._pointsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+    this._offersModel.removeObserver(this._handleModelEvent);
+    this._destinationsModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint() {
@@ -58,8 +75,9 @@ export default class Board {
         return filteredPoints.sort(sortByPrice);
       case SortType.TIME:
         return filteredPoints.sort(sortByTime);
+      case SortType.DAY:
+        return filteredPoints.sort(sortByDay);
     }
-    return filteredPoints.sort(sortByDay);
   }
 
   _handleModeChange() {
@@ -109,15 +127,27 @@ export default class Board {
   }
 
   _renderSort() {
-    this._sortComponent = new TripSortView(this._currentSortType);
-    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
 
+    this._sortComponent = new TripSortView(this._currentSortType);
     render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+  }
+
+  _renderStatistics() {
+    if (this._statisticsComponent !== null) {
+      this._statisticsComponent = null;
+    }
+
+    this._statisticsComponent = new StatisticsView(this._pointsModel.getPoints());
+    render(this._statsContainer, this._statisticsComponent, RenderPosition.BEFOREEND);
   }
 
   _renderPoint(point, destinations) {
     const pointPresenter = new PointPresenter(
-      this._boardComponent,
+      this._pointsComponent,
       this._handleViewAction,
       this._handleModeChange,
       this._destinations);
@@ -132,7 +162,7 @@ export default class Board {
   }
 
   _renderNoPoints() {
-    render(this._boardComponent, this._noEventComponent, RenderPosition.AFTERBEGIN);
+    render(this._pointsComponent, this._noEventComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderBoard() {
@@ -142,6 +172,7 @@ export default class Board {
     }
     this._renderSort();
     this._renderPoints(this._pointsModel);
+    remove(this._statisticsComponent);
   }
 
   _clearBoard({resetSortType = false} = {}) {
@@ -154,6 +185,7 @@ export default class Board {
 
     remove(this._sortComponent);
     remove(this._noEventComponent);
+    this._renderStatistics();
 
     if (resetSortType) {
       this._currentSortType = SortType.DAY;

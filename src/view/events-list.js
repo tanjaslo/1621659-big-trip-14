@@ -7,6 +7,6 @@ const createEventsListTemplate = () => {
 
 export default class EventsList extends AbstractView {
   getTemplate() {
-    return createEventsListTemplate(this._element);
+    return createEventsListTemplate();
   }
 }

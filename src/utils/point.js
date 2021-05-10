@@ -117,8 +117,7 @@ export const getTripDates = (points) => {
   return `${start} &mdash; ${end}`;
 };
 
-export const humanizeDurationFormat = (dateFrom, dateTo) => {
-  const difference = dayjs(dateTo).diff(dayjs(dateFrom));
+export const humanizeDurationFormat = (difference) => {
   const daysDiff = dayjs.duration(difference).days();
   const hoursDiff = dayjs.duration(difference).hours();
   const minutesDiff = dayjs.duration(difference).minutes();
