@@ -4,11 +4,6 @@ import { UserAction, UpdateType, Mode } from '../const.js';
 import EditFormView from '../view/edit-form.js';
 import PointView from '../view/point.js';
 
-/* const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
- */
 export default class Point {
   constructor(pointContainer, changeData, changeMode) {
     this._pointContainer = pointContainer;
@@ -27,15 +22,16 @@ export default class Point {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init(point, destinations) {
+  init(point, offers, destinations) {
     this._point = point;
+    this._offers = offers;
     this._point = destinations;
 
     const prevPointComponent = this._pointComponent;
     const prevPointEditComponent = this._pointEditComponent;
 
     this._pointComponent = new PointView(point);
-    this._pointEditComponent = new EditFormView(point, destinations);
+    this._pointEditComponent = new EditFormView(point, offers, destinations);
 
     this._pointComponent.setPointEditClickHandler(this._handlePointEditClick);
     this._pointComponent.setFavouriteClickHandler(this._handleFavouriteClick);

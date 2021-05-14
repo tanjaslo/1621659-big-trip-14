@@ -2,15 +2,15 @@ import {
   firstLetterCaps,
   isArrayEmpty } from '../utils/common.js';
 import { getFormDateFormat } from '../utils/point.js';
-import { optionsMap } from '../data.js';
+// import { optionsMap } from '../data.js';
 import { DATEPICKER_FORMAT, Mode } from '../const.js';
 import SmartView from './smart.js';
 import he from 'he';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const createEventTypesListTemplate = (currentType) => {
-  const eventTypes = Array.from(optionsMap.keys());
+const createEventTypesListTemplate = (availableOffers, currentType) => {
+  const eventTypes = Array.from(availableOffers.keys());
 
   const eventTypesList = eventTypes.map((type) =>
     `<div class="event__type-item">
@@ -27,12 +27,11 @@ const createDestinationsList = (destinations) => {
   }).join('');
 };
 
-const createOffersList = ({type, offers}) => {
-  const availableOffers = optionsMap.get(type);
-
-  const offersList = availableOffers.map((offer) => {
+const createOffersList = (availableOffers, type, selectedOffers) => {
+  const offers = availableOffers.get(type);
+  const offersList = offers.map((offer) => {
     const {title, price, id} = offer;
-    const isOfferSelected = offers ? offers.some((item) => item.title === title) : false;
+    const isOfferSelected = selectedOffers ? selectedOffers.some((item) => item.title === title) : false;
 
     return `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${id}" type="checkbox" name="event-offer-${type}" data-title="${title}" ${isOfferSelected ? 'checked' : ''}>
@@ -65,23 +64,18 @@ const createPicturesContainer = (destination) => {
 </div>`;
 };
 
-const createOffersContainer = (state) => {
-  return `<h3 class="event__section-title  event__section-title--offers">Offers</h3>
-  <div class="event__available-offers">${createOffersList(state)}</div>`;
-};
-
 const createRollupBtnTemplate = () => {
   return `<button class="event__rollup-btn" type="button">
   <span class="visually-hidden">Open event</span>
   </button>`;
 };
 
-const createEditFormTemplate = (state, destinations, mode) => {
-  const {basePrice, destination, dateFrom, dateTo, type} = state;
+const createEditFormTemplate = (state, availableOffers, destinations, mode) => {
+  const {basePrice, destination, dateFrom, dateTo, offers, type} = state;
 
   const hasDescription = isArrayEmpty(destination.description);
   const hasPicturesList = isArrayEmpty(destination.pictures);
-  const hasOptions = isArrayEmpty(optionsMap.get(type));
+  const hasOptions = isArrayEmpty(availableOffers.get(type));
   const isEditingMode = mode !== Mode.ADDING;
 
   return `<li class="trip-events__item">
@@ -97,7 +91,7 @@ const createEditFormTemplate = (state, destinations, mode) => {
           <div class="event__type-list">
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Event type</legend>
-              ${createEventTypesListTemplate(type)}
+              ${createEventTypesListTemplate(availableOffers, type)}
             </fieldset>
           </div>
         </div>
@@ -133,8 +127,11 @@ const createEditFormTemplate = (state, destinations, mode) => {
         ${isEditingMode ? createRollupBtnTemplate() : ''}
       </header>
       <section class="event__details">
-      <section class="event__section  event__section--offers">
-        ${hasOptions ? createOffersContainer(state) : ''}
+      <section class="event__section  event__section--offers ${hasOptions ? '' : 'visually-hidden'}">
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+        <div class="event__available-offers">
+          ${hasOptions ? createOffersList(availableOffers, type, offers) : ''}
+        </div>
       </section>
       <section class="event__section  event__section--destination">
         ${hasDescription ? createDestinationContainer(destination) : ''}
@@ -146,9 +143,10 @@ const createEditFormTemplate = (state, destinations, mode) => {
 };
 
 export default class EditForm extends SmartView {
-  constructor(point, destinations, mode) {
+  constructor(point, availableOffers, destinations, mode) {
     super();
     this._state = EditForm.parsePointToState(point);
+    this._availableOffers = availableOffers;
     this._destinations = destinations;
     this._mode = mode;
     this._datepicker = null;
@@ -206,7 +204,7 @@ export default class EditForm extends SmartView {
   }
 
   getTemplate() {
-    return createEditFormTemplate(this._state, this._destinations, this._mode);
+    return createEditFormTemplate(this._state, this._availableOffers, this._destinations, this._mode);
   }
 
   _setInnerHandlers() {
@@ -251,7 +249,7 @@ export default class EditForm extends SmartView {
       return;
     }
     const currentType = evt.target.dataset.type;
-    const currentOptions = optionsMap.get(currentType);
+    const currentOptions = this._availableOffers.get(currentType);
     const emptyOffers = [];
 
     this.updateState({
@@ -285,7 +283,7 @@ export default class EditForm extends SmartView {
       return;
     }
     const clickedOption = target.dataset.title;
-    const availableOptions = optionsMap.get(this._state.type);
+    const availableOptions = this._availableOffers.get(this._state.type);
     const pointOffers = this._state.offers;
 
     const selectedOption = availableOptions.find((item) => item.title === clickedOption);

@@ -66,7 +66,6 @@ Promise.all([
   render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
   render(menuElement, menuComponent, RenderPosition.AFTERBEGIN);
   menuComponent.setMenuClickHandler(handleMenuClick);
-  return points;
 })
   .catch(() => {
     offersModel.setOffers([]);

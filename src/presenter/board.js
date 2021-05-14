@@ -168,9 +168,7 @@ export default class Board {
     const pointPresenter = new PointPresenter(
       this._pointsComponent,
       this._handleViewAction,
-      this._handleModeChange,
-      this._offers,
-      this._destinations);
+      this._handleModeChange);
     pointPresenter.init(point, offers, destinations);
     this._pointPresenters[point.id] = pointPresenter;
   }
@@ -195,7 +193,7 @@ export default class Board {
       return;
     }
     this._renderSort();
-    this._renderPoints(this._pointsModel); // this._getPoints()
+    this._renderPoints(this._pointsModel);
     remove(this._statisticsComponent);
   }
 
