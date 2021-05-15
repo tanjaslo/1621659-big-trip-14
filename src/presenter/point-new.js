@@ -21,8 +21,8 @@ export default class PointNew {
   constructor(pointContainer, changeData, offersModel, destinationsModel) {
     this._pointContainer = pointContainer;
     this._changeData = changeData;
-    this._offersModel = offersModel.getOffers();
-    this._destinationsModel = destinationsModel.getDestinations();
+    this._offersModel = offersModel;
+    this._destinationsModel = destinationsModel;
     this._mode = Mode.ADDING;
     this._addEventButton = document.querySelector('.trip-main__event-add-btn');
 
@@ -39,7 +39,7 @@ export default class PointNew {
       return;
     }
 
-    this._pointNewComponent = new EditFormView(BLANK_POINT, this._offersModel, this._destinationsModel, this._mode);
+    this._pointNewComponent = new EditFormView(BLANK_POINT, this._offersModel.getOffers(), this._destinationsModel.getDestinations(), this._mode);
     this._pointNewComponent.setEditFormSubmitHandler(this._editFormSubmitHandler);
     this._pointNewComponent.setEditFormCloseHandler(this._editFormCloseHandler);
     this._pointNewComponent.setEditFormDeleteClickHandler(this._editFormDeleteClickHandler);
