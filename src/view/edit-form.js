@@ -2,7 +2,6 @@ import {
   firstLetterCaps,
   isArrayEmpty } from '../utils/common.js';
 import { getFormDateFormat } from '../utils/point.js';
-// import { optionsMap } from '../data.js';
 import { DATEPICKER_FORMAT, Mode } from '../const.js';
 import SmartView from './smart.js';
 import he from 'he';
@@ -22,6 +21,7 @@ const createEventTypesListTemplate = (availableOffers, currentType) => {
 };
 
 const createDestinationsList = (destinations) => {
+  console.log(destinations);
   return destinations.map((destination) => {
     return `<option value="${destination.name}"></option>`;
   }).join('');
@@ -30,8 +30,9 @@ const createDestinationsList = (destinations) => {
 const createOffersList = (availableOffers, type, selectedOffers) => {
   const offers = availableOffers.get(type);
   const offersList = offers.map((offer) => {
-    const {title, price, id} = offer;
-    const isOfferSelected = selectedOffers ? selectedOffers.some((item) => item.title === title) : false;
+    const {title, price} = offer;
+    const id = title.split('').join('-');
+    const isOfferSelected = selectedOffers ? selectedOffers.some((item) => item.title === title && item.price === price) : false;
 
     return `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${id}" type="checkbox" name="event-offer-${type}" data-title="${title}" ${isOfferSelected ? 'checked' : ''}>
