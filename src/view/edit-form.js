@@ -21,7 +21,6 @@ const createEventTypesListTemplate = (availableOffers, currentType) => {
 };
 
 const createDestinationsList = (destinations) => {
-  console.log(destinations);
   return destinations.map((destination) => {
     return `<option value="${destination.name}"></option>`;
   }).join('');

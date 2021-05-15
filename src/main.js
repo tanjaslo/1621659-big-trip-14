@@ -10,7 +10,7 @@ import FilterPresenter from './presenter/filter.js';
 import { UpdateType, MenuItem, FilterType } from './const.js';
 import Api from './api.js';
 
-const AUTHORIZATION = 'Basic 0L/RgNC40LLQtdGCLNC00LXRiNC40YTRgNC+0LLRidC40Loh';
+const AUTHORIZATION = 'Basic 0LnQvtGDLCDQtNC10YjQuNGE0YDQvtCy0YnQuNC6IQ==';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 
 const addEventButton = document.querySelector('.trip-main__event-add-btn');
@@ -56,22 +56,24 @@ addEventButton.addEventListener('click', (evt) => {
 });
 
 Promise.all([
-  api.getPoints(),
   api.getOffers(),
   api.getDestinations(),
-]).then(([points, offers, destinations]) => {
+  api.getPoints(),
+]).then(([offers, destinations, points]) => {
   offersModel.setOffers(offers);
   destinationsModel.setDestinations(destinations);
   pointsModel.setPoints(UpdateType.INIT, points);
   render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
   render(menuElement, menuComponent, RenderPosition.AFTERBEGIN);
   menuComponent.setMenuClickHandler(handleMenuClick);
+  filterPresenter.init();
 })
   .catch(() => {
     offersModel.setOffers([]);
     destinationsModel.setDestinations([]);
     pointsModel.setPoints(UpdateType.INIT, []);
+    render(menuElement, menuComponent, RenderPosition.AFTERBEGIN);
+    menuComponent.setMenuClickHandler(handleMenuClick);
   });
 
-filterPresenter.init();
 boardPresenter.init();

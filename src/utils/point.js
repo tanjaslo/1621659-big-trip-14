@@ -1,7 +1,5 @@
-import { getRandomArrayElement, getRandomInteger, shuffle } from '../utils/common.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { SENTENCES } from '../data.js';
 
 dayjs.extend(duration);
 dayjs.duration(100);
@@ -55,42 +53,11 @@ export const getTotalPrice = (points) => {
   return totalPrice;
 };
 
-export const createPhotosArray = () => {
-  const array = [];
-  for (let i = 1; i < getRandomInteger(2, 10); i++) {
-    const picture = {
-      src: `http://picsum.photos/248/152?r=${(i)}`,
-      description: getRandomArrayElement(SENTENCES),
-    };
-    array.push(picture);
-  }
-  return array;
-};
-
-export const getDescriptionFromSentences = (array) => {
-  const copiedArray = array.slice();
-  shuffle(copiedArray);
-
-  const descriptionSentences = copiedArray.slice(0, getRandomInteger(1, 5));
-  return descriptionSentences.join(' ');
-};
-
 const getPointDateFromToFormat = (dateFrom, dateTo) => {
   const date1 = dayjs(dateFrom);
   const date2 = dayjs(dateTo);
 
   return date2.isAfter(date1, 'day') ? 'MM/D HH:mm' : 'HH:mm';
-};
-
-export const getRandomDate = (start, end) => {
-  const randomDate = dayjs(dayjs(start) + Math.random() * (dayjs(end) - dayjs(start)));
-  return dayjs(randomDate).format('YYYY-MM-DDTHH:mm');
-};
-
-export const getDateTo = (dateFrom) => {
-  const minEventDuration = dayjs(dateFrom).add(10, 'm');
-  const maxEventDuration = dayjs(dateFrom).add(36, 'h');
-  return dayjs(getRandomInteger(minEventDuration, maxEventDuration)).format('YYYY-MM-DDTHH:mm');
 };
 
 export const getDuration = (dateFrom, dateTo) => {

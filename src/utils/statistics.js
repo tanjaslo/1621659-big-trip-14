@@ -5,7 +5,7 @@ export const getUniqueTypes = (points) => {
 
   points.forEach((point) => typesSet.add(point.type.toUpperCase()));
 
-  return [...typesSet]; // Array.from(labelsSet);
+  return [...typesSet];
 };
 
 export const getCostsByType = (points, uniqueTypes) => {
