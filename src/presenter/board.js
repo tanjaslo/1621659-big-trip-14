@@ -14,7 +14,6 @@ import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 export default class Board {
   constructor(boardContainer, pointsModel, filterModel, offersModel, destinationsModel, api) {
     this._boardContainer = boardContainer;
-    this._statsContainer = document.querySelector('.page-body__page-main');
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._offersModel = offersModel;
@@ -157,7 +156,7 @@ export default class Board {
     }
 
     this._statisticsComponent = new StatisticsView(this._pointsModel.getPoints());
-    render(this._statsContainer, this._statisticsComponent, RenderPosition.BEFOREEND);
+    render(this._boardContainer, this._statisticsComponent, RenderPosition.BEFOREEND);
   }
 
   _renderLoading() {
