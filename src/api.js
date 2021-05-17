@@ -20,16 +20,16 @@ export default class Api {
 
   getPoints() {
     return this._load({url: 'points'})
-      .then(Api.toJSON)
+      .then(Api.parseJSON)
       .then((points) => points.map(PointsModel.adaptToClient));
   }
 
   getDestinations() {
-    return this._load({url: 'destinations'}).then(Api.toJSON);
+    return this._load({url: 'destinations'}).then(Api.parseJSON);
   }
 
   getOffers() {
-    return this._load({url: 'offers'}).then(Api.toJSON);
+    return this._load({url: 'offers'}).then(Api.parseJSON);
   }
 
   updatePoint(point) {
@@ -39,7 +39,7 @@ export default class Api {
       body: JSON.stringify(PointsModel.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
-      .then(Api.toJSON)
+      .then(Api.parseJSON)
       .then(PointsModel.adaptToClient);
   }
 
@@ -50,7 +50,7 @@ export default class Api {
       body: JSON.stringify(PointsModel.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
-      .then(Api.toJSON)
+      .then(Api.parseJSON)
       .then((point) => {
         return PointsModel.adaptToClient(point);});
   }
@@ -79,17 +79,14 @@ export default class Api {
   }
 
   static checkStatus(response) {
-    if (
-      response.status < SuccessHTTPStatusRange.MIN ||
-      response.status > SuccessHTTPStatusRange.MAX
-    ) {
-      throw new Error(`${response.status}: ${response.statusText}`);
+    if (String(response.status).match(/^2[0-9]{2}$/)) {
+      return response;
     }
 
-    return response;
+    throw new Error(`${response.status}: ${response.statusText}`);
   }
 
-  static toJSON(response) {
+  static parseJSON(response) {
     return response.json();
   }
 
