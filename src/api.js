@@ -7,11 +7,6 @@ const Method = {
   POST: 'POST',
 };
 
-const SuccessHTTPStatusRange = {
-  MIN: 200,
-  MAX: 299,
-};
-
 export default class Api {
   constructor(endPoint, authorization) {
     this._endPoint = endPoint;
