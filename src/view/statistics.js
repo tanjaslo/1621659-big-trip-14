@@ -5,8 +5,9 @@ import {
   getCostsByType,
   getAmountOfPointsByType,
   getTimeSpentByType } from '../utils/statistics.js';
-import SmartView from './smart.js';
 import { humanizeDurationFormat } from '../utils/point.js';
+import { sortedItems } from '../utils/common.js';
+import SmartView from './smart.js';
 
 const BAR_HEIGHT = 55;
 
@@ -21,9 +22,9 @@ const renderChart = (ctx, uniqueTypes, dataByTypes, format, title) => {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: uniqueTypes,
+      labels: sortedItems(uniqueTypes),
       datasets: [{
-        data: dataByTypes,
+        data: sortedItems(dataByTypes),
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
