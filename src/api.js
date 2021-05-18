@@ -38,7 +38,7 @@ export default class Api {
       .then(PointsModel.adaptToClient);
   }
 
-  addNewPoint (point) {
+  addPoint(point) {
     return this._load({
       url: 'points',
       method: Method.POST,
@@ -46,11 +46,10 @@ export default class Api {
       headers: new Headers({'Content-Type': 'application/json'}),
     })
       .then(Api.parseJSON)
-      .then((point) => {
-        return PointsModel.adaptToClient(point);});
+      .then(PointsModel.adaptToClient);
   }
 
-  deletePoint (point) {
+  deletePoint(point) {
     return this._load({
       url: `points/${point.id}`,
       method: Method.DELETE,

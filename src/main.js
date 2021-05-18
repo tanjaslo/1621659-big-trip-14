@@ -7,7 +7,7 @@ import MenuView from './view/menu.js';
 import TripInfoView from './view/route.js';
 import BoardPresenter from './presenter/board.js';
 import FilterPresenter from './presenter/filter.js';
-import { UpdateType, MenuItem, FilterType } from './const.js';
+import { UpdateType, MenuItem, FilterType } from './utils/const.js';
 import Api from './api.js';
 
 const AUTHORIZATION = 'Basic 0LnQvtGDLCDQtNC10YjQuNGE0YDQvtCy0YnQuNC6IQ==';
@@ -24,14 +24,16 @@ const boardElement = mainElement.querySelector('.page-body__container');
 const api = new Api(END_POINT, AUTHORIZATION);
 
 const pointsModel = new PointsModel();
-const destinationsModel = new DestinationsModel();
 const filterModel = new FilterModel();
 const offersModel = new OffersModel();
+const destinationsModel = new DestinationsModel();
 
 const menuComponent = new MenuView();
 
 const boardPresenter = new BoardPresenter(boardElement, pointsModel, filterModel, offersModel, destinationsModel, api);
 const filterPresenter = new FilterPresenter(filtersElement, filterModel, pointsModel, offersModel, destinationsModel);
+
+render(menuElement, menuComponent, RenderPosition.AFTERBEGIN);
 
 const handleMenuClick = (menuItem) => {
   menuComponent.setMenuItem(menuItem);
@@ -50,10 +52,8 @@ const handleMenuClick = (menuItem) => {
   }
 };
 
-addEventButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  boardPresenter.createPoint();
-});
+addEventButton.disabled = true;
+
 
 Promise.all([
   api.getOffers(),
@@ -64,16 +64,19 @@ Promise.all([
   destinationsModel.setDestinations(destinations);
   pointsModel.setPoints(UpdateType.INIT, points);
   render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
-  render(menuElement, menuComponent, RenderPosition.AFTERBEGIN);
   menuComponent.setMenuClickHandler(handleMenuClick);
-  filterPresenter.init();
+  addEventButton.disabled = false;
+  addEventButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    boardPresenter.createPoint();
+  });
 })
   .catch(() => {
     offersModel.setOffers([]);
     destinationsModel.setDestinations([]);
     pointsModel.setPoints(UpdateType.INIT, []);
-    render(menuElement, menuComponent, RenderPosition.AFTERBEGIN);
     menuComponent.setMenuClickHandler(handleMenuClick);
   });
 
 boardPresenter.init();
+filterPresenter.init();
