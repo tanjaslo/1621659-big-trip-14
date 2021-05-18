@@ -1,5 +1,5 @@
 import { isExpiredEvent, isFutureEvent } from './point.js';
-import { FilterType } from '../const.js';
+import { FilterType } from './const.js';
 
 const pointsFilter = {
   [FilterType.EVERYTHING]: (points) => {

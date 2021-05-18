@@ -6,6 +6,12 @@ export const Mode = {
   ADDING: 'ADDING',
 };
 
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
 export const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
@@ -34,4 +40,18 @@ export const UpdateType = {
 export const MenuItem = {
   TABLE: 'TABLE',
   STATS: 'STATS',
+};
+
+export const BLANK_POINT = {
+  type: 'taxi',
+  offers: [],
+  destination: {
+    description: '',
+    name: '',
+    pictures: [],
+  },
+  dateFrom: new Date(),
+  dateTo: new Date(),
+  basePrice: '',
+  isFavourite: false,
 };

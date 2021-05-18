@@ -7,7 +7,6 @@ export const isArrayEmpty = (array) => {
   // или return !array.length;
 };
 
-export const sortedItems = (items) => {
+export const getSortedItems = (items) => {
   return items.sort((a, b) => b - a);
 };
-

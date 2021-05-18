@@ -1,21 +1,6 @@
 import EditFormView from '../view/edit-form.js';
-import { nanoid } from 'nanoid';
 import { remove, render, RenderPosition } from '../utils/render.js';
-import { UserAction, UpdateType, Mode } from '../const.js';
-
-const BLANK_POINT = {
-  type: 'bus',
-  offers: [],
-  destination: {
-    description: '',
-    name: '',
-    pictures: [],
-  },
-  dateFrom: new Date(),
-  dateTo: new Date(),
-  basePrice: '',
-  isFavorite: false,
-};
+import { UserAction, UpdateType, Mode, BLANK_POINT } from '../utils/const.js';
 
 export default class PointNew {
   constructor(pointContainer, changeData, offersModel, destinationsModel) {
@@ -61,13 +46,31 @@ export default class PointNew {
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
+  setSaving() {
+    this._pointNewComponent.updateState({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._pointNewComponent.updateState({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this._pointNewComponent.shake(resetFormState);
+  }
+
   _editFormSubmitHandler(point) {
     this._changeData(
       UserAction.ADD_POINT,
-      UpdateType.MINOR,
-      Object.assign({id: nanoid()}, point),
+      UpdateType.MAJOR,
+      point,
     );
-    this.destroy();
   }
 
   _editFormCloseHandler() {
