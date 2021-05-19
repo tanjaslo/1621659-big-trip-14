@@ -8,7 +8,7 @@ import TripInfoView from './view/route.js';
 import BoardPresenter from './presenter/board.js';
 import FilterPresenter from './presenter/filter.js';
 import { UpdateType, MenuItem, FilterType } from './utils/const.js';
-import Api from './api.js';
+import Api from './api/api.js';
 
 const AUTHORIZATION = 'Basic 0LnQvtGDLCDQtNC10YjQuNGE0YDQvtCy0YnQuNC6IQ==';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
