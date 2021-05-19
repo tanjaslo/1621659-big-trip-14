@@ -28,3 +28,19 @@ export const getAmountOfPointsByType = (points, uniqueTypes) => {
   });
 };
 
+export const getDataMap = (labels, data) => {
+  const dataMap = new Map();
+  for (let i = 0 ; i < labels.length; i++) {
+    dataMap.set(labels[i], data[i]);
+  }
+  return dataMap;
+};
+
+export const getSortedMap = (mapToSort) => {
+  const sortedMap = new Map([...mapToSort.entries()]
+    .sort((firstEntry, secondEntry) => {
+      return secondEntry[1] - firstEntry[1];
+    }));
+  return sortedMap;
+};
+

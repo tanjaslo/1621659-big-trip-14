@@ -4,10 +4,11 @@ import {
   getUniqueTypes,
   getCostsByType,
   getAmountOfPointsByType,
-  getTimeSpentByType } from '../utils/statistics.js';
+  getTimeSpentByType,
+  getDataMap,
+  getSortedMap } from '../utils/statistics.js';
 import SmartView from './smart.js';
 import { humanizeDurationFormat } from '../utils/point.js';
-import { getSortedItems } from '../utils/common.js';
 
 const BAR_HEIGHT = 55;
 
@@ -18,13 +19,16 @@ const timeFormat = (val) => `${humanizeDurationFormat(val)}`;
 const renderChart = (ctx, uniqueTypes, dataByTypes, format, title) => {
   ctx.height = BAR_HEIGHT * uniqueTypes.length;
 
+  const dataMap = getDataMap(uniqueTypes, dataByTypes);
+  const sortedMap = getSortedMap(dataMap);
+
   return new Chart(ctx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: getSortedItems(uniqueTypes),
+      labels: [...sortedMap.keys()],
       datasets: [{
-        data: getSortedItems(dataByTypes),
+        data: [...sortedMap.values()],
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -71,7 +75,7 @@ const renderChart = (ctx, uniqueTypes, dataByTypes, format, title) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: 50,
+          minBarLength: 90,
         }],
       },
       legend: {
