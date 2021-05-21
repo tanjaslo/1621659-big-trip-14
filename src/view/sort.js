@@ -30,7 +30,7 @@ const createSortTemplate = (sortType) => {
   </form>`;
 };
 
-export default class TripSort extends AbstractView {
+export default class Sort extends AbstractView {
   constructor(sortType) {
     super();
 

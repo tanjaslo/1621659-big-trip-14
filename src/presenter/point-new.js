@@ -1,6 +1,8 @@
 import EditFormView from '../view/edit-form.js';
-import { remove, render, RenderPosition } from '../utils/render.js';
 import { UserAction, UpdateType, Mode, BLANK_POINT } from '../utils/const.js';
+import { isOnline } from '../utils/common.js';
+import { toast } from '../utils/toast/toast.js';
+import { remove, render, RenderPosition } from '../utils/render.js';
 
 export default class PointNew {
   constructor(pointContainer, changeData, offersModel, destinationsModel) {
@@ -78,6 +80,10 @@ export default class PointNew {
   }
 
   _editFormDeleteClickHandler() {
+    if (!isOnline()) {
+      toast('You cannot delete point offline');
+      return;
+    }
     this.destroy();
   }
 

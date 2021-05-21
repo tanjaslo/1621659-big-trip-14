@@ -35,7 +35,7 @@ const createOffersList = (availableOffers, type, selectedOffers, isDisabled) => 
     const isOfferSelected = selectedOffers ? selectedOffers.some((item) => item.title === title && item.price === price) : false;
 
     return `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${id}" type="checkbox" name="event-offer-${type}" data-title="${title}" ${isOfferSelected ? 'checked' : ''} ${isDisabled ? 'disabled' : ''} >
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${id}" type="checkbox" name="event-offer-${type}" data-title="${title}" ${isOfferSelected ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
       <label class="event__offer-label" for="event-offer-${type}-${id}">
         <span class="event__offer-title">${title}</span>
         &plus;&euro;&nbsp;

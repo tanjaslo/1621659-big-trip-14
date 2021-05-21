@@ -17,7 +17,7 @@ const createRouteTemplate = (points) => {
   </section>`;
 };
 
-export default class TripInfo extends AbstractView {
+export default class Route extends AbstractView {
   constructor(points) {
     super();
     this._points = points;

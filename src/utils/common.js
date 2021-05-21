@@ -10,3 +10,7 @@ export const isArrayEmpty = (array) => {
 export const getSortedItems = (items) => {
   return items.sort((a, b) => b - a);
 };
+
+export const isOnline = () => {
+  return window.navigator.onLine;
+};

@@ -2,7 +2,7 @@ import EventsListView from '../view/events-list.js';
 import BoardView from '../view/board.js';
 import LoadingView from '../view/loading.js';
 import NoEventView from '../view/no-event.js';
-import TripSortView from '../view/sort.js';
+import SortView from '../view/sort.js';
 import StatisticsView from '../view/statistics.js';
 import PointPresenter, {State as PointPresenterViewState} from './point.js';
 import PointNewPresenter from './point-new.js';
@@ -160,7 +160,7 @@ export default class Board {
       this._sortComponent = null;
     }
 
-    this._sortComponent = new TripSortView(this._currentSortType);
+    this._sortComponent = new SortView(this._currentSortType);
     render(this._boardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
