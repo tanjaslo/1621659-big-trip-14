@@ -6,7 +6,7 @@ import DestinationsModel from './model/destinations.js';
 import OffersModel from './model/offers.js';
 import FilterModel from './model/filter.js';
 import MenuView from './view/menu.js';
-import TripInfoView from './view/route.js';
+import RouteView from './view/route.js';
 import BoardPresenter from './presenter/board.js';
 import FilterPresenter from './presenter/filter.js';
 import {
@@ -79,7 +79,7 @@ Promise.all([
   offersModel.setOffers(offers);
   destinationsModel.setDestinations(destinations);
   pointsModel.setPoints(UpdateType.INIT, points);
-  render(tripMainElement, new TripInfoView(points), RenderPosition.AFTERBEGIN);
+  render(tripMainElement, new RouteView(points), RenderPosition.AFTERBEGIN);
   menuComponent.setMenuClickHandler(handleMenuClick);
   addEventButton.disabled = false;
   addEventButton.addEventListener('click', (evt) => {
@@ -109,4 +109,5 @@ window.addEventListener('online', () => {
 
 window.addEventListener('offline', () => {
   document.title += ' [offline]';
+  toast('Attention! Network not available.');
 });

@@ -121,10 +121,6 @@ export default class Point {
   }
 
   _handlePointEditClick() {
-    if (!isOnline()) {
-      toast('You cannot edit point offline');
-      return;
-    }
     this._replacePointToForm();
   }
 
