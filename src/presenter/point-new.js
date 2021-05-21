@@ -1,6 +1,6 @@
 import EditFormView from '../view/edit-form.js';
-import { remove, render, RenderPosition } from '../utils/render.js';
 import { UserAction, UpdateType, Mode, BLANK_POINT } from '../utils/const.js';
+import { remove, render, RenderPosition } from '../utils/render.js';
 
 export default class PointNew {
   constructor(pointContainer, changeData, offersModel, destinationsModel) {

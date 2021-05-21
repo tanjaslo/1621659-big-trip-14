@@ -1,6 +1,8 @@
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
 import { areDatesEqual } from '../utils/point.js';
 import { UserAction, UpdateType, Mode, State } from '../utils/const.js';
+import { isOnline } from '../utils/common.js';
+import { toast } from '../utils/toast/toast.js';
 import EditFormView from '../view/edit-form.js';
 import PointView from '../view/point.js';
 
@@ -119,10 +121,18 @@ export default class Point {
   }
 
   _handlePointEditClick() {
+    if (!isOnline()) {
+      toast('You cannot edit point offline');
+      return;
+    }
     this._replacePointToForm();
   }
 
   _handleFavouriteClick() {
+    if (!isOnline()) {
+      toast('You cannot edit point offline');
+      return;
+    }
     this._changeData(
       UserAction.UPDATE_POINT,
       UpdateType.PATCH,
@@ -137,6 +147,10 @@ export default class Point {
   }
 
   _handleEditFormSubmit(update) {
+    if (!isOnline()) {
+      toast('You cannot save point offline');
+      return;
+    }
     const isMinorUpdate =
     !areDatesEqual(this._point.dateFrom, update.dateFrom) ||
     this._point.basePrice !== update.basePrice;
@@ -155,6 +169,10 @@ export default class Point {
   }
 
   _handleDeleteClick(point) {
+    if (!isOnline()) {
+      toast('You cannot delete point offline');
+      return;
+    }
     this._changeData(
       UserAction.DELETE_POINT,
       UpdateType.MINOR,

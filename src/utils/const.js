@@ -1,4 +1,7 @@
 export const DATEPICKER_FORMAT = 'd/m/y H:i';
+export const AUTHORIZATION = 'Basic TanjaThirst';
+export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
+export const STORE_VER = 'v14';
 
 export const Mode = {
   DEFAULT: 'DEFAULT',
@@ -40,6 +43,12 @@ export const UpdateType = {
 export const MenuItem = {
   TABLE: 'TABLE',
   STATS: 'STATS',
+};
+
+export const StorePrefix = {
+  POINTS: 'bigtrip-points-localstorage',
+  OFFERS: 'bigtrip-offers-localstorage',
+  DESTINATIONS: 'bigtrip-destinations-localstorage',
 };
 
 export const BLANK_POINT = {
