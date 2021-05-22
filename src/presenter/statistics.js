@@ -5,6 +5,7 @@ export default class Statistics {
   constructor(statisticsContainer, pointsModel) {
     this._statisticsContainer = statisticsContainer;
     this._pointsModel = pointsModel;
+
     this._statisticsComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);

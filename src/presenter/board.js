@@ -5,10 +5,10 @@ import NoEventView from '../view/no-event.js';
 import SortView from '../view/sort.js';
 import PointPresenter, {State as PointPresenterViewState} from './point.js';
 import PointNewPresenter from './point-new.js';
-import { render, RenderPosition, remove } from '../utils/render.js';
+import { SortType, UpdateType, UserAction, FilterType } from '../utils/const.js';
 import { pointsFilter } from '../utils/filter.js';
 import { sortByDay, sortByPrice, sortByTime } from '../utils/point.js';
-import { SortType, UpdateType, UserAction, FilterType } from '../utils/const.js';
+import { render, RenderPosition, remove } from '../utils/render.js';
 
 export default class Board {
   constructor(boardContainer, pointsModel, filterModel, offersModel, destinationsModel, api) {
