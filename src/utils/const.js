@@ -3,6 +3,11 @@ export const AUTHORIZATION = 'Basic TanjaThirst';
 export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 export const STORE_VER = 'v14';
 
+export const Color = {
+  WHITE: '#ffffff',
+  BLACK: '#000000',
+};
+
 export const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
