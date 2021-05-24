@@ -6,9 +6,10 @@ import DestinationsModel from './model/destinations.js';
 import OffersModel from './model/offers.js';
 import FilterModel from './model/filter.js';
 import MenuView from './view/menu.js';
-import RouteView from './view/route.js';
 import BoardPresenter from './presenter/board.js';
+import RoutePresenter from './presenter/route.js';
 import FilterPresenter from './presenter/filter.js';
+import StatisticsPresenter from './presenter/statistics.js';
 import {
   UpdateType,
   MenuItem,
@@ -46,11 +47,16 @@ const destinationsModel = new DestinationsModel();
 
 const menuComponent = new MenuView();
 
+const routePresenter = new RoutePresenter(tripMainElement, pointsModel);
+routePresenter.init();
+
 const boardPresenter = new BoardPresenter(boardElement, pointsModel, filterModel, offersModel, destinationsModel, apiWithProvider);
 boardPresenter.init();
 
 const filterPresenter = new FilterPresenter(filtersElement, filterModel, pointsModel, offersModel, destinationsModel);
 filterPresenter.init();
+
+const statisticsPresenter = new StatisticsPresenter(boardElement, pointsModel);
 
 render(menuElement, menuComponent, RenderPosition.AFTERBEGIN);
 
@@ -60,10 +66,12 @@ const handleMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.STATS:
       boardPresenter.destroy();
+      statisticsPresenter.init();
       addEventButton.disabled = true;
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
       break;
     case MenuItem.TABLE:
+      statisticsPresenter.destroy();
       boardPresenter.init();
       addEventButton.disabled = false;
       filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
@@ -79,7 +87,6 @@ Promise.all([
   offersModel.setOffers(offers);
   destinationsModel.setDestinations(destinations);
   pointsModel.setPoints(UpdateType.INIT, points);
-  render(tripMainElement, new RouteView(points), RenderPosition.AFTERBEGIN);
   menuComponent.setMenuClickHandler(handleMenuClick);
   addEventButton.disabled = false;
   addEventButton.addEventListener('click', (evt) => {

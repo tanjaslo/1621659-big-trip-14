@@ -1,5 +1,6 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Color } from '../utils/const.js';
 import {
   getUniqueTypes,
   getCostsByType,
@@ -11,6 +12,11 @@ import SmartView from './smart.js';
 import { humanizeDurationFormat } from '../utils/point.js';
 
 const BAR_HEIGHT = 55;
+const FONT_SIZE = 13;
+const LENGTH = 90;
+const PADDING = 5;
+const THICKNESS = 44;
+const TITLE_FONT_SIZE = 23;
 
 const moneyFormat = (val) => `€ ${val}`;
 const typeFormat = (val) => `${val}x`;
@@ -29,8 +35,8 @@ const renderChart = (ctx, uniqueTypes, dataByTypes, format, title) => {
       labels: [...sortedMap.keys()],
       datasets: [{
         data: [...sortedMap.values()],
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
+        backgroundColor: Color.WHITE,
+        hoverBackgroundColor: Color.WHITE,
         anchor: 'start',
       }],
     },
@@ -38,9 +44,9 @@ const renderChart = (ctx, uniqueTypes, dataByTypes, format, title) => {
       plugins: {
         datalabels: {
           font: {
-            size: 13,
+            size: FONT_SIZE,
           },
-          color: '#000000',
+          color: Color.BLACK,
           anchor: 'end',
           align: 'start',
           formatter: format,
@@ -49,22 +55,22 @@ const renderChart = (ctx, uniqueTypes, dataByTypes, format, title) => {
       title: {
         display: true,
         text: title,
-        fontColor: '#000000',
-        fontSize: 23,
+        fontColor: Color.BLACK,
+        fontSize: TITLE_FONT_SIZE,
         position: 'left',
       },
       scales: {
         yAxes: [{
           ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
+            fontColor: Color.BLACK,
+            padding: PADDING,
+            fontSize: FONT_SIZE,
           },
           gridLines: {
             display: false,
             drawBorder: false,
           },
-          barThickness: 44,
+          barThickness: THICKNESS,
         }],
         xAxes: [{
           ticks: {
@@ -75,7 +81,7 @@ const renderChart = (ctx, uniqueTypes, dataByTypes, format, title) => {
             display: false,
             drawBorder: false,
           },
-          minBarLength: 90,
+          minBarLength: LENGTH,
         }],
       },
       legend: {
