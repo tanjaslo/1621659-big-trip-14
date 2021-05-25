@@ -184,13 +184,11 @@ export default class Board {
   }
 
   _renderBoard() {
-    const filterType = this._filterModel.getFilter();
-
     if (this._isLoading) {
       this._renderLoading();
       return;
     }
-    if (this._getPoints().length === 0 && filterType.EVERYTHING) {
+    if (this._getPoints().length === 0) {
       this._renderNoPoints();
       return;
     }
