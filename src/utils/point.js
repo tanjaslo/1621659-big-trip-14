@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-
 dayjs.extend(duration);
-dayjs.duration(100);
 
 const MIN_TITLE_LENGTH = 5;
 
@@ -125,7 +123,7 @@ export const isExpiredEvent = (point) => {
 };
 
 export const sortByDay = (pointA, pointB) => {
-  return dayjs(pointA.dateFrom) - dayjs(pointB.dateFrom);
+  return dayjs(pointB.dateFrom) - dayjs(pointA.dateFrom);
 };
 
 export const sortByPrice = (pointA, pointB) => {
