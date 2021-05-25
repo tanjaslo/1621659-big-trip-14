@@ -1,5 +1,4 @@
 .toast-container {
-  position: absolute;
   z-index: 1000;
   position: fixed;
   display: flex;
@@ -13,7 +12,7 @@
   padding-top: 0.6em;
   padding-left: 0.4em;
   height: 0;
-  font-family: tahoma;
+  font-family: tahoma, sans-serif;
   font-size: 22px;
   line-height: 1.5;
   box-sizing: border-box;

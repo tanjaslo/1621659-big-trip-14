@@ -3,12 +3,7 @@ export const firstLetterCaps = (str) => {
 };
 
 export const isArrayEmpty = (array) => {
-  return array.length === 0 ? false : true;
-  // или return !array.length;
-};
-
-export const getSortedItems = (items) => {
-  return items.sort((a, b) => b - a);
+  return array.length !== 0;
 };
 
 export const isOnline = () => {
