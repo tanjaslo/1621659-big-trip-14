@@ -123,7 +123,7 @@ export const isExpiredEvent = (point) => {
 };
 
 export const sortByDay = (pointA, pointB) => {
-  return dayjs(pointB.dateFrom) - dayjs(pointA.dateFrom);
+  return dayjs(pointA.dateFrom) - dayjs(pointB.dateFrom);
 };
 
 export const sortByPrice = (pointA, pointB) => {
