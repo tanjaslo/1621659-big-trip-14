@@ -164,6 +164,35 @@ export default class EditForm extends SmartView {
     this._setInnerHandlers();
   }
 
+  getTemplate() {
+    return createEditFormTemplate(this._state, this._availableOffers, this._destinations, this._mode);
+  }
+
+  setEditFormCloseHandler(callback) {
+    if (this._mode === Mode.ADDING) {
+      return;
+    }
+
+    this._callbacks.formClose = callback;
+    this.getElement()
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this._editFormCloseHandler);
+  }
+
+  setEditFormSubmitHandler(callback) {
+    this._callbacks.formSubmit = callback;
+    this.getElement()
+      .querySelector('form')
+      .addEventListener('submit', this._editFormSubmitHandler);
+  }
+
+  setEditFormDeleteClickHandler(callback) {
+    this._callbacks.deleteClick = callback;
+    this.getElement()
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this._editFormDeleteClickHandler);
+  }
+
   _setDateFromPicker() {
     if (this._dateFromPicker) {
       this._dateFromPicker.destroy();
@@ -199,35 +228,6 @@ export default class EditForm extends SmartView {
         onChange: this._dateToChangeHandler,
       },
     );
-  }
-
-  getTemplate() {
-    return createEditFormTemplate(this._state, this._availableOffers, this._destinations, this._mode);
-  }
-
-  setEditFormCloseHandler(callback) {
-    if (this._mode === Mode.ADDING) {
-      return;
-    }
-
-    this._callbacks.formClose = callback;
-    this.getElement()
-      .querySelector('.event__rollup-btn')
-      .addEventListener('click', this._editFormCloseHandler);
-  }
-
-  setEditFormSubmitHandler(callback) {
-    this._callbacks.formSubmit = callback;
-    this.getElement()
-      .querySelector('form')
-      .addEventListener('submit', this._editFormSubmitHandler);
-  }
-
-  setEditFormDeleteClickHandler(callback) {
-    this._callbacks.deleteClick = callback;
-    this.getElement()
-      .querySelector('.event__reset-btn')
-      .addEventListener('click', this._editFormDeleteClickHandler);
   }
 
   _setInnerHandlers() {
