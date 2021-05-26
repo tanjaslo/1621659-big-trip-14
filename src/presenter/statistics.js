@@ -15,7 +15,7 @@ export default class Statistics {
     this._pointsModel.addObserver(this._handleModelEvent);
 
     const prevStatisticsComponent = this._statisticsComponent;
-    this._statisticsComponent = new StatisticsView(this._pointsModel.getPoints());
+    this._statisticsComponent = new StatisticsView(this._pointsModel.get());
 
     if (prevStatisticsComponent === null) {
       render(this._statisticsContainer, this._statisticsComponent, RenderPosition.BEFOREEND);

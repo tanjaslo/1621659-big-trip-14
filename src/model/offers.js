@@ -6,11 +6,11 @@ export default class Offers extends Observer {
     this._offers = new Map();
   }
 
-  getOffers() {
+  get() {
     return this._offers;
   }
 
-  setOffers(offers) {
+  set(offers) {
     offers.forEach((offer) => this._offers.set(offer.type, offer.offers));
   }
 }

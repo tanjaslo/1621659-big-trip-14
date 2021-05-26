@@ -20,7 +20,7 @@ export default class Filter {
   }
 
   _getFilters() {
-    const points = this._pointsModel.getPoints();
+    const points = this._pointsModel.get();
     return Object.values(FilterType).map((type) => ({type, name: type, count: pointsFilter[type](points).length}));
   }
 
@@ -28,7 +28,7 @@ export default class Filter {
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
+    this._filterComponent = new FilterView(filters, this._filterModel.get());
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
@@ -45,10 +45,10 @@ export default class Filter {
   }
 
   _handleFilterTypeChange(filterType) {
-    if (this._filterModel.getFilter() === filterType) {
+    if (this._filterModel.get() === filterType) {
       return;
     }
 
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._filterModel.set(UpdateType.MAJOR, filterType);
   }
 }

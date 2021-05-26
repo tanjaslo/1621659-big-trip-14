@@ -46,7 +46,7 @@ export default class PointNew {
       return;
     }
 
-    this._pointNewComponent = new EditFormView(BLANK_POINT, this._offersModel.getOffers(), this._destinationsModel.getDestinations(), this._mode);
+    this._pointNewComponent = new EditFormView(BLANK_POINT, this._offersModel.get(), this._destinationsModel.get(), this._mode);
     this._pointNewComponent.setEditFormSubmitHandler(this._editFormSubmitHandler);
     this._pointNewComponent.setEditFormCloseHandler(this._editFormCloseHandler);
     this._pointNewComponent.setEditFormDeleteClickHandler(this._editFormDeleteClickHandler);

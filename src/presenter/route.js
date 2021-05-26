@@ -16,7 +16,7 @@ export default class Route {
   init() {
     remove(this._routeComponent);
 
-    const points = this._pointsModel.getPoints();
+    const points = this._pointsModel.get();
     if (points.length === 0) {
       return;
     }

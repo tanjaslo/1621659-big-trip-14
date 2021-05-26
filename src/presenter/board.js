@@ -40,8 +40,8 @@ export default class Board {
   }
 
   _getPoints() {
-    const filterType = this._filterModel.getFilter();
-    const points = this._pointsModel.getPoints();
+    const filterType = this._filterModel.get();
+    const points = this._pointsModel.get();
     const filteredPoints = pointsFilter[filterType](points);
 
     switch (this._currentSortType) {
@@ -56,7 +56,7 @@ export default class Board {
 
   createPoint() {
     this._currentSortType = SortType.DAY;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._filterModel.set(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointNewPresenter.init();
   }
 
@@ -106,7 +106,7 @@ export default class Board {
 
   _renderPoints() {
     this._getPoints().forEach((point) => {
-      this._renderPoint(point, this._offersModel.getOffers(), this._destinationsModel.getDestinations());
+      this._renderPoint(point, this._offersModel.get(), this._destinationsModel.get());
     });
   }
 
@@ -157,7 +157,7 @@ export default class Board {
         this._pointNewPresenter.setSaving();
         this._api.addPoint(update)
           .then((response) => {
-            this._pointsModel.addPoint(updateType, response);
+            this._pointsModel.add(updateType, response);
           })
           .catch(() => {
             this._pointNewPresenter.setAborting();
@@ -167,7 +167,7 @@ export default class Board {
         this._pointPresenters[update.id].setViewState(PointPresenterViewState.SAVING);
         this._api.updatePoint(update)
           .then((response) => {
-            this._pointsModel.updatePoint(updateType, response);
+            this._pointsModel.update(updateType, response);
           })
           .catch(() => {
             this._pointPresenters[update.id].setViewState(PointPresenterViewState.ABORTING);
@@ -177,7 +177,7 @@ export default class Board {
         this._pointPresenters[update.id].setViewState(PointPresenterViewState.DELETING);
         this._api.deletePoint(update)
           .then(() => {
-            this._pointsModel.deletePoint(updateType, update);
+            this._pointsModel.delete(updateType, update);
           })
           .catch(() => {
             this._pointPresenters[update.id].setViewState(PointPresenterViewState.ABORTING);
@@ -189,7 +189,7 @@ export default class Board {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        this._pointPresenters[data.id].init(data, this._offersModel.getOffers(), this._destinationsModel.getDestinations());
+        this._pointPresenters[data.id].init(data, this._offersModel.get(), this._destinationsModel.get());
         break;
       case UpdateType.MINOR:
         this._clearBoard();
