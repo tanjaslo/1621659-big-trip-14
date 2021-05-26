@@ -1,6 +1,6 @@
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
 import { areDatesEqual } from '../utils/point.js';
-import { UserAction, UpdateType, Mode, State } from '../utils/const.js';
+import { EscKeys, UserAction, UpdateType, Mode, State } from '../utils/const.js';
 import { isOnline } from '../utils/common.js';
 import { toast } from '../utils/toast/toast.js';
 import EditFormView from '../view/edit-form.js';
@@ -111,7 +111,7 @@ export default class Point {
   }
 
   _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (evt.key === EscKeys.ESCAPE || evt.key === EscKeys.ESC) {
       evt.preventDefault();
       this._pointEditComponent.reset(this._point);
       this._replaceFormToPoint();

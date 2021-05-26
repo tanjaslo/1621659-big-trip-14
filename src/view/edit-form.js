@@ -1,5 +1,5 @@
 import {
-  firstLetterCaps,
+  uppercaseFirstLetter,
   isArrayEmpty } from '../utils/common.js';
 import { getFormDateFormat } from '../utils/point.js';
 import { DATEPICKER_FORMAT, Mode } from '../utils/const.js';
@@ -15,7 +15,7 @@ const createEventTypesListTemplate = (availableOffers, currentType, isDisabled) 
   const eventTypesList = eventTypes.map((type) =>
     `<div class="event__type-item">
       <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${type === currentType ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
-      <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1" data-type="${type}">${firstLetterCaps(type)}</label>
+      <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1" data-type="${type}">${uppercaseFirstLetter(type)}</label>
     </div>`).join('');
 
   return eventTypesList;
