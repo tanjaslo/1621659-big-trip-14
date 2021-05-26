@@ -1,6 +1,6 @@
 import EditFormView from '../view/edit-form.js';
-import { EscKeys, UserAction, UpdateType, Mode, BLANK_POINT } from '../utils/const.js';
-import { isOnline } from '../utils/common.js';
+import { UserAction, UpdateType, Mode, BLANK_POINT } from '../utils/const.js';
+import { isEscEvent, isOnline } from '../utils/common.js';
 import { toast } from '../utils/toast/toast.js';
 import { remove, render, RenderPosition } from '../utils/render.js';
 
@@ -89,7 +89,7 @@ export default class PointNew {
   }
 
   _escKeyDownHandler(evt) {
-    if (evt.key === EscKeys.ESCAPE || evt.key === EscKeys.ESC) {
+    if (isEscEvent(evt)) {
       evt.preventDefault();
       this.destroy();
     }
