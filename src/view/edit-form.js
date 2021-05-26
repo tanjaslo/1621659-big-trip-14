@@ -205,6 +205,31 @@ export default class EditForm extends SmartView {
     return createEditFormTemplate(this._state, this._availableOffers, this._destinations, this._mode);
   }
 
+  setEditFormCloseHandler(callback) {
+    if (this._mode === Mode.ADDING) {
+      return;
+    }
+
+    this._callbacks.formClose = callback;
+    this.getElement()
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this._editFormCloseHandler);
+  }
+
+  setEditFormSubmitHandler(callback) {
+    this._callbacks.formSubmit = callback;
+    this.getElement()
+      .querySelector('form')
+      .addEventListener('submit', this._editFormSubmitHandler);
+  }
+
+  setEditFormDeleteClickHandler(callback) {
+    this._callbacks.deleteClick = callback;
+    this.getElement()
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this._editFormDeleteClickHandler);
+  }
+
   _setInnerHandlers() {
     this.getElement()
       .querySelector('.event__type-group')
@@ -227,6 +252,21 @@ export default class EditForm extends SmartView {
     this.setEditFormSubmitHandler(this._callbacks.formSubmit);
     this.setEditFormCloseHandler(this._callbacks.formClose);
     this.setEditFormDeleteClickHandler(this._callbacks.deleteClick);
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+  }
+
+  reset(point) {
+    this.updateState(
+      EditForm.parsePointToState(point),
+    );
   }
 
   _dateFromChangeHandler([userDate]) {
@@ -320,54 +360,14 @@ export default class EditForm extends SmartView {
     this._callbacks.formSubmit(EditForm.parseStateToPoint(this._state));
   }
 
-  setEditFormSubmitHandler(callback) {
-    this._callbacks.formSubmit = callback;
-    this.getElement()
-      .querySelector('form')
-      .addEventListener('submit', this._editFormSubmitHandler);
-  }
-
   _editFormCloseHandler(evt) {
     evt.preventDefault();
     this._callbacks.formClose();
   }
 
-  setEditFormCloseHandler(callback) {
-    if (this._mode === Mode.ADDING) {
-      return;
-    }
-
-    this._callbacks.formClose = callback;
-    this.getElement()
-      .querySelector('.event__rollup-btn')
-      .addEventListener('click', this._editFormCloseHandler);
-  }
-
   _editFormDeleteClickHandler(evt) {
     evt.preventDefault();
     this._callbacks.deleteClick(EditForm.parseStateToPoint(this._state));
-  }
-
-  setEditFormDeleteClickHandler(callback) {
-    this._callbacks.deleteClick = callback;
-    this.getElement()
-      .querySelector('.event__reset-btn')
-      .addEventListener('click', this._editFormDeleteClickHandler);
-  }
-
-  removeElement() {
-    super.removeElement();
-
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
-    }
-  }
-
-  reset(point) {
-    this.updateState(
-      EditForm.parsePointToState(point),
-    );
   }
 
   static parsePointToState(point) {

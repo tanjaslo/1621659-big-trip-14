@@ -4,9 +4,9 @@ import StatisticsView from '../view/statistics.js';
 export default class Statistics {
   constructor(statisticsContainer, pointsModel) {
     this._statisticsContainer = statisticsContainer;
-    this._pointsModel = pointsModel;
-
     this._statisticsComponent = null;
+
+    this._pointsModel = pointsModel;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
   }

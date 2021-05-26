@@ -7,18 +7,38 @@ import { remove, render, RenderPosition } from '../utils/render.js';
 export default class PointNew {
   constructor(pointContainer, changeData, offersModel, destinationsModel) {
     this._pointContainer = pointContainer;
+    this._pointNewComponent = null;
+
     this._changeData = changeData;
     this._offersModel = offersModel;
     this._destinationsModel = destinationsModel;
+
     this._mode = Mode.ADDING;
     this._addEventButton = document.querySelector('.trip-main__event-add-btn');
-
-    this._pointNewComponent = null;
 
     this._editFormSubmitHandler = this._editFormSubmitHandler.bind(this);
     this._editFormCloseHandler = this._editFormCloseHandler.bind(this);
     this._editFormDeleteClickHandler = this._editFormDeleteClickHandler.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+  }
+
+  setSaving() {
+    this._pointNewComponent.updateState({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._pointNewComponent.updateState({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this._pointNewComponent.shake(resetFormState);
   }
 
   init() {
@@ -46,25 +66,6 @@ export default class PointNew {
 
     this._addEventButton.disabled = false;
     document.removeEventListener('keydown', this._escKeyDownHandler);
-  }
-
-  setSaving() {
-    this._pointNewComponent.updateState({
-      isDisabled: true,
-      isSaving: true,
-    });
-  }
-
-  setAborting() {
-    const resetFormState = () => {
-      this._pointNewComponent.updateState({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-
-    this._pointNewComponent.shake(resetFormState);
   }
 
   _editFormSubmitHandler(point) {

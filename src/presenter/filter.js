@@ -6,6 +6,7 @@ import { FilterType, UpdateType } from '../utils/const.js';
 export default class Filter {
   constructor(filterContainer, filterModel, pointsModel) {
     this._filterContainer = filterContainer;
+
     this._filterModel = filterModel;
     this._pointsModel = pointsModel;
 
@@ -16,6 +17,11 @@ export default class Filter {
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+  }
+
+  _getFilters() {
+    const points = this._pointsModel.getPoints();
+    return Object.values(FilterType).map((type) => ({type, name: type, count: pointsFilter[type](points).length}));
   }
 
   init() {
@@ -44,10 +50,5 @@ export default class Filter {
     }
 
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
-  }
-
-  _getFilters() {
-    const points = this._pointsModel.getPoints();
-    return Object.values(FilterType).map((type) => ({type, name: type, count: pointsFilter[type](points).length}));
   }
 }

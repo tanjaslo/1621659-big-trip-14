@@ -5,9 +5,9 @@ import RouteView from '../view/route.js';
 export default class Route {
   constructor(routeContainer, pointsModel) {
     this._routeContainer = routeContainer;
-    this._pointsModel = pointsModel;
-
     this._routeComponent = null;
+
+    this._pointsModel = pointsModel;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._pointsModel.addObserver(this._handleModelEvent);
