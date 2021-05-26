@@ -4,7 +4,7 @@ dayjs.extend(duration);
 
 const MIN_TITLE_LENGTH = 5;
 
-const removeDuplPointsNames = (points) => {
+const removeDuplicatedPointsNames = (points) => {
   const unduplicatedPointsNames = [points[0].destination.name];
 
   for (let i = 0; i < points.length - 1; i++) {
@@ -19,7 +19,7 @@ const removeDuplPointsNames = (points) => {
 };
 
 export const getRoutePointsTitle = (points) => {
-  const routeTitle = removeDuplPointsNames(points);
+  const routeTitle = removeDuplicatedPointsNames(points);
   const lastPoint = routeTitle.slice([routeTitle.length - 1]);
 
   if (routeTitle.length > MIN_TITLE_LENGTH) {

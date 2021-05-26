@@ -1,6 +1,6 @@
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
 import { areDatesEqual } from '../utils/point.js';
-import { UserAction, UpdateType, Mode, State } from '../utils/const.js';
+import { EscKeys, UserAction, UpdateType, Mode, State } from '../utils/const.js';
 import { isOnline } from '../utils/common.js';
 import { toast } from '../utils/toast/toast.js';
 import EditFormView from '../view/edit-form.js';
@@ -9,6 +9,7 @@ import PointView from '../view/point.js';
 export default class Point {
   constructor(pointContainer, changeData, changeMode) {
     this._pointContainer = pointContainer;
+
     this._changeData = changeData;
     this._changeMode = changeMode;
 
@@ -22,6 +23,35 @@ export default class Point {
     this._handleEditFormClose = this._handleEditFormClose.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+  }
+
+  setViewState(state) {
+    const resetFormState = () => {
+      this._pointEditComponent.updateState({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._pointEditComponent.updateState({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this._pointEditComponent.updateState({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      case State.ABORTING:
+        this._pointComponent.shake(resetFormState);
+        this._pointEditComponent.shake(resetFormState);
+        break;
+    }
   }
 
   init(point, offers, destinations) {
@@ -68,35 +98,6 @@ export default class Point {
     }
   }
 
-  setViewState(state) {
-    const resetFormState = () => {
-      this._pointEditComponent.updateState({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-
-    switch (state) {
-      case State.SAVING:
-        this._pointEditComponent.updateState({
-          isDisabled: true,
-          isSaving: true,
-        });
-        break;
-      case State.DELETING:
-        this._pointEditComponent.updateState({
-          isDisabled: true,
-          isDeleting: true,
-        });
-        break;
-      case State.ABORTING:
-        this._pointComponent.shake(resetFormState);
-        this._pointEditComponent.shake(resetFormState);
-        break;
-    }
-  }
-
   _replacePointToForm() {
     replace(this._pointEditComponent, this._pointComponent);
     document.addEventListener('keydown', this._escKeyDownHandler);
@@ -111,7 +112,7 @@ export default class Point {
   }
 
   _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (evt.key === EscKeys.ESCAPE || evt.key === EscKeys.ESC) {
       evt.preventDefault();
       this._pointEditComponent.reset(this._point);
       this._replaceFormToPoint();

@@ -3,6 +3,11 @@ export const AUTHORIZATION = 'Basic TanjaThirst24';
 export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 export const STORE_VER = 'v14';
 
+export const EscKeys = {
+  ESCAPE: 'Escape',
+  ESC: 'Esc',
+};
+
 export const Color = {
   WHITE: '#ffffff',
   BLACK: '#000000',

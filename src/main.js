@@ -68,13 +68,13 @@ const handleMenuClick = (menuItem) => {
       boardPresenter.destroy();
       statisticsPresenter.init();
       addEventButton.disabled = true;
-      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+      filterModel.set(UpdateType.MAJOR, FilterType.EVERYTHING);
       break;
     case MenuItem.TABLE:
       statisticsPresenter.destroy();
       boardPresenter.init();
       addEventButton.disabled = false;
-      filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+      filterModel.set(UpdateType.MAJOR, FilterType.EVERYTHING);
       break;
   }
 };
@@ -84,9 +84,9 @@ Promise.all([
   apiWithProvider.getDestinations(),
   apiWithProvider.getPoints(),
 ]).then(([offers, destinations, points]) => {
-  offersModel.setOffers(offers);
-  destinationsModel.setDestinations(destinations);
-  pointsModel.setPoints(UpdateType.INIT, points);
+  offersModel.set(offers);
+  destinationsModel.set(destinations);
+  pointsModel.set(UpdateType.INIT, points);
   menuComponent.setMenuClickHandler(handleMenuClick);
   addEventButton.disabled = false;
   addEventButton.addEventListener('click', (evt) => {
@@ -99,9 +99,9 @@ Promise.all([
   });
 })
   .catch(() => {
-    offersModel.setOffers([]);
-    destinationsModel.setDestinations([]);
-    pointsModel.setPoints(UpdateType.INIT, []);
+    offersModel.set([]);
+    destinationsModel.set([]);
+    pointsModel.set(UpdateType.INIT, []);
     menuComponent.setMenuClickHandler(handleMenuClick);
   });
 

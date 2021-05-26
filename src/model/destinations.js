@@ -6,11 +6,11 @@ export default class Destinations extends Observer {
     this._destinations = [];
   }
 
-  setDestinations(destinations) {
-    this._destinations = destinations.slice();
+  get() {
+    return this._destinations;
   }
 
-  getDestinations() {
-    return this._destinations;
+  set(destinations) {
+    this._destinations = destinations.slice();
   }
 }
