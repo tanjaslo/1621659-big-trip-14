@@ -1,6 +1,6 @@
 export const DATEPICKER_FORMAT = 'd/m/y H:i';
 export const AUTHORIZATION = 'Basic TanjaThirst24';
-export const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
+export const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 export const STORE_VER = 'v14';
 
 export const Color = {
